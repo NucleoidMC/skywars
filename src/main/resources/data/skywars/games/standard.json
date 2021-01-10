@@ -1,0 +1,14 @@
+{
+  "type": "skywars:skywars",
+  "map": {
+    "spawn_block": {
+      "Name": "minecraft:red_terracotta",
+      "Properties": {}
+    }
+  },
+  "players": {
+    "min": 1,
+    "max": 100
+  },
+  "time_limit_secs": 60
+}

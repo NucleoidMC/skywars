@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "skywars",
+  "version": "${version}",
+  "name": "Sky Wars",
+  "description": "Fabric skywars minigame",
+  "authors": [
+    "Potatoboy9999"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "us.potatoboy.skywars.SkyWars"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.9.1",
+    "fabric": "*",
+    "minecraft": "1.16.4",
+    "plasmid": "0.4.x"
+  }
+}
