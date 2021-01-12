@@ -1,0 +1,7 @@
+{
+  "type": "skywars:skywars",
+  "map": {
+    "id": "skywars:shroomlight"
+  },
+  "time_limit_mins": 10
+}
