@@ -11,6 +11,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameMode;
 import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.game.map.SkyWarsMap;
+import xyz.nucleoid.plasmid.util.BlockBounds;
+
+import java.util.Random;
 
 public class SkyWarsSpawnLogic {
     private final GameSpace gameSpace;
@@ -25,29 +28,34 @@ public class SkyWarsSpawnLogic {
         player.setGameMode(gameMode);
         player.setVelocity(Vec3d.ZERO);
         player.fallDistance = 0.0f;
-
-        player.addStatusEffect(new StatusEffectInstance(
-                StatusEffects.NIGHT_VISION,
-                20 * 60 * 60,
-                1,
-                true,
-                false
-        ));
     }
 
     public void spawnPlayer(ServerPlayerEntity player) {
-        ServerWorld world = this.gameSpace.getWorld();
-
-        BlockPos pos = this.map.spawn;
-        if (pos == null) {
+        BlockBounds bounds = this.map.waitingSpawn;
+        if (bounds == null) {
             SkyWars.LOGGER.error("Cannot spawn player! No spawn is defined in the map!");
             return;
         }
 
-        float radius = 4.5f;
-        float x = pos.getX() + MathHelper.nextFloat(player.getRandom(), -radius, radius);
-        float z = pos.getZ() + MathHelper.nextFloat(player.getRandom(), -radius, radius);
+        Vec3d pos = choosePos(player.getRandom(), bounds, 0);
 
-        player.teleport(world, x, pos.getY(), z, 0.0F, 0.0F);
+        spawnPlayer(player, new BlockPos(pos));
+    }
+
+    public void spawnPlayer(ServerPlayerEntity player, BlockPos pos) {
+        ServerWorld world = this.gameSpace.getWorld();
+
+        player.teleport(world, pos.getX(), pos.getY(), pos.getZ(), 0.0F, 0.0F);
+    }
+
+    public static Vec3d choosePos(Random random, BlockBounds bounds, float aboveGround) {
+        BlockPos min = bounds.getMin();
+        BlockPos max = bounds.getMax();
+
+        double x = MathHelper.nextDouble(random, min.getX(), max.getX());
+        double z = MathHelper.nextDouble(random, min.getZ(), max.getZ());
+        double y = min.getY() + aboveGround;
+
+        return new Vec3d(x + 0.5, y, z + 0.5);
     }
 }

@@ -1,7 +1,9 @@
 package us.potatoboy.skywars.game;
 
 import net.minecraft.util.ActionResult;
+import us.potatoboy.skywars.game.map.loot.LootHelper;
 import xyz.nucleoid.plasmid.game.*;
+import xyz.nucleoid.plasmid.game.config.PlayerConfig;
 import xyz.nucleoid.plasmid.game.event.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -33,13 +35,15 @@ public class SkyWarsWaiting {
                 .setDefaultGameMode(GameMode.SPECTATOR);
 
         return context.createOpenProcedure(worldConfig, game -> {
-            SkyWarsWaiting waiting = new SkyWarsWaiting(game.getSpace(), map, context.getConfig());
+            GameWaitingLobby.applyTo(game, new PlayerConfig(1, map.spawns.size()));
 
-            GameWaitingLobby.applyTo(game, config.playerConfig);
+            SkyWarsWaiting waiting = new SkyWarsWaiting(game.getSpace(), map, context.getConfig());
 
             game.on(RequestStartListener.EVENT, waiting::requestStart);
             game.on(PlayerAddListener.EVENT, waiting::addPlayer);
             game.on(PlayerDeathListener.EVENT, waiting::onPlayerDeath);
+
+            LootHelper.fillChests(game.getSpace().getWorld(), map, 1);
         });
     }
 

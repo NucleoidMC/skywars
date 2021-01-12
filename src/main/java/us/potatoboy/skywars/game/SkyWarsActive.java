@@ -3,6 +3,8 @@ package us.potatoboy.skywars.game;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.BlockPos;
+import xyz.nucleoid.plasmid.game.GameCloseReason;
 import xyz.nucleoid.plasmid.game.GameSpace;
 import xyz.nucleoid.plasmid.game.event.*;
 import xyz.nucleoid.plasmid.game.player.JoinResult;
@@ -35,7 +37,6 @@ public class SkyWarsActive {
     private final SkyWarsSpawnLogic spawnLogic;
     private final SkyWarsStageManager stageManager;
     private final boolean ignoreWinState;
-    private final SkyWarsTimerBar timerBar;
 
     private SkyWarsActive(GameSpace gameSpace, SkyWarsMap map, GlobalWidgets widgets, SkyWarsConfig config, Set<PlayerRef> participants) {
         this.gameSpace = gameSpace;
@@ -50,7 +51,6 @@ public class SkyWarsActive {
 
         this.stageManager = new SkyWarsStageManager();
         this.ignoreWinState = this.participants.size() <= 1;
-        this.timerBar = new SkyWarsTimerBar(widgets);
     }
 
     public static void open(GameSpace gameSpace, SkyWarsMap map, SkyWarsConfig config) {
@@ -61,14 +61,14 @@ public class SkyWarsActive {
             GlobalWidgets widgets = new GlobalWidgets(game);
             SkyWarsActive active = new SkyWarsActive(gameSpace, map, widgets, config, participants);
 
-            game.setRule(GameRule.CRAFTING, RuleResult.DENY);
+            game.setRule(GameRule.CRAFTING, RuleResult.ALLOW);
             game.setRule(GameRule.PORTALS, RuleResult.DENY);
-            game.setRule(GameRule.PVP, RuleResult.DENY);
-            game.setRule(GameRule.HUNGER, RuleResult.DENY);
-            game.setRule(GameRule.FALL_DAMAGE, RuleResult.DENY);
-            game.setRule(GameRule.INTERACTION, RuleResult.DENY);
-            game.setRule(GameRule.BLOCK_DROPS, RuleResult.DENY);
-            game.setRule(GameRule.THROW_ITEMS, RuleResult.DENY);
+            game.setRule(GameRule.PVP, RuleResult.ALLOW);
+            game.setRule(GameRule.HUNGER, RuleResult.ALLOW);
+            game.setRule(GameRule.FALL_DAMAGE, RuleResult.ALLOW);
+            game.setRule(GameRule.INTERACTION, RuleResult.ALLOW);
+            game.setRule(GameRule.BLOCK_DROPS, RuleResult.ALLOW);
+            game.setRule(GameRule.THROW_ITEMS, RuleResult.ALLOW);
             game.setRule(GameRule.UNSTABLE_TNT, RuleResult.DENY);
 
             game.on(GameOpenListener.EVENT, active::onOpen);
@@ -87,11 +87,22 @@ public class SkyWarsActive {
 
     private void onOpen() {
         ServerWorld world = this.gameSpace.getWorld();
-        for (PlayerRef ref : this.participants.keySet()) {
-            ref.ifOnline(world, this::spawnParticipant);
-        }
+        spawnParticipants();
+
         this.stageManager.onOpen(world.getTime(), this.config);
         // TODO setup logic
+    }
+
+    private void spawnParticipants() {
+        ServerWorld world = this.gameSpace.getWorld();
+
+        Iterator<BlockPos> spawnIterator = gameMap.spawns.listIterator();
+        for (PlayerRef ref : this.participants.keySet()) {
+            ref.ifOnline(world, player -> {
+                this.spawnLogic.resetPlayer(player, GameMode.SURVIVAL);
+                this.spawnLogic.spawnPlayer(player, spawnIterator.next());
+            });
+        }
     }
 
     private void onClose() {
@@ -110,19 +121,14 @@ public class SkyWarsActive {
 
     private ActionResult onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount) {
         // TODO handle damage
-        this.spawnParticipant(player);
-        return ActionResult.FAIL;
+        //this.spawnParticipant(player);
+        return ActionResult.PASS;
     }
 
     private ActionResult onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
         // TODO handle death
-        this.spawnParticipant(player);
+        this.spawnSpectator(player);
         return ActionResult.FAIL;
-    }
-
-    private void spawnParticipant(ServerPlayerEntity player) {
-        this.spawnLogic.resetPlayer(player, GameMode.ADVENTURE);
-        this.spawnLogic.spawnPlayer(player);
     }
 
     private void spawnSpectator(ServerPlayerEntity player) {
@@ -145,11 +151,9 @@ public class SkyWarsActive {
                 this.broadcastWin(this.checkWinResult());
                 return;
             case GAME_CLOSED:
-                this.gameSpace.close();
+                this.gameSpace.close(GameCloseReason.FINISHED);
                 return;
         }
-
-        this.timerBar.update(this.stageManager.finishTime - time, this.config.timeLimitSecs * 20);
 
         // TODO tick logic
     }
