@@ -36,7 +36,7 @@ public class SkyWarsActive {
     private final Object2ObjectMap<PlayerRef, SkyWarsPlayer> participants;
     private final SkyWarsSpawnLogic spawnLogic;
     private final SkyWarsStageManager stageManager;
-    private final boolean ignoreWinState;
+    public final boolean ignoreWinState;
 
     private SkyWarsActive(GameSpace gameSpace, SkyWarsMap map, GlobalWidgets widgets, SkyWarsConfig config, Set<PlayerRef> participants) {
         this.gameSpace = gameSpace;
@@ -49,7 +49,7 @@ public class SkyWarsActive {
             this.participants.put(player, new SkyWarsPlayer());
         }
 
-        this.stageManager = new SkyWarsStageManager();
+        this.stageManager = new SkyWarsStageManager(this);
         this.ignoreWinState = this.participants.size() <= 1;
     }
 
@@ -184,7 +184,18 @@ public class SkyWarsActive {
         ServerPlayerEntity winningPlayer = null;
 
         // TODO win result logic
-        return WinResult.no();
+        for (ServerPlayerEntity player : this.gameSpace.getPlayers()) {
+            if (!player.isSpectator()) {
+                // we still have more than one player remaining
+                if (winningPlayer != null) {
+                    return WinResult.no();
+                }
+
+                winningPlayer = player;
+            }
+        }
+
+        return WinResult.win(winningPlayer);
     }
 
     static class WinResult {

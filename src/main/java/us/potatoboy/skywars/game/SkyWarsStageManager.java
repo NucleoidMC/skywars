@@ -12,18 +12,19 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameMode;
 
 import java.util.Set;
 
 public class SkyWarsStageManager {
+    private final SkyWarsActive game;
+
     private long closeTime = -1;
     public long finishTime = -1;
     private long startTime = -1;
     private final Object2ObjectMap<ServerPlayerEntity, FrozenPlayer> frozen;
-    private boolean setSpectator = false;
 
-    public SkyWarsStageManager() {
+    public SkyWarsStageManager(SkyWarsActive game) {
+        this.game = game;
         this.frozen = new Object2ObjectOpenHashMap<>();
     }
 
@@ -33,6 +34,10 @@ public class SkyWarsStageManager {
     }
 
     public IdleTickResult tick(long time, GameSpace space) {
+        if (space.getPlayers().isEmpty()) {
+            return IdleTickResult.GAME_CLOSED;
+        }
+
         // Game has finished. Wait a few seconds before finally closing the game.
         if (this.closeTime > 0) {
             if (time >= this.closeTime) {
@@ -47,15 +52,21 @@ public class SkyWarsStageManager {
             return IdleTickResult.TICK_FINISHED;
         }
 
-        // Game has just finished. Transition to the waiting-before-close state.
-        if (time > this.finishTime || space.getPlayers().isEmpty()) {
-            if (!this.setSpectator) {
-                this.setSpectator = true;
-                for (ServerPlayerEntity player : space.getPlayers()) {
-                    player.setGameMode(GameMode.SPECTATOR);
-                }
+        //Only one player remaining. Game finished
+        int remainingCount = 0;
+        for (ServerPlayerEntity player : space.getPlayers()) {
+            if (!player.isSpectator()) {
+                remainingCount++;
             }
+        }
+        if (remainingCount < 2) {
+            this.closeTime = time + (5 * 20);
 
+            return IdleTickResult.GAME_FINISHED;
+        }
+
+        // Game has just finished. Transition to the waiting-before-close state.
+        if (time > this.finishTime) {
             this.closeTime = time + (5 * 20);
 
             return IdleTickResult.GAME_FINISHED;
