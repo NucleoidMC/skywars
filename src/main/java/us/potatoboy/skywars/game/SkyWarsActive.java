@@ -95,6 +95,7 @@ public class SkyWarsActive {
 
     private void spawnParticipants() {
         ServerWorld world = this.gameSpace.getWorld();
+        Collections.shuffle(gameMap.spawns);
 
         Iterator<BlockPos> spawnIterator = gameMap.spawns.listIterator();
         for (PlayerRef ref : this.participants.keySet()) {
