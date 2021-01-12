@@ -59,7 +59,7 @@ public class SkyWarsStageManager {
                 remainingCount++;
             }
         }
-        if (remainingCount < 2) {
+        if (remainingCount < 2 && !game.ignoreWinState) {
             this.closeTime = time + (5 * 20);
 
             return IdleTickResult.GAME_FINISHED;
