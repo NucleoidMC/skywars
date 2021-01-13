@@ -1,0 +1,36 @@
+package us.potatoboy.skywars.mixin;
+
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import us.potatoboy.skywars.SkyWars;
+import xyz.nucleoid.plasmid.game.ManagedGameSpace;
+import xyz.nucleoid.plasmid.game.rule.GameRule;
+import xyz.nucleoid.plasmid.game.rule.RuleResult;
+
+@Mixin(PlayerEntity.class)
+public abstract class PlayerEntityMixin extends LivingEntity {
+    protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
+        super(entityType, world);
+    }
+
+    @Inject(method = "damage", at = @At(value = "RETURN", ordinal = 3), cancellable = true)
+    private void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        ManagedGameSpace gameSpace = ManagedGameSpace.forWorld(this.world);
+
+        if (gameSpace != null) {
+            if (gameSpace.testRule(SkyWars.PLAYER_PROJECTILE_KNOCKBACK) == RuleResult.ALLOW) {
+                if (source.isProjectile()) {
+                    cir.setReturnValue(super.damage(source, amount));
+                }
+            }
+        }
+    }
+}

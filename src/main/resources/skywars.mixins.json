@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "us.potatoboy.skywars.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "server": [
+    "PlayerEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

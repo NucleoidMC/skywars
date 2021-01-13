@@ -1,5 +1,6 @@
 {
   "type": "skywars:skywars",
+  "name": "SkyWars Test",
   "map": {
     "id": "skywars:test"
   },

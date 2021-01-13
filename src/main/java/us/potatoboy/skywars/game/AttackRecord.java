@@ -4,7 +4,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import xyz.nucleoid.plasmid.util.PlayerRef;
 
 public class AttackRecord {
-    public static final long EXPIRE_TIME = 20 * 5;
+    public static final long EXPIRE_TIME = 20 * 10;
 
     public final PlayerRef player;
     private final long expireTime;

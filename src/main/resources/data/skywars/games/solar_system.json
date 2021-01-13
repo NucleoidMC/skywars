@@ -1,8 +1,8 @@
 {
   "type": "skywars:skywars",
-  "name": "SkyWars Shroomlight",
+  "name": "SkyWars Solar System",
   "map": {
-    "id": "skywars:shroomlight"
+    "id": "skywars:solar_system"
   },
   "time_limit_mins": 10
 }

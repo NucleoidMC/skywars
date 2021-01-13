@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
+import us.potatoboy.skywars.SkyWars;
 import xyz.nucleoid.plasmid.game.GameCloseReason;
 import xyz.nucleoid.plasmid.game.GameSpace;
 import xyz.nucleoid.plasmid.game.event.*;
@@ -72,6 +73,7 @@ public class SkyWarsActive {
             game.setRule(GameRule.BLOCK_DROPS, RuleResult.ALLOW);
             game.setRule(GameRule.THROW_ITEMS, RuleResult.ALLOW);
             game.setRule(GameRule.UNSTABLE_TNT, RuleResult.DENY);
+            game.setRule(SkyWars.PLAYER_PROJECTILE_KNOCKBACK, RuleResult.ALLOW);
 
             game.on(GameOpenListener.EVENT, active::onOpen);
             game.on(GameCloseListener.EVENT, active::onClose);

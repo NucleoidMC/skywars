@@ -14,6 +14,9 @@
       "us.potatoboy.skywars.SkyWars"
     ]
   },
+  "mixins": [
+    "skywars.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=0.9.1",
     "fabric": "*",
