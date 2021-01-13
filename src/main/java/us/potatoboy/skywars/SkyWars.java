@@ -14,6 +14,7 @@ public class SkyWars implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
     public static final GameRule PLAYER_PROJECTILE_KNOCKBACK = new GameRule();
+    public static final GameRule TRIDENTS_LOYAL_IN_VOID = new GameRule();
 
     public static final GameType<SkyWarsConfig> TYPE = GameType.register(
             new Identifier(ID, "skywars"),

@@ -9,52 +9,67 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minecraft:iron_boots"
+          "weight": 8,
+          "name": "minecraft:iron_boots",
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": 7
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 6,
+          "name": "minecraft:iron_leggings",
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": 7
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "name": "minecraft:diamond_leggings",
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": 7
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 6,
+          "name": "minecraft:iron_chestplate",
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": 7
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "name": "minecraft:diamond_chestplate",
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": 7
+            }
+          ]
         },
         {
           "type": "minecraft:item",
           "weight": 8,
-          "name": "minecraft:iron_leggings"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 1,
-          "name": "minecraft:diamond_leggings"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 6,
-          "name": "minecraft:iron_chestplate"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 1,
-          "name": "minecraft:diamond_chestplate"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 10,
-          "name": "minecraft:iron_helmet"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 6,
-          "quality": 1,
-          "name": "minecraft:crossbow"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 6,
-          "quality": 1,
-          "name": "minecraft:arrow",
+          "name": "minecraft:iron_helmet",
           "functions": [
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 6,
-                "max": 16
-              }
+              "function": "minecraft:enchant_with_levels",
+              "levels": 7
             }
           ]
         },
@@ -62,6 +77,19 @@
           "type": "minecraft:item",
           "weight": 4,
           "name": "minecraft:flint_and_steel"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minecraft:trident",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "enchantments": [
+                "minecraft:loyalty"
+              ]
+            }
+          ]
         },
         {
           "type": "minecraft:item",
@@ -79,7 +107,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 6,
+          "weight": 10,
           "name": "minecraft:golden_apple"
         },
         {
@@ -109,21 +137,39 @@
         {
           "type": "minecraft:item",
           "weight": 8,
-          "name": "minecraft:shield"
+          "name": "minecraft:shield",
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": 7
+            }
+          ]
         },
         {
           "type": "minecraft:item",
           "weight": 12,
-          "name": "minecraft:iron_sword"
+          "name": "minecraft:iron_sword",
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": 7
+            }
+          ]
         },
         {
           "type": "minecraft:item",
           "weight": 6,
-          "name": "minecraft:diamond_sword"
+          "name": "minecraft:diamond_sword",
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": 7
+            }
+          ]
         },
         {
           "type": "minecraft:item",
-          "weight": 1,
+          "weight": 5,
           "name": "minecraft:ender_pearl"
         },
         {

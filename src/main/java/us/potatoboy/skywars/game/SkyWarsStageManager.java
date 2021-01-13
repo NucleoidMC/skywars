@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableSet;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.world.GameMode;
+import us.potatoboy.skywars.game.map.loot.LootHelper;
 import xyz.nucleoid.plasmid.game.GameSpace;
 import xyz.nucleoid.plasmid.game.player.PlayerSet;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -18,9 +20,12 @@ import java.util.Set;
 public class SkyWarsStageManager {
     private final SkyWarsActive game;
 
+    public int refills = 1;
+
     private long closeTime = -1;
     public long finishTime = -1;
     private long startTime = -1;
+    public long refillTime = -1;
     private final Object2ObjectMap<ServerPlayerEntity, FrozenPlayer> frozen;
 
     public SkyWarsStageManager(SkyWarsActive game) {
@@ -30,6 +35,7 @@ public class SkyWarsStageManager {
 
     public void onOpen(long time, SkyWarsConfig config) {
         this.startTime = time - (time % 20) + (4 * 20) + 19;
+        this.refillTime = startTime + (config.refill_mins * 20 * 60);
         this.finishTime = this.startTime + (config.timeLimitMins * 20 * 60);
     }
 
@@ -63,6 +69,14 @@ public class SkyWarsStageManager {
             this.closeTime = time + (5 * 20);
 
             return IdleTickResult.GAME_FINISHED;
+        }
+
+        if (refills <= game.config.refills) {
+            if (time > refillTime) {
+                refills++;
+                LootHelper.fillChests(game.gameSpace.getWorld(), game.gameMap, refills);
+                this.refillTime = time + (game.config.refill_mins * 20 * 60);
+            }
         }
 
         // Game has just finished. Transition to the waiting-before-close state.
@@ -113,6 +127,9 @@ public class SkyWarsStageManager {
             } else {
                 players.sendTitle(new LiteralText("Go!").formatted(Formatting.BOLD));
                 players.sendSound(SoundEvents.BLOCK_NOTE_BLOCK_HARP, SoundCategory.PLAYERS, 1.0F, 2.0F);
+                for (ServerPlayerEntity playerEntity : players) {
+                    playerEntity.setGameMode(GameMode.SURVIVAL);
+                }
             }
         }
     }

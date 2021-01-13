@@ -30,36 +30,36 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class SkyWarsActive {
-    private final SkyWarsConfig config;
+    public final SkyWarsConfig config;
 
     public final GameSpace gameSpace;
-    private final SkyWarsMap gameMap;
+    public final SkyWarsMap gameMap;
 
-    // TODO replace with ServerPlayerEntity if players are removed upon leaving
-    private final Object2ObjectMap<PlayerRef, SkyWarsPlayer> participants;
+    public final Object2ObjectMap<ServerPlayerEntity, SkyWarsPlayer> participants;
     private final SkyWarsSpawnLogic spawnLogic;
-    private final SkyWarsStageManager stageManager;
+    public final SkyWarsStageManager stageManager;
+    private final SkyWarsSidebar sidebar;
     public final boolean ignoreWinState;
 
-    private SkyWarsActive(GameSpace gameSpace, SkyWarsMap map, GlobalWidgets widgets, SkyWarsConfig config, Set<PlayerRef> participants) {
+    private SkyWarsActive(GameSpace gameSpace, SkyWarsMap map, GlobalWidgets widgets, SkyWarsConfig config, Set<ServerPlayerEntity> participants) {
         this.gameSpace = gameSpace;
         this.config = config;
         this.gameMap = map;
         this.spawnLogic = new SkyWarsSpawnLogic(gameSpace, map);
         this.participants = new Object2ObjectOpenHashMap<>();
 
-        for (PlayerRef player : participants) {
+        for (ServerPlayerEntity player : participants) {
             this.participants.put(player, new SkyWarsPlayer());
         }
 
+        this.sidebar = new SkyWarsSidebar(this);
         this.stageManager = new SkyWarsStageManager(this);
         this.ignoreWinState = this.participants.size() <= 1;
     }
 
     public static void open(GameSpace gameSpace, SkyWarsMap map, SkyWarsConfig config) {
         gameSpace.openGame(game -> {
-            Set<PlayerRef> participants = gameSpace.getPlayers().stream()
-                    .map(PlayerRef::of)
+            Set<ServerPlayerEntity> participants = gameSpace.getPlayers().stream()
                     .collect(Collectors.toSet());
             GlobalWidgets widgets = new GlobalWidgets(game);
             SkyWarsActive active = new SkyWarsActive(gameSpace, map, widgets, config, participants);
@@ -74,6 +74,7 @@ public class SkyWarsActive {
             game.setRule(GameRule.THROW_ITEMS, RuleResult.ALLOW);
             game.setRule(GameRule.UNSTABLE_TNT, RuleResult.DENY);
             game.setRule(SkyWars.PLAYER_PROJECTILE_KNOCKBACK, RuleResult.ALLOW);
+            game.setRule(SkyWars.TRIDENTS_LOYAL_IN_VOID, RuleResult.ALLOW);
 
             game.on(GameOpenListener.EVENT, active::onOpen);
             game.on(GameCloseListener.EVENT, active::onClose);
@@ -98,10 +99,6 @@ public class SkyWarsActive {
     }
 
     private SkyWarsPlayer getParticipant(ServerPlayerEntity player) {
-        return getParticipant(PlayerRef.of(player));
-    }
-
-    private SkyWarsPlayer getParticipant(PlayerRef player) {
         return participants.get(player);
     }
 
@@ -110,26 +107,26 @@ public class SkyWarsActive {
         Collections.shuffle(gameMap.spawns);
 
         Iterator<BlockPos> spawnIterator = gameMap.spawns.listIterator();
-        for (PlayerRef ref : this.participants.keySet()) {
-            ref.ifOnline(world, player -> {
-                this.spawnLogic.resetPlayer(player, GameMode.SURVIVAL);
-                this.spawnLogic.spawnPlayer(player, spawnIterator.next());
-            });
+        for (ServerPlayerEntity player : this.participants.keySet()) {
+            this.spawnLogic.resetPlayer(player, GameMode.ADVENTURE);
+            this.spawnLogic.spawnPlayer(player, spawnIterator.next());
         }
     }
 
     private void onClose() {
         // TODO teardown logic
+        sidebar.close();
     }
 
     private void addPlayer(ServerPlayerEntity player) {
-        if (!this.participants.containsKey(PlayerRef.of(player))) {
-            this.spawnSpectator(player);
-        }
+        spawnSpectator(player);
     }
 
     private void removePlayer(ServerPlayerEntity player) {
-        this.participants.remove(PlayerRef.of(player));
+        if (participants.containsKey(player)) {
+            sidebar.sidebars.get(player).removePlayer(player);
+            this.participants.remove(player);
+        }
     }
 
     private ActionResult onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount) {
@@ -207,7 +204,9 @@ public class SkyWarsActive {
                 return;
         }
 
-        // TODO tick logic
+        if (time % 20 == 0) {
+            sidebar.update(time);
+        }
     }
 
     private void broadcastWin(WinResult result) {
