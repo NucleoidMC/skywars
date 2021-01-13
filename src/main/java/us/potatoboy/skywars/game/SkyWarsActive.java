@@ -2,6 +2,8 @@ package us.potatoboy.skywars.game;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import xyz.nucleoid.plasmid.game.GameCloseReason;
@@ -93,6 +95,14 @@ public class SkyWarsActive {
         // TODO setup logic
     }
 
+    private SkyWarsPlayer getParticipant(ServerPlayerEntity player) {
+        return getParticipant(PlayerRef.of(player));
+    }
+
+    private SkyWarsPlayer getParticipant(PlayerRef player) {
+        return participants.get(player);
+    }
+
     private void spawnParticipants() {
         ServerWorld world = this.gameSpace.getWorld();
         Collections.shuffle(gameMap.spawns);
@@ -121,15 +131,54 @@ public class SkyWarsActive {
     }
 
     private ActionResult onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount) {
-        // TODO handle damage
-        //this.spawnParticipant(player);
+        SkyWarsPlayer participant = getParticipant(player);
+        long time = gameSpace.getWorld().getTime();
+
+        if (participant != null && source.getAttacker() != null && source.getAttacker() instanceof ServerPlayerEntity) {
+            PlayerRef attacker = PlayerRef.of((PlayerEntity) source.getAttacker());
+            participant.lastTimeAttacked = new AttackRecord(attacker, time);
+        }
+
         return ActionResult.PASS;
     }
 
+
     private ActionResult onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
-        // TODO handle death
+        MutableText deathMessage = getDeathMessage(player, source);
+        gameSpace.getPlayers().sendMessage(deathMessage.formatted(Formatting.GRAY));
+
+        player.inventory.dropAll();
         this.spawnSpectator(player);
+
         return ActionResult.FAIL;
+    }
+
+    private MutableText getDeathMessage(ServerPlayerEntity player, DamageSource source) {
+        SkyWarsPlayer participant = getParticipant(player);
+        ServerWorld world = gameSpace.getWorld();
+        long time = world.getTime();
+
+        MutableText deathMessage = new LiteralText(" was killed by ");
+        SkyWarsPlayer attacker = null;
+
+        if (source.getAttacker() != null) {
+            deathMessage.append(source.getAttacker().getDisplayName());
+
+            if (source.getAttacker() instanceof ServerPlayerEntity) {
+                attacker = getParticipant((ServerPlayerEntity) source.getAttacker());
+            }
+        } else if (participant != null && participant.attacker(time, world) != null) {
+            deathMessage.append(participant.attacker(time, world).getDisplayName());
+            attacker = getParticipant(participant.attacker(time, world));
+        } else {
+            deathMessage = new LiteralText(" died");
+        }
+
+        if (attacker != null) {
+            attacker.kills += 1;
+        }
+
+        return new LiteralText("").append(player.getDisplayName()).append(deathMessage);
     }
 
     private void spawnSpectator(ServerPlayerEntity player) {

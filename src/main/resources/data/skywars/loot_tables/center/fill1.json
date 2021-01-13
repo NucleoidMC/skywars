@@ -9,23 +9,33 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minecraft:chainmail_boots"
+          "weight": 10,
+          "name": "minecraft:iron_boots"
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minecraft:chainmail_leggings"
+          "weight": 8,
+          "name": "minecraft:iron_leggings"
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minecraft:chainmail_chestplate"
+          "weight": 1,
+          "name": "minecraft:diamond_leggings"
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minecraft:chainmail_helmet"
+          "weight": 6,
+          "name": "minecraft:iron_chestplate"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "minecraft:diamond_chestplate"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minecraft:iron_helmet"
         },
         {
           "type": "minecraft:item",
@@ -48,18 +58,18 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
+          "weight": 6,
           "name": "minecraft:golden_apple"
         },
         {
           "type": "minecraft:item",
-          "weight": 1,
+          "weight": 4,
           "name": "minecraft:diamond"
         },
         {
           "type": "minecraft:item",
           "weight": 4,
-          "name": "minecraft:stone_axe"
+          "name": "minecraft:iron_axe"
         },
         {
           "type": "minecraft:item",
@@ -84,6 +94,16 @@
           "type": "minecraft:item",
           "weight": 12,
           "name": "minecraft:iron_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 6,
+          "name": "minecraft:diamond_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "minecraft:ender_pearl"
         }
       ]
     }
