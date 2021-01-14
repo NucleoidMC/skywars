@@ -128,9 +128,9 @@ public class SkyWarsActive {
     }
 
     private void removePlayer(ServerPlayerEntity player) {
-        if (participants.containsKey(player)) {
-            sidebar.sidebars.get(player).removePlayer(player);
-            this.participants.remove(player);
+        if (player != null && participants.containsKey(player)) {
+            sidebar.sidebars.get(getParticipant(player)).removePlayer(player);
+            participants.remove(player);
         }
     }
 
