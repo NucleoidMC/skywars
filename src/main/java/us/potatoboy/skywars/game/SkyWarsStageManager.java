@@ -61,7 +61,7 @@ public class SkyWarsStageManager {
         //Only one player remaining. Game finished
         int remainingCount = 0;
         for (ServerPlayerEntity player : space.getPlayers()) {
-            if (!player.isSpectator()) {
+            if (player.interactionManager.getGameMode() == GameMode.SURVIVAL) {
                 remainingCount++;
             }
         }

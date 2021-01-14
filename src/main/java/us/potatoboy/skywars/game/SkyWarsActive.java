@@ -2,9 +2,13 @@ package us.potatoboy.skywars.game;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import us.potatoboy.skywars.SkyWars;
 import xyz.nucleoid.plasmid.game.GameCloseReason;
@@ -87,6 +91,7 @@ public class SkyWarsActive {
 
             game.on(PlayerDamageListener.EVENT, active::onPlayerDamage);
             game.on(PlayerDeathListener.EVENT, active::onPlayerDeath);
+            game.on(PlaceBlockListener.EVENT, active::onPlaceBlock);
         });
     }
 
@@ -150,6 +155,23 @@ public class SkyWarsActive {
         this.spawnSpectator(player);
 
         return ActionResult.FAIL;
+    }
+
+    private ActionResult onPlaceBlock(ServerPlayerEntity playerEntity, BlockPos pos, BlockState blockState, ItemUsageContext context) {
+        int slot;
+        if (context.getHand() == Hand.MAIN_HAND) {
+            slot = playerEntity.inventory.selectedSlot;
+        } else {
+            slot = 40; // offhand
+        }
+
+        if(!gameMap.template.getBounds().contains(pos)) {
+            playerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(-2, slot, context.getStack()));
+            playerEntity.sendMessage(new LiteralText("Border reached").formatted(Formatting.RED, Formatting.BOLD), false);
+            return ActionResult.FAIL;
+        }
+
+        return ActionResult.PASS;
     }
 
     private MutableText getDeathMessage(ServerPlayerEntity player, DamageSource source) {

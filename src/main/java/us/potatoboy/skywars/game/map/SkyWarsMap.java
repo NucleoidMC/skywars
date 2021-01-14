@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SkyWarsMap {
-    private final MapTemplate template;
+    public final MapTemplate template;
     private final SkyWarsMapConfig config;
     public BlockBounds waitingSpawn;
     public List<BlockPos> spawns = new ArrayList<>();
