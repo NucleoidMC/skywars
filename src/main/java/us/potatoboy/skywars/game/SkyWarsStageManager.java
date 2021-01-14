@@ -63,13 +63,7 @@ public class SkyWarsStageManager {
         }
 
         //Only one player remaining. Game finished
-        int remainingCount = 0;
-        for (ServerPlayerEntity player : space.getPlayers()) {
-            if (player.interactionManager.getGameMode() == GameMode.SURVIVAL) {
-                remainingCount++;
-            }
-        }
-        if (remainingCount < 2 && !game.ignoreWinState) {
+        if (game.checkWinResult().isWin()) {
             this.closeTime = time + (5 * 20);
 
             return IdleTickResult.GAME_FINISHED;
@@ -131,7 +125,7 @@ public class SkyWarsStageManager {
             } else {
                 players.sendTitle(new LiteralText("Go!").formatted(Formatting.BOLD));
                 players.sendSound(SoundEvents.BLOCK_NOTE_BLOCK_HARP, SoundCategory.PLAYERS, 1.0F, 2.0F);
-                for (ServerPlayerEntity playerEntity : players) {
+                for (ServerPlayerEntity playerEntity : game.participants.keySet()) {
                     playerEntity.setGameMode(GameMode.SURVIVAL);
                 }
                 game.gameLogic.setRule(GameRule.INTERACTION, RuleResult.ALLOW);

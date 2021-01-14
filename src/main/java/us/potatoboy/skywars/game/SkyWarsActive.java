@@ -252,25 +252,21 @@ public class SkyWarsActive {
         players.sendSound(SoundEvents.ENTITY_VILLAGER_YES);
     }
 
-    private WinResult checkWinResult() {
+    public WinResult checkWinResult() {
         // for testing purposes: don't end the game if we only ever had one participant
         if (this.ignoreWinState) {
-            return WinResult.no();
+            if (participants.size() == 0) {
+                return WinResult.win(null);
+            } else {
+                return WinResult.no();
+            }
         }
 
-        ServerWorld world = this.gameSpace.getWorld();
-        ServerPlayerEntity winningPlayer = null;
-
-        for (ServerPlayerEntity player : participants.keySet()) {
-                // we still have more than one player remaining
-                if (winningPlayer != null) {
-                    return WinResult.no();
-                }
-
-                winningPlayer = player;
+        if (participants.size() == 1) {
+            return WinResult.win((ServerPlayerEntity) participants.keySet().toArray()[0]);
         }
 
-        return WinResult.win(winningPlayer);
+        return WinResult.no();
     }
 
     public void spawnGameEnd() {
