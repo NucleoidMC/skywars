@@ -273,7 +273,6 @@ public class SkyWarsActive {
         WitherEntity witherEntity = EntityType.WITHER.create(gameSpace.getWorld());
         Vec3d pos = SkyWarsSpawnLogic.choosePos(new Random(), gameMap.waitingSpawn, 2f);
         witherEntity.refreshPositionAfterTeleport(pos);
-        witherEntity.method_6885();
         witherEntity.setCustomName(new LiteralText("Game End"));
         ServerPlayerEntity target = (ServerPlayerEntity) participants.keySet().toArray()[participants.size() == 1 ? 0 : new Random().nextInt(participants.size() - 1)];
         witherEntity.setTarget(target);
