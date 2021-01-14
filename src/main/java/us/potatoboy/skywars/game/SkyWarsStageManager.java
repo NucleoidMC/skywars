@@ -3,6 +3,8 @@ package us.potatoboy.skywars.game;
 import com.google.common.collect.ImmutableSet;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.world.GameMode;
 import us.potatoboy.skywars.game.map.loot.LootHelper;
@@ -14,6 +16,8 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
+import xyz.nucleoid.plasmid.game.rule.GameRule;
+import xyz.nucleoid.plasmid.game.rule.RuleResult;
 
 import java.util.Set;
 
@@ -81,9 +85,9 @@ public class SkyWarsStageManager {
 
         // Game has just finished. Transition to the waiting-before-close state.
         if (time > this.finishTime) {
-            this.closeTime = time + (5 * 20);
-
-            return IdleTickResult.GAME_FINISHED;
+            //this.closeTime = time + (5 * 20);
+            finishTime += 20 * 30;
+            game.spawnGameEnd();
         }
 
         return IdleTickResult.CONTINUE_TICK;
@@ -130,6 +134,7 @@ public class SkyWarsStageManager {
                 for (ServerPlayerEntity playerEntity : players) {
                     playerEntity.setGameMode(GameMode.SURVIVAL);
                 }
+                game.gameLogic.setRule(GameRule.INTERACTION, RuleResult.ALLOW);
             }
         }
     }

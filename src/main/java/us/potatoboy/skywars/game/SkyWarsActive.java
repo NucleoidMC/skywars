@@ -2,7 +2,10 @@ package us.potatoboy.skywars.game;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
@@ -10,8 +13,9 @@ import net.minecraft.text.MutableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import us.potatoboy.skywars.SkyWars;
+import net.minecraft.util.math.Vec3d;
 import xyz.nucleoid.plasmid.game.GameCloseReason;
+import xyz.nucleoid.plasmid.game.GameLogic;
 import xyz.nucleoid.plasmid.game.GameSpace;
 import xyz.nucleoid.plasmid.game.event.*;
 import xyz.nucleoid.plasmid.game.player.JoinResult;
@@ -38,6 +42,7 @@ public class SkyWarsActive {
 
     public final GameSpace gameSpace;
     public final SkyWarsMap gameMap;
+    public final GameLogic gameLogic;
 
     public final Object2ObjectMap<ServerPlayerEntity, SkyWarsPlayer> participants;
     private final SkyWarsSpawnLogic spawnLogic;
@@ -45,10 +50,11 @@ public class SkyWarsActive {
     private final SkyWarsSidebar sidebar;
     public final boolean ignoreWinState;
 
-    private SkyWarsActive(GameSpace gameSpace, SkyWarsMap map, GlobalWidgets widgets, SkyWarsConfig config, Set<ServerPlayerEntity> participants) {
+    private SkyWarsActive(GameSpace gameSpace, SkyWarsMap map, GlobalWidgets widgets, SkyWarsConfig config, Set<ServerPlayerEntity> participants, GameLogic gameLogic) {
         this.gameSpace = gameSpace;
         this.config = config;
         this.gameMap = map;
+        this.gameLogic = gameLogic;
         this.spawnLogic = new SkyWarsSpawnLogic(gameSpace, map);
         this.participants = new Object2ObjectOpenHashMap<>();
 
@@ -66,14 +72,14 @@ public class SkyWarsActive {
             Set<ServerPlayerEntity> participants = gameSpace.getPlayers().stream()
                     .collect(Collectors.toSet());
             GlobalWidgets widgets = new GlobalWidgets(game);
-            SkyWarsActive active = new SkyWarsActive(gameSpace, map, widgets, config, participants);
+            SkyWarsActive active = new SkyWarsActive(gameSpace, map, widgets, config, participants, game);
 
             game.setRule(GameRule.CRAFTING, RuleResult.ALLOW);
             game.setRule(GameRule.PORTALS, RuleResult.DENY);
             game.setRule(GameRule.PVP, RuleResult.ALLOW);
             game.setRule(GameRule.HUNGER, RuleResult.ALLOW);
             game.setRule(GameRule.FALL_DAMAGE, RuleResult.ALLOW);
-            game.setRule(GameRule.INTERACTION, RuleResult.ALLOW);
+            game.setRule(GameRule.INTERACTION, RuleResult.DENY);
             game.setRule(GameRule.BLOCK_DROPS, RuleResult.ALLOW);
             game.setRule(GameRule.THROW_ITEMS, RuleResult.ALLOW);
             game.setRule(GameRule.UNSTABLE_TNT, RuleResult.DENY);
@@ -128,7 +134,7 @@ public class SkyWarsActive {
     }
 
     private void removePlayer(ServerPlayerEntity player) {
-        if (player != null && participants.containsKey(player)) {
+        if (participants.containsKey(player)) {
             sidebar.sidebars.get(getParticipant(player)).removePlayer(player);
             participants.remove(player);
         }
@@ -146,7 +152,6 @@ public class SkyWarsActive {
         return ActionResult.PASS;
     }
 
-
     private ActionResult onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
         MutableText deathMessage = getDeathMessage(player, source);
         gameSpace.getPlayers().sendMessage(deathMessage.formatted(Formatting.GRAY));
@@ -154,6 +159,7 @@ public class SkyWarsActive {
         player.inventory.dropAll();
         this.spawnSpectator(player);
 
+        participants.remove(player);
         return ActionResult.FAIL;
     }
 
@@ -255,19 +261,28 @@ public class SkyWarsActive {
         ServerWorld world = this.gameSpace.getWorld();
         ServerPlayerEntity winningPlayer = null;
 
-        // TODO win result logic
-        for (ServerPlayerEntity player : this.gameSpace.getPlayers()) {
-            if (!player.isSpectator()) {
+        for (ServerPlayerEntity player : participants.keySet()) {
                 // we still have more than one player remaining
                 if (winningPlayer != null) {
                     return WinResult.no();
                 }
 
                 winningPlayer = player;
-            }
         }
 
         return WinResult.win(winningPlayer);
+    }
+
+    public void spawnGameEnd() {
+        WitherEntity witherEntity = EntityType.WITHER.create(gameSpace.getWorld());
+        Vec3d pos = SkyWarsSpawnLogic.choosePos(new Random(), gameMap.waitingSpawn, 2f);
+        witherEntity.refreshPositionAfterTeleport(pos);
+        witherEntity.method_6885();
+        witherEntity.setCustomName(new LiteralText("Game End"));
+        ServerPlayerEntity target = (ServerPlayerEntity) participants.keySet().toArray()[participants.size() == 1 ? 0 : new Random().nextInt(participants.size() - 1)];
+        witherEntity.setTarget(target);
+
+        gameSpace.getWorld().spawnEntity(witherEntity);
     }
 
     static class WinResult {
