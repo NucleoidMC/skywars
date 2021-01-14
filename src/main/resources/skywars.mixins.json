@@ -4,8 +4,6 @@
   "package": "us.potatoboy.skywars.mixin",
   "compatibilityLevel": "JAVA_8",
   "server": [
-    "PlayerEntityMixin",
-    "TridentEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

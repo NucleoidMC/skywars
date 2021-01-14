@@ -77,8 +77,8 @@ public class SkyWarsActive {
             game.setRule(GameRule.BLOCK_DROPS, RuleResult.ALLOW);
             game.setRule(GameRule.THROW_ITEMS, RuleResult.ALLOW);
             game.setRule(GameRule.UNSTABLE_TNT, RuleResult.DENY);
-            game.setRule(SkyWars.PLAYER_PROJECTILE_KNOCKBACK, RuleResult.ALLOW);
-            game.setRule(SkyWars.TRIDENTS_LOYAL_IN_VOID, RuleResult.ALLOW);
+            game.setRule(GameRule.PLAYER_PROJECTILE_KNOCKBACK, RuleResult.ALLOW);
+            game.setRule(GameRule.TRIDENTS_LOYAL_IN_VOID, RuleResult.ALLOW);
 
             game.on(GameOpenListener.EVENT, active::onOpen);
             game.on(GameCloseListener.EVENT, active::onClose);
