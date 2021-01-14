@@ -44,43 +44,46 @@
           "type": "minecraft:item",
           "weight": 10,
           "quality": 1,
-          "name": "minecraft:chainmail_boots"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 4,
-          "quality": 1,
           "name": "minecraft:iron_boots"
         },
         {
           "type": "minecraft:item",
           "weight": 10,
           "quality": 1,
-          "name": "minecraft:chainmail_leggings"
+          "name": "minecraft:iron_leggings"
         },
         {
           "type": "minecraft:item",
           "weight": 10,
           "quality": 1,
-          "name": "minecraft:chainmail_chestplate"
+          "name": "minecraft:iron_chestplate"
         },
         {
           "type": "minecraft:item",
           "weight": 10,
-          "quality": 1,
-          "name": "minecraft:chainmail_helmet"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 4,
           "quality": 1,
           "name": "minecraft:iron_helmet"
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
+          "weight": 6,
+          "name": "minecraft:water_bucket"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "name": "minecraft:lava_bucket"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
           "quality": 1,
           "name": "minecraft:crossbow"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 6,
+          "name": "minecraft:golden_apple"
         },
         {
           "type": "minecraft:item",
@@ -111,7 +114,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
+          "weight": 10,
           "quality": 1,
           "name": "minecraft:arrow",
           "functions": [
@@ -126,7 +129,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 6,
+          "weight": 10,
           "quality": 1,
           "name": "minecraft:bow"
         },

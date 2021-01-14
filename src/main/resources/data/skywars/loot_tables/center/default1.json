@@ -46,6 +46,16 @@
         {
           "type": "minecraft:item",
           "weight": 6,
+          "name": "minecraft:water_bucket"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 4,
+          "name": "minecraft:lava_bucket"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 6,
           "quality": 1,
           "name": "minecraft:arrow",
           "functions": [

@@ -74,7 +74,7 @@ public class SkyWarsStageManager {
         if (refills <= game.config.refills) {
             if (time > refillTime) {
                 refills++;
-                LootHelper.fillChests(game.gameSpace.getWorld(), game.gameMap, refills);
+                LootHelper.fillChests(game.gameSpace.getWorld(), game.gameMap, game.config, refills);
                 this.refillTime = time + (game.config.refill_mins * 20 * 60);
             }
         }

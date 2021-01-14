@@ -1,6 +1,8 @@
 package us.potatoboy.skywars.game;
 
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 import us.potatoboy.skywars.game.map.loot.LootHelper;
 import xyz.nucleoid.plasmid.game.*;
 import xyz.nucleoid.plasmid.game.config.PlayerConfig;
@@ -32,6 +34,7 @@ public class SkyWarsWaiting {
 
         BubbleWorldConfig worldConfig = new BubbleWorldConfig()
                 .setGenerator(map.asGenerator(context.getServer()))
+                .setDimensionType(RegistryKey.of(Registry.DIMENSION_TYPE_KEY, config.dimension))
                 .setDefaultGameMode(GameMode.SPECTATOR);
 
         return context.createOpenProcedure(worldConfig, game -> {
@@ -43,7 +46,7 @@ public class SkyWarsWaiting {
             game.on(PlayerAddListener.EVENT, waiting::addPlayer);
             game.on(PlayerDeathListener.EVENT, waiting::onPlayerDeath);
 
-            LootHelper.fillChests(game.getSpace().getWorld(), map, 1);
+            LootHelper.fillChests(game.getSpace().getWorld(), map, config, 1);
         });
     }
 
