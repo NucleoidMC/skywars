@@ -115,7 +115,6 @@ public class SkyWarsActive {
         spawnParticipants();
 
         this.stageManager.onOpen(world.getTime(), this.config);
-        // TODO setup logic
     }
 
     private SkyWarsPlayer getParticipant(ServerPlayerEntity player) {
@@ -137,7 +136,6 @@ public class SkyWarsActive {
     }
 
     private void onClose() {
-        // TODO teardown logic
         sidebar.close();
         allTeams.forEach(team -> gameSpace.getServer().getScoreboard().removeTeam(team));
     }
@@ -255,16 +253,40 @@ public class SkyWarsActive {
     private void broadcastWin(WinResult result) {
         Team winningTeam = result.getWinningTeam();
 
-        Text message;
-        if (winningTeam != null) {
-            message = winningTeam.getDisplayName().shallowCopy().append(" has won the game!").formatted(Formatting.GOLD);
-        } else {
-            message = new LiteralText("The game ended, but nobody won!").formatted(Formatting.GOLD);
-        }
+        Text message = getWinMessage(winningTeam);
 
         PlayerSet players = this.gameSpace.getPlayers();
         players.sendMessage(message);
         players.sendSound(SoundEvents.ENTITY_VILLAGER_YES);
+    }
+
+    private Text getWinMessage(Team winningTeam) {
+        if (winningTeam != null) {
+            MutableText message = new LiteralText("");
+            //message = new LiteralText(" has won the game!").formatted(Formatting.GOLD);
+            List<ServerPlayerEntity> winners = new ArrayList<>(teams.get(winningTeam));
+            for (int i = 0; i < winners.size(); i++) {
+                switch (i) {
+                    case 0:
+                        message = new LiteralText("").append(winners.get(i).getDisplayName()).append(message);
+                        break;
+                    case 1:
+                        message = new LiteralText("").append(winners.get(i).getDisplayName()).append(" and ").append(message);
+                        break;
+                    default:
+                        message = new LiteralText("").append(winners.get(i).getDisplayName()).append(", ").append(message);
+                        break;
+                }
+            }
+
+            if (winners.size() <= 1) {
+                return message.append(" has won the game!").formatted(Formatting.GOLD);
+            } else {
+                return message.append(" have won the game!").formatted(Formatting.GOLD);
+            }
+        } else {
+            return new LiteralText("The game ended, but nobody won!").formatted(Formatting.GOLD);
+        }
     }
 
     public WinResult checkWinResult() {

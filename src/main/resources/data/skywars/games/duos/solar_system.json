@@ -1,6 +1,6 @@
 {
   "type": "skywars:skywars",
-  "name": "SkyWars Solar System",
+  "name": "SkyWars Solar System (Duos)",
   "map": {
     "id": "skywars:solar_system"
   },
