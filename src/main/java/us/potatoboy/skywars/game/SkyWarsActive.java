@@ -1,14 +1,19 @@
 package us.potatoboy.skywars.game;
 
+import com.google.common.base.Predicates;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.boss.dragon.phase.PhaseType;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -45,16 +50,20 @@ public class SkyWarsActive {
     public final GameLogic gameLogic;
 
     public final Object2ObjectMap<ServerPlayerEntity, SkyWarsPlayer> participants;
+    public Multimap<Team, ServerPlayerEntity> teams;
+    private Set<Team> allTeams;
     private final SkyWarsSpawnLogic spawnLogic;
     public final SkyWarsStageManager stageManager;
     private final SkyWarsSidebar sidebar;
     public final boolean ignoreWinState;
 
-    private SkyWarsActive(GameSpace gameSpace, SkyWarsMap map, GlobalWidgets widgets, SkyWarsConfig config, Set<ServerPlayerEntity> participants, GameLogic gameLogic) {
+    private SkyWarsActive(GameSpace gameSpace, SkyWarsMap map, GlobalWidgets widgets, SkyWarsConfig config, Set<ServerPlayerEntity> participants, GameLogic gameLogic, Multimap<Team, ServerPlayerEntity> teams) {
         this.gameSpace = gameSpace;
         this.config = config;
         this.gameMap = map;
         this.gameLogic = gameLogic;
+        this.teams = teams;
+        this.allTeams = new HashSet<>(teams.keySet());
         this.spawnLogic = new SkyWarsSpawnLogic(gameSpace, map);
         this.participants = new Object2ObjectOpenHashMap<>();
 
@@ -64,15 +73,15 @@ public class SkyWarsActive {
 
         this.sidebar = new SkyWarsSidebar(this);
         this.stageManager = new SkyWarsStageManager(this);
-        this.ignoreWinState = this.participants.size() <= 1;
+        this.ignoreWinState = this.teams.keySet().size() <= 1;
     }
 
-    public static void open(GameSpace gameSpace, SkyWarsMap map, SkyWarsConfig config) {
+    public static void open(GameSpace gameSpace, SkyWarsMap map, SkyWarsConfig config, Multimap<Team, ServerPlayerEntity> teams) {
         gameSpace.openGame(game -> {
             Set<ServerPlayerEntity> participants = gameSpace.getPlayers().stream()
                     .collect(Collectors.toSet());
             GlobalWidgets widgets = new GlobalWidgets(game);
-            SkyWarsActive active = new SkyWarsActive(gameSpace, map, widgets, config, participants, game);
+            SkyWarsActive active = new SkyWarsActive(gameSpace, map, widgets, config, participants, game, teams);
 
             game.setRule(GameRule.CRAFTING, RuleResult.ALLOW);
             game.setRule(GameRule.PORTALS, RuleResult.DENY);
@@ -118,15 +127,19 @@ public class SkyWarsActive {
         Collections.shuffle(gameMap.spawns);
 
         Iterator<BlockPos> spawnIterator = gameMap.spawns.listIterator();
-        for (ServerPlayerEntity player : this.participants.keySet()) {
-            this.spawnLogic.resetPlayer(player, GameMode.ADVENTURE);
-            this.spawnLogic.spawnPlayer(player, spawnIterator.next());
+        for (Team team : teams.keySet()) {
+            BlockPos spawn = spawnIterator.next();
+            for (ServerPlayerEntity player : teams.get(team)) {
+                this.spawnLogic.resetPlayer(player, GameMode.ADVENTURE);
+                this.spawnLogic.spawnPlayer(player, spawn);
+            }
         }
     }
 
     private void onClose() {
         // TODO teardown logic
         sidebar.close();
+        allTeams.forEach(team -> gameSpace.getServer().getScoreboard().removeTeam(team));
     }
 
     private void addPlayer(ServerPlayerEntity player) {
@@ -137,6 +150,8 @@ public class SkyWarsActive {
         if (participants.containsKey(player)) {
             sidebar.sidebars.get(getParticipant(player)).removePlayer(player);
             participants.remove(player);
+            teams.values().remove(player);
+            teams.containsValue(player);
         }
     }
 
@@ -159,7 +174,7 @@ public class SkyWarsActive {
         player.inventory.dropAll();
         this.spawnSpectator(player);
 
-        participants.remove(player);
+        removePlayer(player);
         return ActionResult.FAIL;
     }
 
@@ -238,11 +253,11 @@ public class SkyWarsActive {
     }
 
     private void broadcastWin(WinResult result) {
-        ServerPlayerEntity winningPlayer = result.getWinningPlayer();
+        Team winningTeam = result.getWinningTeam();
 
         Text message;
-        if (winningPlayer != null) {
-            message = winningPlayer.getDisplayName().shallowCopy().append(" has won the game!").formatted(Formatting.GOLD);
+        if (winningTeam != null) {
+            message = winningTeam.getDisplayName().shallowCopy().append(" has won the game!").formatted(Formatting.GOLD);
         } else {
             message = new LiteralText("The game ended, but nobody won!").formatted(Formatting.GOLD);
         }
@@ -255,37 +270,52 @@ public class SkyWarsActive {
     public WinResult checkWinResult() {
         // for testing purposes: don't end the game if we only ever had one participant
         if (this.ignoreWinState) {
-            if (participants.size() == 0) {
+            if (teams.keySet().size() == 0) {
                 return WinResult.win(null);
             } else {
                 return WinResult.no();
             }
         }
 
-        if (participants.size() == 1) {
-            return WinResult.win((ServerPlayerEntity) participants.keySet().toArray()[0]);
+        if (teams.keySet().size() == 1) {
+            return WinResult.win((Team) teams.keySet().toArray()[0]);
         }
 
         return WinResult.no();
     }
 
     public void spawnGameEnd() {
-        WitherEntity witherEntity = EntityType.WITHER.create(gameSpace.getWorld());
-        Vec3d pos = SkyWarsSpawnLogic.choosePos(new Random(), gameMap.waitingSpawn, 2f);
-        witherEntity.refreshPositionAfterTeleport(pos);
-        witherEntity.setCustomName(new LiteralText("Game End"));
-        ServerPlayerEntity target = (ServerPlayerEntity) participants.keySet().toArray()[participants.size() == 1 ? 0 : new Random().nextInt(participants.size() - 1)];
-        witherEntity.setTarget(target);
+        Random random = new Random();
+        int eventID = random.nextInt(2);
+        MobEntity entity;
+        ServerPlayerEntity target = (ServerPlayerEntity) participants.keySet().toArray()[participants.size() == 1 ? 0 : random.nextInt(participants.size())];
 
-        gameSpace.getWorld().spawnEntity(witherEntity);
+        switch (eventID) {
+            case 0:
+                entity = EntityType.WITHER.create(gameSpace.getWorld());
+                entity.setTarget(target);
+                break;
+            case 1:
+                entity = EntityType.ENDER_DRAGON.create(gameSpace.getWorld());
+                ((EnderDragonEntity) entity).getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);
+                ((EnderDragonEntity) entity).getPhaseManager().create(PhaseType.CHARGING_PLAYER).setTarget(new Vec3d(target.getX(), target.getY(), target.getZ()));
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + eventID);
+        }
+
+        Vec3d pos = SkyWarsSpawnLogic.choosePos(new Random(), gameMap.waitingSpawn, 2f);
+        entity.refreshPositionAfterTeleport(pos);
+        
+        gameSpace.getWorld().spawnEntity(entity);
     }
 
     static class WinResult {
-        final ServerPlayerEntity winningPlayer;
+        final Team winningTeam;
         final boolean win;
 
-        private WinResult(ServerPlayerEntity winningPlayer, boolean win) {
-            this.winningPlayer = winningPlayer;
+        private WinResult(Team winningTeam, boolean win) {
+            this.winningTeam = winningTeam;
             this.win = win;
         }
 
@@ -293,16 +323,16 @@ public class SkyWarsActive {
             return new WinResult(null, false);
         }
 
-        static WinResult win(ServerPlayerEntity player) {
-            return new WinResult(player, true);
+        static WinResult win(Team team) {
+            return new WinResult(team, true);
         }
 
         public boolean isWin() {
             return this.win;
         }
 
-        public ServerPlayerEntity getWinningPlayer() {
-            return this.winningPlayer;
+        public Team getWinningTeam() {
+            return this.winningTeam;
         }
     }
 }

@@ -34,7 +34,7 @@ public class SkyWarsSidebar {
             sidebar.set(content -> {
                 long ticksUntilEnd = game.stageManager.finishTime - time;
                 long ticksUntilRefill = game.stageManager.refillTime - time;
-                content.writeLine(formatTime(ticksUntilEnd, "Game End"));
+                content.writeLine(formatTime(ticksUntilEnd, "Armageddon"));
                 if (game.stageManager.refills <= game.config.refills) {
                     content.writeLine("");
                     content.writeLine(formatTime(ticksUntilRefill, "Next Refill"));

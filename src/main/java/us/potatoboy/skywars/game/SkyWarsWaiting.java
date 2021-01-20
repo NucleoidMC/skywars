@@ -1,8 +1,15 @@
 package us.potatoboy.skywars.game;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import net.minecraft.scoreboard.AbstractTeam;
+import net.minecraft.scoreboard.ServerScoreboard;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
+import org.apache.commons.lang3.RandomStringUtils;
+import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.game.map.loot.LootHelper;
 import xyz.nucleoid.plasmid.game.*;
 import xyz.nucleoid.plasmid.game.config.PlayerConfig;
@@ -13,6 +20,10 @@ import net.minecraft.world.GameMode;
 import us.potatoboy.skywars.game.map.SkyWarsMap;
 import us.potatoboy.skywars.game.map.SkyWarsMapGenerator;
 import xyz.nucleoid.fantasy.BubbleWorldConfig;
+import xyz.nucleoid.plasmid.game.player.GameTeam;
+import xyz.nucleoid.plasmid.game.player.TeamAllocator;
+
+import java.util.HashSet;
 
 public class SkyWarsWaiting {
     private final GameSpace gameSpace;
@@ -38,7 +49,7 @@ public class SkyWarsWaiting {
                 .setDefaultGameMode(GameMode.SPECTATOR);
 
         return context.createOpenProcedure(worldConfig, game -> {
-            GameWaitingLobby.applyTo(game, new PlayerConfig(1, map.spawns.size(), 2, PlayerConfig.Countdown.DEFAULT));
+            GameWaitingLobby.applyTo(game, new PlayerConfig(1, map.spawns.size(), config.teamSize + 1, PlayerConfig.Countdown.DEFAULT));
 
             SkyWarsWaiting waiting = new SkyWarsWaiting(game.getSpace(), map, context.getConfig());
 
@@ -51,7 +62,32 @@ public class SkyWarsWaiting {
     }
 
     private StartResult requestStart() {
-        SkyWarsActive.open(this.gameSpace, this.map, this.config);
+        ServerScoreboard scoreboard = gameSpace.getServer().getScoreboard();
+
+        HashSet<Team> teams = new HashSet<>();
+
+        for (int i = 0; i < Math.round(gameSpace.getPlayers().size() / (float) config.teamSize); i++) {
+            Team team = scoreboard.addTeam(RandomStringUtils.randomAlphabetic(16));
+            team.setFriendlyFireAllowed(false);
+            team.setShowFriendlyInvisibles(true);
+            team.setCollisionRule(AbstractTeam.CollisionRule.NEVER);
+
+            teams.add(team);
+        }
+
+        TeamAllocator allocator = new TeamAllocator(teams);
+
+        for (ServerPlayerEntity playerEntity : gameSpace.getPlayers()) {
+            allocator.add(playerEntity, null);
+        }
+
+        Multimap<Team, ServerPlayerEntity> teamPlayers = HashMultimap.create();
+        allocator.allocate((team, player) -> {
+            scoreboard.addPlayerToTeam(((ServerPlayerEntity)player).getEntityName(), (Team) team);
+            teamPlayers.put((Team)team, (ServerPlayerEntity)player);
+        });
+
+        SkyWarsActive.open(this.gameSpace, this.map, this.config, teamPlayers);
         return StartResult.OK;
     }
 

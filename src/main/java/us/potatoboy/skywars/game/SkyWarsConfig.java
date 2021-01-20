@@ -16,7 +16,8 @@ public class SkyWarsConfig {
             Identifier.CODEC.optionalFieldOf("center_loot_table", new Identifier(SkyWars.ID, "center/default")).forGetter(config -> config.centerLootTable),
             Codec.INT.fieldOf("refills").forGetter(config -> config.refills),
             Codec.INT.fieldOf("refill_mins").forGetter(config -> config.refill_mins),
-            Codec.INT.fieldOf("time_limit_mins").forGetter(config -> config.timeLimitMins)
+            Codec.INT.fieldOf("time_limit_mins").forGetter(config -> config.timeLimitMins),
+            Codec.INT.optionalFieldOf("team_size", 1).forGetter(config -> config.teamSize)
     ).apply(instance, SkyWarsConfig::new));
 
     public final SkyWarsMapConfig mapConfig;
@@ -26,8 +27,9 @@ public class SkyWarsConfig {
     public Identifier centerLootTable;
     public int refills;
     public int refill_mins;
+    public int teamSize;
 
-    public SkyWarsConfig( Identifier dimension, SkyWarsMapConfig mapConfig, Identifier spawnLootTable, Identifier centerLootTable, int refills, int refill_mins, int timeLimitMins) {
+    public SkyWarsConfig( Identifier dimension, SkyWarsMapConfig mapConfig, Identifier spawnLootTable, Identifier centerLootTable, int refills, int refill_mins, int timeLimitMins, int teamSize) {
         this.mapConfig = mapConfig;
         this.timeLimitMins = timeLimitMins;
         this.dimension = dimension;
@@ -35,5 +37,6 @@ public class SkyWarsConfig {
         this.centerLootTable = centerLootTable;
         this.refills = refills;
         this.refill_mins = refill_mins;
+        this.teamSize = teamSize;
     }
 }

@@ -47,6 +47,7 @@ public class SkyWarsSpawnLogic {
         ServerWorld world = this.gameSpace.getWorld();
 
         player.teleport(world, pos.getX(), pos.getY(), pos.getZ(), 0.0F, 0.0F);
+        player.setOnGround(true);
     }
 
     public static Vec3d choosePos(Random random, BlockBounds bounds, float aboveGround) {
