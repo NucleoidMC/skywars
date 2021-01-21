@@ -5,7 +5,9 @@ import com.google.common.collect.Multimap;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.scoreboard.Team;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -23,7 +25,10 @@ import xyz.nucleoid.fantasy.BubbleWorldConfig;
 import xyz.nucleoid.plasmid.game.player.GameTeam;
 import xyz.nucleoid.plasmid.game.player.TeamAllocator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 public class SkyWarsWaiting {
     private final GameSpace gameSpace;
@@ -65,12 +70,31 @@ public class SkyWarsWaiting {
         ServerScoreboard scoreboard = gameSpace.getServer().getScoreboard();
 
         HashSet<Team> teams = new HashSet<>();
+        List<Formatting> teamColors = new ArrayList<>(Arrays.asList(
+                Formatting.BLUE,
+                Formatting.RED,
+                Formatting.YELLOW,
+                Formatting.GREEN,
+                Formatting.GOLD,
+                Formatting.AQUA,
+                Formatting.GOLD,
+                Formatting.LIGHT_PURPLE,
+                Formatting.DARK_PURPLE,
+                Formatting.DARK_AQUA,
+                Formatting.DARK_RED,
+                Formatting.DARK_GREEN,
+                Formatting.DARK_BLUE,
+                Formatting.DARK_GRAY,
+                Formatting.BLACK
+        ));
 
         for (int i = 0; i < Math.round(gameSpace.getPlayers().size() / (float) config.teamSize); i++) {
             Team team = scoreboard.addTeam(RandomStringUtils.randomAlphabetic(16));
             team.setFriendlyFireAllowed(false);
             team.setShowFriendlyInvisibles(true);
             team.setCollisionRule(AbstractTeam.CollisionRule.NEVER);
+            team.setDisplayName(new LiteralText("Team"));
+            team.setColor(teamColors.get(i));
 
             teams.add(team);
         }

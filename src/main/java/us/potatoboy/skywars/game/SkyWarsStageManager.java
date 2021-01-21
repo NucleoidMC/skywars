@@ -74,6 +74,8 @@ public class SkyWarsStageManager {
                 refills++;
                 LootHelper.fillChests(game.gameSpace.getWorld(), game.gameMap, game.config, refills);
                 this.refillTime = time + (game.config.refill_mins * 20 * 60);
+                game.gameSpace.getPlayers().sendActionbar(new LiteralText("Chests Refilled"), 5, 20, 5);
+                game.gameSpace.getPlayers().sendSound(SoundEvents.BLOCK_CHEST_CLOSE);
             }
         }
 
@@ -82,6 +84,8 @@ public class SkyWarsStageManager {
             //this.closeTime = time + (5 * 20);
             finishTime += 20 * 30;
             game.spawnGameEnd();
+            game.gameSpace.getPlayers().sendTitle(new LiteralText("Armageddon").formatted(Formatting.BOLD, Formatting.RED), 5, 20, 5);
+            game.gameSpace.getPlayers().sendSound(SoundEvents.ENTITY_WITHER_SPAWN);
         }
 
         return IdleTickResult.CONTINUE_TICK;
