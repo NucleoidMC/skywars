@@ -13,6 +13,8 @@ public class SkyWars implements ModInitializer {
     public static final String ID = "skywars";
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
+    public static GameRule PROJECTILE_PLAYER_MOMENTUM = new GameRule();
+
     public static final GameType<SkyWarsConfig> TYPE = GameType.register(
             new Identifier(ID, "skywars"),
             SkyWarsWaiting::open,
