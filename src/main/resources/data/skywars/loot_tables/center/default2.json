@@ -169,12 +169,12 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "weight": 7,
           "name": "minecraft:ender_pearl"
         },
         {
           "type": "minecraft:item",
-          "weight": 18,
+          "weight": 10,
           "quality": 1,
           "name": "minecraft:oak_planks",
           "functions": [
