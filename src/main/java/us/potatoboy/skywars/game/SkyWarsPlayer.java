@@ -2,11 +2,12 @@ package us.potatoboy.skywars.game;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import us.potatoboy.skywars.kit.Kit;
 
 public class SkyWarsPlayer {
-    //TODO kit
     public AttackRecord lastTimeAttacked;
     public int kills;
+    public Kit selectedKit;
 
     public SkyWarsPlayer() {
         kills = 0;

@@ -1,6 +1,7 @@
 package us.potatoboy.skywars;
 
 import net.fabricmc.api.ModInitializer;
+import us.potatoboy.skywars.kit.KitRegistry;
 import xyz.nucleoid.plasmid.game.GameType;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +23,9 @@ public class SkyWars implements ModInitializer {
     );
 
     @Override
-    public void onInitialize() {}
+    public void onInitialize() {
+        KitRegistry.register();
+    }
 
     public static Identifier identifier(String value) {
         return new Identifier(ID, value);

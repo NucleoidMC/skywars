@@ -1,0 +1,34 @@
+{
+  "kit_name": "iron_golem",
+  "icon": {
+    "id": "player_head",
+    "Count": 1,
+    "tag": {
+      "SkullOwner": "MHF_Golem"
+    }
+  },
+  "armor": [
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "iron_chestplate",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    }
+  ],
+  "items": [
+    {
+      "id": "iron_ingot",
+      "Count": 2
+    }
+  ]
+}

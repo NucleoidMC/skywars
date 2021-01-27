@@ -131,6 +131,11 @@ public class SkyWarsStageManager {
                 players.sendSound(SoundEvents.BLOCK_NOTE_BLOCK_HARP, SoundCategory.PLAYERS, 1.0F, 2.0F);
                 for (ServerPlayerEntity playerEntity : game.participants.keySet()) {
                     playerEntity.setGameMode(GameMode.SURVIVAL);
+
+                    SkyWarsPlayer participant = game.participants.get(playerEntity);
+                    if (participant.selectedKit != null) {
+                        participant.selectedKit.equipPlayer(playerEntity);
+                    }
                 }
                 game.gameLogic.setRule(GameRule.INTERACTION, RuleResult.ALLOW);
             }
