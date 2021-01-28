@@ -72,7 +72,7 @@ public final class KitSelectorInventory implements Inventory {
     }
 
     public int size() {
-        return 9;
+        return 27;
     }
 
     public boolean isEmpty() {

@@ -72,6 +72,11 @@ public class KitRegistry {
         return KITS.get(identifier);
     }
 
+    @Nullable
+    public static Identifier getId(Kit kit) {
+        return KITS.getIdentifier(kit);
+    }
+
     public static TinyRegistry<Kit> getKITS() {
         return KITS;
     }

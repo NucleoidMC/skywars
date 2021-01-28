@@ -22,6 +22,7 @@ import net.minecraft.util.registry.RegistryKey;
 import org.apache.commons.lang3.RandomStringUtils;
 import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.game.map.loot.LootHelper;
+import us.potatoboy.skywars.kit.KitRegistry;
 import xyz.nucleoid.plasmid.game.*;
 import xyz.nucleoid.plasmid.game.config.PlayerConfig;
 import xyz.nucleoid.plasmid.game.event.*;
@@ -145,7 +146,9 @@ public class SkyWarsWaiting {
     }
 
     private void addPlayer(ServerPlayerEntity player) {
-        participants.put(player, new SkyWarsPlayer());
+        SkyWarsPlayer participant = new SkyWarsPlayer();
+        participant.selectedKit = KitRegistry.get(SkyWars.KIT_STORAGE.getPlayerKit(player.getUuid()));
+        participants.put(player, participant);
         this.spawnPlayer(player);
     }
 

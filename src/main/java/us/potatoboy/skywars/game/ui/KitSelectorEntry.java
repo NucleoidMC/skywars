@@ -3,14 +3,14 @@ package us.potatoboy.skywars.game.ui;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import us.potatoboy.skywars.game.SkyWarsPlayer;
 import us.potatoboy.skywars.kit.Kit;
@@ -54,7 +54,7 @@ public final class KitSelectorEntry {
 
     ItemStack createIcon(SkyWarsPlayer participant) {
         ItemStack icon = this.icon.build().copy();
-        icon.getTag().putByte("HideFlags", (byte) 127);
+        icon.getTag().putByte("HideFlags", (byte) 95);
 
         Style style = Style.EMPTY.withItalic(false).withColor(Formatting.GOLD);
 
@@ -63,8 +63,11 @@ public final class KitSelectorEntry {
 
         if (participant.selectedKit == kit) {
             icon.addEnchantment(null, 0);
-        } else {
-            icon.getTag().remove("Enchantments");
+
+            CompoundTag display = icon.getOrCreateSubTag("display");
+            ListTag loreList = new ListTag();
+            display.put("Lore", loreList);
+            loreList.add(StringTag.of(Text.Serializer.toJson(new TranslatableText("skywars.text.selected"))));
         }
 
         return icon;

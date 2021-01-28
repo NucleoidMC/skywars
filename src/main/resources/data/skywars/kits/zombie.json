@@ -1,7 +1,7 @@
 {
-  "kit_name": "iron_golem",
+  "kit_name": "zombie",
   "icon": {
-    "id": "iron_ingot",
+    "id": "rotten_flesh",
     "Count": 1
   },
   "armor": [
@@ -10,7 +10,7 @@
       "Count": 1
     },
     {
-      "id": "iron_chestplate",
+      "id": "leather_chestplate",
       "Count": 1
     },
     {
@@ -24,7 +24,7 @@
   ],
   "items": [
     {
-      "id": "iron_ingot",
+      "id": "stone_sword",
       "Count": 2
     }
   ]

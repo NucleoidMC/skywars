@@ -36,7 +36,7 @@ public final class KitSelectorUI implements NamedScreenHandlerFactory {
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
         final ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
         KitSelectorInventory inventory = new KitSelectorInventory(serverPlayer, game.participants.get(player), this.builder);
-        return new GenericContainerScreenHandler(ScreenHandlerType.GENERIC_9X1, syncId, playerInventory, inventory, 1) {
+        return new GenericContainerScreenHandler(ScreenHandlerType.GENERIC_9X3, syncId, playerInventory, inventory, 3) {
             public ItemStack transferSlot(PlayerEntity player, int invSlot) {
                 this.resendInventory();
                 return ItemStack.EMPTY;

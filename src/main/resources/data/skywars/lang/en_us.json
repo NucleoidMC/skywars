@@ -1,6 +1,10 @@
 {
   "skywars.item.select_kit": "Select Kit",
   "skywars.text.select_kit": "Select Your Kit",
+  "skywars.text.selected": "§aSelected",
 
-  "skywars.kit.iron_golem": "Iron Golem"
+  "skywars.kit.none": "None",
+  "skywars.kit.iron_golem": "Iron Golem",
+  "skywars.kit.zombie": "Zombie"
+
 }
