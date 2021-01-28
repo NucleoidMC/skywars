@@ -37,7 +37,7 @@ public class KitRegistry {
             public void apply(ResourceManager manager) {
                 KITS.clear();
 
-                Collection<Identifier> resources = manager.findResources("kits", path -> path.endsWith(".json"));
+                Collection<Identifier> resources = manager.findResources("skywarsKits", path -> path.endsWith(".json"));
 
                 for (Identifier path : resources) {
                     try {
