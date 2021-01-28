@@ -6,10 +6,12 @@ import com.google.common.collect.Multimaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
@@ -307,28 +309,41 @@ public class SkyWarsActive {
 
     public void spawnGameEnd() {
         Random random = new Random();
-        int eventID = random.nextInt(2);
-        MobEntity entity;
+        int eventID = random.nextInt(3);
+        List<MobEntity> entities = new ArrayList<>();
         ServerPlayerEntity target = (ServerPlayerEntity) participants.keySet().toArray()[participants.size() == 1 ? 0 : random.nextInt(participants.size())];
 
         switch (eventID) {
             case 0:
-                entity = EntityType.WITHER.create(gameSpace.getWorld());
+                MobEntity entity = EntityType.WITHER.create(gameSpace.getWorld());
                 entity.setTarget(target);
+                entities.add(entity);
                 break;
             case 1:
                 entity = EntityType.ENDER_DRAGON.create(gameSpace.getWorld());
                 ((EnderDragonEntity) entity).getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);
                 ((EnderDragonEntity) entity).getPhaseManager().create(PhaseType.CHARGING_PLAYER).setTarget(new Vec3d(target.getX(), target.getY(), target.getZ()));
+                entities.add(entity);
+                break;
+            case 2:
+                for (int i = 0; i < 10; i++) {
+                    entity = EntityType.BEE.create(gameSpace.getWorld());
+                    ((BeeEntity)entity).setAngerTime(1000000000);
+                    ((BeeEntity)entity).setTarget(target);
+                    ((BeeEntity)entity).setAngryAt(target.getUuid());
+                    entities.add(entity);
+                }
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + eventID);
         }
 
-        Vec3d pos = SkyWarsSpawnLogic.choosePos(new Random(), gameMap.waitingSpawn, 2f);
-        entity.refreshPositionAfterTeleport(pos);
-        
-        gameSpace.getWorld().spawnEntity(entity);
+        for (MobEntity entity : entities) {
+            Vec3d pos = SkyWarsSpawnLogic.choosePos(new Random(), gameMap.waitingSpawn, 2f);
+            entity.refreshPositionAfterTeleport(pos);
+
+            gameSpace.getWorld().spawnEntity(entity);
+        }
     }
 
     static class WinResult {
