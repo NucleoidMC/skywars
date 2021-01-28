@@ -92,6 +92,7 @@ public class SkyWarsActive {
             game.setRule(GameRule.PLAYER_PROJECTILE_KNOCKBACK, RuleResult.ALLOW);
             game.setRule(GameRule.TRIDENTS_LOYAL_IN_VOID, RuleResult.ALLOW);
             game.setRule(SkyWars.PROJECTILE_PLAYER_MOMENTUM, RuleResult.ALLOW);
+            game.setRule(SkyWars.REDUCED_EXPLOSION_DAMAGE, RuleResult.ALLOW);
 
             game.on(GameOpenListener.EVENT, active::onOpen);
             game.on(GameCloseListener.EVENT, active::onClose);

@@ -7,5 +7,6 @@
   "dimension": "skywars:outer_space",
   "refills": 2,
   "refill_mins": 2,
-  "time_limit_mins": 10
+  "time_limit_mins": 10,
+  "kits": true
 }

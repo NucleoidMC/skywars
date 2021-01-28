@@ -4,7 +4,11 @@
   "skywars.text.selected": "§aSelected",
 
   "skywars.kit.none": "None",
-  "skywars.kit.iron_golem": "Iron Golem",
-  "skywars.kit.zombie": "Zombie"
-
+  "skywars.kit.zombie": "Zombie",
+  "skywars.kit.creeper": "Creeper",
+  "skywars.kit.skeleton": "Skeleton",
+  "skywars.kit.witch": "Witch",
+  "skywars.kit.slime": "Slime",
+  "skywars.kit.guardian": "Guardian",
+  "skywars.kit.enderman": "Enderman"
 }

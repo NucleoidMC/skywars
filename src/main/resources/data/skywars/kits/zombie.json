@@ -11,11 +11,21 @@
     },
     {
       "id": "leather_chestplate",
-      "Count": 1
+      "Count": 1,
+      "tag": {
+        "display": {
+          "color": 3847130
+        }
+      }
     },
     {
-      "id": "air",
-      "Count": 1
+      "id": "leather_leggings",
+      "Count": 1,
+      "tag": {
+        "display": {
+          "color": 3949738
+        }
+      }
     },
     {
       "id": "air",
@@ -24,8 +34,8 @@
   ],
   "items": [
     {
-      "id": "stone_sword",
-      "Count": 2
+      "id": "iron_axe",
+      "Count": 1
     }
   ]
 }

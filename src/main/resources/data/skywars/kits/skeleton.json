@@ -1,16 +1,16 @@
 {
-  "kit_name": "iron_golem",
+  "kit_name": "skeleton",
   "icon": {
-    "id": "iron_ingot",
+    "id": "bow",
     "Count": 1
   },
   "armor": [
     {
-      "id": "air",
+      "id": "chainmail_helmet",
       "Count": 1
     },
     {
-      "id": "iron_chestplate",
+      "id": "air",
       "Count": 1
     },
     {
@@ -24,8 +24,12 @@
   ],
   "items": [
     {
-      "id": "iron_ingot",
-      "Count": 2
+      "id": "bow",
+      "Count": 1
+    },
+    {
+      "id": "arrow",
+      "Count": 16
     }
   ]
 }

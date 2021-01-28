@@ -18,6 +18,7 @@ public class SkyWars implements ModInitializer {
     public static final PlayerKitStorage KIT_STORAGE = ServerStorage.createStorage(identifier("kits"), new PlayerKitStorage());
 
     public static GameRule PROJECTILE_PLAYER_MOMENTUM = new GameRule();
+    public static GameRule REDUCED_EXPLOSION_DAMAGE = new GameRule();
 
     public static final GameType<SkyWarsConfig> TYPE = GameType.register(
             new Identifier(ID, "skywars"),
