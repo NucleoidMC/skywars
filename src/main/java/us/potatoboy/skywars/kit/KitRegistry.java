@@ -30,14 +30,14 @@ public class KitRegistry {
         serverData.registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public Identifier getFabricId() {
-                return SkyWars.identifier("skywarsKits");
+                return SkyWars.identifier("skywars_kits");
             }
 
             @Override
             public void apply(ResourceManager manager) {
                 KITS.clear();
 
-                Collection<Identifier> resources = manager.findResources("skywarsKits", path -> path.endsWith(".json"));
+                Collection<Identifier> resources = manager.findResources("skywars_kits", path -> path.endsWith(".json"));
 
                 for (Identifier path : resources) {
                     try {
