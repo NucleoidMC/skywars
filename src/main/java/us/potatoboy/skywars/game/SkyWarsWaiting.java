@@ -2,17 +2,27 @@ package us.potatoboy.skywars.game;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.Style;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import org.apache.commons.lang3.RandomStringUtils;
 import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.game.map.loot.LootHelper;
+import us.potatoboy.skywars.kit.KitRegistry;
 import xyz.nucleoid.plasmid.game.*;
 import xyz.nucleoid.plasmid.game.config.PlayerConfig;
 import xyz.nucleoid.plasmid.game.event.*;
@@ -24,6 +34,7 @@ import us.potatoboy.skywars.game.map.SkyWarsMapGenerator;
 import xyz.nucleoid.fantasy.BubbleWorldConfig;
 import xyz.nucleoid.plasmid.game.player.GameTeam;
 import xyz.nucleoid.plasmid.game.player.TeamAllocator;
+import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,14 +44,17 @@ import java.util.List;
 public class SkyWarsWaiting {
     private final GameSpace gameSpace;
     private final SkyWarsMap map;
-    private final SkyWarsConfig config;
+    public final SkyWarsConfig config;
     private final SkyWarsSpawnLogic spawnLogic;
+
+    public final Object2ObjectMap<ServerPlayerEntity, SkyWarsPlayer> participants;
 
     private SkyWarsWaiting(GameSpace gameSpace, SkyWarsMap map, SkyWarsConfig config) {
         this.gameSpace = gameSpace;
         this.map = map;
         this.config = config;
         this.spawnLogic = new SkyWarsSpawnLogic(gameSpace, map);
+        this.participants = new Object2ObjectOpenHashMap<>();
     }
 
     public static GameOpenProcedure open(GameOpenContext<SkyWarsConfig> context) {
@@ -60,10 +74,26 @@ public class SkyWarsWaiting {
 
             game.on(RequestStartListener.EVENT, waiting::requestStart);
             game.on(PlayerAddListener.EVENT, waiting::addPlayer);
+            game.on(PlayerRemoveListener.EVENT, waiting::removePlayer);
             game.on(PlayerDeathListener.EVENT, waiting::onPlayerDeath);
+            game.on(UseItemListener.EVENT, waiting::onUseItem);
 
             LootHelper.fillChests(game.getSpace().getWorld(), map, config, 1);
         });
+    }
+
+    private TypedActionResult<ItemStack> onUseItem(ServerPlayerEntity playerEntity, Hand hand) {
+        SkyWarsPlayer participant = participants.get(playerEntity);
+
+        if (participant != null && playerEntity.inventory.getMainHandStack().getItem() == Items.COMPASS) {
+            SkyWarsKitSelector.openSelector(playerEntity, participant, this);
+        }
+
+        return TypedActionResult.pass(playerEntity.getStackInHand(hand));
+    }
+
+    private void removePlayer(ServerPlayerEntity playerEntity) {
+        participants.remove(playerEntity);
     }
 
     private StartResult requestStart() {
@@ -111,11 +141,14 @@ public class SkyWarsWaiting {
             teamPlayers.put((Team)team, (ServerPlayerEntity)player);
         });
 
-        SkyWarsActive.open(this.gameSpace, this.map, this.config, teamPlayers);
+        SkyWarsActive.open(this.gameSpace, this.map, this.config, teamPlayers, participants);
         return StartResult.OK;
     }
 
     private void addPlayer(ServerPlayerEntity player) {
+        SkyWarsPlayer participant = new SkyWarsPlayer();
+        participant.selectedKit = KitRegistry.get(SkyWars.KIT_STORAGE.getPlayerKit(player.getUuid()));
+        participants.put(player, participant);
         this.spawnPlayer(player);
     }
 
@@ -128,5 +161,9 @@ public class SkyWarsWaiting {
     private void spawnPlayer(ServerPlayerEntity player) {
         this.spawnLogic.resetPlayer(player, GameMode.ADVENTURE);
         this.spawnLogic.spawnPlayer(player);
+
+        player.inventory.setStack(8, ItemStackBuilder.of(Items.COMPASS)
+                .setName(new TranslatableText("skywars.item.select_kit")
+                        .setStyle(Style.EMPTY.withItalic(false).withColor(Formatting.GOLD))).build());
     }
 }

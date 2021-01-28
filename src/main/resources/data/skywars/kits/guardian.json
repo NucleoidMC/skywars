@@ -1,0 +1,51 @@
+{
+  "kit_name": "guardian",
+  "icon": {
+    "id": "prismarine_shard",
+    "Count": 1
+  },
+  "armor": [
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "iron_boots",
+      "Count": 1,
+      "tag": {
+        "Enchantments": [
+          {
+            "lvl": 3,
+            "id": "depth_strider"
+          }
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "water_bucket",
+      "Count": 1
+    },
+    {
+      "id": "tropical_fish_bucket",
+      "Count": 1
+    },
+    {
+      "id": "tropical_fish_bucket",
+      "Count": 1
+    },
+    {
+      "id": "tropical_fish_bucket",
+      "Count": 1
+    }
+  ]
+}

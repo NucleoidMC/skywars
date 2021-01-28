@@ -6,5 +6,6 @@
   },
   "refills": 2,
   "refill_mins": 1,
-  "time_limit_mins": 5
+  "time_limit_mins": 5,
+  "kits": true
 }

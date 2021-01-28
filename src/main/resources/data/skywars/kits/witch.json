@@ -1,0 +1,55 @@
+{
+  "kit_name": "witch",
+  "icon": {
+    "id": "potion",
+    "Count": 1
+  },
+  "armor": [
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    }
+  ],
+  "items": [
+    {
+      "id": "splash_potion",
+      "Count": 1,
+      "tag": {
+        "Potion": "harming"
+      }
+    },
+    {
+      "id": "splash_potion",
+      "Count": 1,
+      "tag": {
+        "Potion": "harming"
+      }
+    },
+    {
+      "id": "splash_potion",
+      "Count": 1,
+      "tag": {
+        "Potion": "poison"
+      }
+    },
+    {
+      "id": "potion",
+      "Count": 1,
+      "tag": {
+        "Potion": "strong_healing"
+      }
+    }
+  ]
+}

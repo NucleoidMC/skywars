@@ -1,0 +1,41 @@
+{
+  "kit_name": "zombie",
+  "icon": {
+    "id": "rotten_flesh",
+    "Count": 1
+  },
+  "armor": [
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "leather_chestplate",
+      "Count": 1,
+      "tag": {
+        "display": {
+          "color": 3847130
+        }
+      }
+    },
+    {
+      "id": "leather_leggings",
+      "Count": 1,
+      "tag": {
+        "display": {
+          "color": 3949738
+        }
+      }
+    },
+    {
+      "id": "air",
+      "Count": 1
+    }
+  ],
+  "items": [
+    {
+      "id": "iron_axe",
+      "Count": 1
+    }
+  ]
+}

@@ -60,7 +60,7 @@ public class SkyWarsActive {
     private final SkyWarsSidebar sidebar;
     public final boolean ignoreWinState;
 
-    private SkyWarsActive(GameSpace gameSpace, SkyWarsMap map, GlobalWidgets widgets, SkyWarsConfig config, Set<ServerPlayerEntity> participants, GameLogic gameLogic, Multimap<Team, ServerPlayerEntity> teams) {
+    private SkyWarsActive(GameSpace gameSpace, SkyWarsMap map, GlobalWidgets widgets, SkyWarsConfig config, Object2ObjectMap<ServerPlayerEntity, SkyWarsPlayer> participants, GameLogic gameLogic, Multimap<Team, ServerPlayerEntity> teams) {
         this.gameSpace = gameSpace;
         this.config = config;
         this.gameMap = map;
@@ -68,21 +68,15 @@ public class SkyWarsActive {
         this.teams = teams;
         this.allTeams = new HashSet<>(teams.keySet());
         this.spawnLogic = new SkyWarsSpawnLogic(gameSpace, map);
-        this.participants = new Object2ObjectOpenHashMap<>();
-
-        for (ServerPlayerEntity player : participants) {
-            this.participants.put(player, new SkyWarsPlayer());
-        }
+        this.participants = participants;
 
         this.sidebar = new SkyWarsSidebar(this);
         this.stageManager = new SkyWarsStageManager(this);
         this.ignoreWinState = this.teams.keySet().size() <= 1;
     }
 
-    public static void open(GameSpace gameSpace, SkyWarsMap map, SkyWarsConfig config, Multimap<Team, ServerPlayerEntity> teams) {
+    public static void open(GameSpace gameSpace, SkyWarsMap map, SkyWarsConfig config, Multimap<Team, ServerPlayerEntity> teams, Object2ObjectMap<ServerPlayerEntity, SkyWarsPlayer> participants) {
         gameSpace.openGame(game -> {
-            Set<ServerPlayerEntity> participants = gameSpace.getPlayers().stream()
-                    .collect(Collectors.toSet());
             GlobalWidgets widgets = new GlobalWidgets(game);
             SkyWarsActive active = new SkyWarsActive(gameSpace, map, widgets, config, participants, game, teams);
 
@@ -98,6 +92,7 @@ public class SkyWarsActive {
             game.setRule(GameRule.PLAYER_PROJECTILE_KNOCKBACK, RuleResult.ALLOW);
             game.setRule(GameRule.TRIDENTS_LOYAL_IN_VOID, RuleResult.ALLOW);
             game.setRule(SkyWars.PROJECTILE_PLAYER_MOMENTUM, RuleResult.ALLOW);
+            game.setRule(SkyWars.REDUCED_EXPLOSION_DAMAGE, RuleResult.ALLOW);
 
             game.on(GameOpenListener.EVENT, active::onOpen);
             game.on(GameCloseListener.EVENT, active::onClose);
@@ -135,6 +130,8 @@ public class SkyWarsActive {
             for (ServerPlayerEntity player : teams.get(team)) {
                 this.spawnLogic.resetPlayer(player, GameMode.ADVENTURE);
                 this.spawnLogic.spawnPlayer(player, spawn);
+                player.inventory.clear();
+                player.closeHandledScreen();
             }
         }
     }
@@ -226,6 +223,7 @@ public class SkyWarsActive {
     }
 
     private void spawnSpectator(ServerPlayerEntity player) {
+        player.inventory.clear();
         this.spawnLogic.resetPlayer(player, GameMode.SPECTATOR);
         this.spawnLogic.spawnPlayer(player);
     }
