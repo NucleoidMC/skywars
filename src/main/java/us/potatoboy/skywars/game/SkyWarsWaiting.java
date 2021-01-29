@@ -19,6 +19,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.GameRules;
 import org.apache.commons.lang3.RandomStringUtils;
 import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.game.map.loot.LootHelper;
@@ -65,6 +66,7 @@ public class SkyWarsWaiting {
         BubbleWorldConfig worldConfig = new BubbleWorldConfig()
                 .setGenerator(map.asGenerator(context.getServer()))
                 .setDimensionType(RegistryKey.of(Registry.DIMENSION_TYPE_KEY, config.dimension))
+                .setGameRule(GameRules.DO_FIRE_TICK, true)
                 .setDefaultGameMode(GameMode.SPECTATOR);
 
         return context.createOpenProcedure(worldConfig, game -> {
