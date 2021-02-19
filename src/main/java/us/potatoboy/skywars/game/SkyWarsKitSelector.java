@@ -41,7 +41,7 @@ public class SkyWarsKitSelector {
     }
 
     private static void addKits(Collection<Kit> kits, KitSelectorBuilder ui, ServerPlayerEntity player, SkyWarsPlayer participant, SkyWarsWaiting game) {
-        for (Kit kit : KitRegistry.getKITS().values()) {
+        for (Kit kit : kits) {
 
             if (kit != null) {
                 ui.add(KitSelectorEntry.ofIcon(kit.icon, kit)

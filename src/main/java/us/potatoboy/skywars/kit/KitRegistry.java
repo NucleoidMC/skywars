@@ -63,7 +63,7 @@ public class KitRegistry {
 
     private static Identifier identifierFromPath(Identifier location) {
         String path = location.getPath();
-        path = path.substring("skywarsKits/".length(), path.length() - ".json".length());
+        path = path.substring("skywarsKits//".length(), path.length() - ".json".length());
         return new Identifier(location.getNamespace(), path);
     }
 

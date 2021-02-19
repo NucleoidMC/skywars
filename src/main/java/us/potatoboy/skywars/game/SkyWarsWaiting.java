@@ -23,6 +23,7 @@ import net.minecraft.world.GameRules;
 import org.apache.commons.lang3.RandomStringUtils;
 import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.game.map.loot.LootHelper;
+import us.potatoboy.skywars.kit.Kit;
 import us.potatoboy.skywars.kit.KitRegistry;
 import xyz.nucleoid.plasmid.game.*;
 import xyz.nucleoid.plasmid.game.config.PlayerConfig;
@@ -149,7 +150,14 @@ public class SkyWarsWaiting {
 
     private void addPlayer(ServerPlayerEntity player) {
         SkyWarsPlayer participant = new SkyWarsPlayer();
-        participant.selectedKit = KitRegistry.get(SkyWars.KIT_STORAGE.getPlayerKit(player.getUuid()));
+        Kit selectedKit = KitRegistry.get(SkyWars.KIT_STORAGE.getPlayerKit(player.getUuid()));
+        if (config.kits.left().isPresent()) {
+            if (!config.kits.left().get().contains(selectedKit)) selectedKit = null;
+        } else if (config.kits.right().isPresent()) {
+            if (!config.kits.right().get()) selectedKit = null;
+        }
+
+        participant.selectedKit = selectedKit;
         participants.put(player, participant);
         this.spawnPlayer(player);
     }
@@ -164,7 +172,7 @@ public class SkyWarsWaiting {
         this.spawnLogic.resetPlayer(player, GameMode.ADVENTURE);
         this.spawnLogic.spawnPlayer(player);
 
-        player.inventory.setStack(8, ItemStackBuilder.of(Items.COMPASS)
+        player.inventory.setStack(0, ItemStackBuilder.of(Items.COMPASS)
                 .setName(new TranslatableText("skywars.item.select_kit")
                         .setStyle(Style.EMPTY.withItalic(false).withColor(Formatting.GOLD))).build());
     }

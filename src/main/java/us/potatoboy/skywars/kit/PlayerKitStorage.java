@@ -30,10 +30,12 @@ public class PlayerKitStorage implements ServerStorage {
         CompoundTag tag = new CompoundTag();
         ListTag kitsTag = new ListTag();
         kits.forEach((uuid, identifier) -> {
-            CompoundTag entryTag = new CompoundTag();
-            entryTag.putUuid("UUID", uuid);
-            entryTag.putString("Kit", identifier.toString());
-            kitsTag.add(entryTag);
+            if (identifier != null) {
+                CompoundTag entryTag = new CompoundTag();
+                entryTag.putUuid("UUID", uuid);
+                entryTag.putString("Kit", identifier.toString());
+                kitsTag.add(entryTag);
+            }
         });
 
         tag.put("Kits", kitsTag);
