@@ -71,7 +71,7 @@ public class SkyWarsWaiting {
                 .setDefaultGameMode(GameMode.SPECTATOR);
 
         return context.createOpenProcedure(worldConfig, game -> {
-            GameWaitingLobby.applyTo(game, new PlayerConfig(1, map.spawns.size(), config.teamSize + 1, PlayerConfig.Countdown.DEFAULT));
+            GameWaitingLobby.applyTo(game, new PlayerConfig(1, map.spawns.size() * config.teamSize, config.teamSize + 1, PlayerConfig.Countdown.DEFAULT));
 
             SkyWarsWaiting waiting = new SkyWarsWaiting(game.getSpace(), map, context.getConfig());
 
