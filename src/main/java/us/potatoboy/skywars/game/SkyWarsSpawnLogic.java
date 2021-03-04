@@ -29,6 +29,7 @@ public class SkyWarsSpawnLogic {
         player.setVelocity(Vec3d.ZERO);
         player.fallDistance = 0.0f;
         player.getHungerManager().add(20, 2.0f);
+        player.setHealth(20.0f);
     }
 
     public void spawnPlayer(ServerPlayerEntity player) {
