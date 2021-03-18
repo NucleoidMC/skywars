@@ -1,0 +1,43 @@
+{
+  "kit_name": "rusher",
+  "icon": {
+    "id": "trident",
+    "Count": 1
+  },
+  "armor": [
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    }
+  ],
+  "items": [
+    {
+      "id": "trident"
+      "Count": 1,
+      "tag": {
+        "Enchantments": [
+          {
+            "lvl": 3,
+            "id": "riptide"
+          }
+        ]
+      }
+},
+{
+  "id": "water_bucket
+  "Count": 2
+    }
+  ]
+}
