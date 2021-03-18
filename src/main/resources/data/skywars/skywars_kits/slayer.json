@@ -1,7 +1,7 @@
 {
-  "kit_name": "enderman",
+  "kit_name": "slayer",
   "icon": {
-    "id": "ender_pearl",
+    "id": "diamond_axe",
     "Count": 1
   },
   "armor": [
@@ -24,14 +24,14 @@
   ],
   "items": [
     {
-      "id": "ender_pearl",
-      "Count": 2
+      "id": "diamond_axe",
+      "Count": 1
     }
   ],
   "cooldowns": [
     {
       "id": "ender_pearl",
-      "duration": 30
+      "duration": 60
     }
   ]
 }
