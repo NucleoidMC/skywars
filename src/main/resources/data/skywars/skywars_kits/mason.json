@@ -1,12 +1,12 @@
 {
-  "kit_name": "constructor",
+  "kit_name": "mason",
   "icon": {
     "id": "stone",
     "Count": 1
   },
   "armor": [
     {
-      "id": "chainmail_helmet",
+      "id": "air",
       "Count": 1
     },
     {
@@ -18,7 +18,7 @@
       "Count": 1
     },
     {
-      "id": "chainmail_boots",
+      "id": "air",
       "Count": 1
     }
   ],
