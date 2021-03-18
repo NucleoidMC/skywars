@@ -1,7 +1,7 @@
 {
-  "kit_name": "creeper",
+  "kit_name": "archer",
   "icon": {
-    "id": "gunpowder",
+    "id": "crossbow",
     "Count": 1
   },
   "armor": [
