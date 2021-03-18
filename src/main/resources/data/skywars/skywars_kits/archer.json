@@ -14,16 +14,8 @@
       "Count": 1
     },
     {
-      "id": "chainmail_leggings",
+      "id": "air",
       "Count": 1,
-      "tag": {
-        "Enchantments": [
-          {
-            "lvl": 4,
-            "id": "blast_protection"
-          }
-        ]
-      }
     },
     {
       "id": "air",
@@ -32,15 +24,7 @@
   ],
   "items": [
     {
-      "id": "tnt",
-      "Count": 12
-    },
-    {
-      "id": "redstone_block",
-      "Count": 6
-    },
-    {
-      "id": "water_bucket",
+      "id": "crossbow",
       "Count": 1
     }
   ]
