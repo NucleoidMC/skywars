@@ -6,7 +6,7 @@
   },
   "armor": [
     {
-      "id": "air",
+      "id": "chainmail_helmet",
       "Count": 1
     },
     {
@@ -14,7 +14,7 @@
       "Count": 1
     },
     {
-      "id": "chainmail_leggings",
+      "id": "air",
       "Count": 1
     },
     {
