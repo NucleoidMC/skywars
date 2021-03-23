@@ -31,5 +31,11 @@
       "id": "arrow",
       "Count": 16
     }
+  ],
+  "cooldowns": [
+    {
+      "id": "bow",
+      "duration": 30
+    }
   ]
 }
