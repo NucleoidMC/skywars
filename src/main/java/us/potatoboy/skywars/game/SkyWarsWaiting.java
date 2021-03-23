@@ -125,14 +125,14 @@ public class SkyWarsWaiting {
             Team team = scoreboard.addTeam(RandomStringUtils.randomAlphabetic(16));
             team.setFriendlyFireAllowed(false);
             team.setShowFriendlyInvisibles(true);
-            team.setCollisionRule(AbstractTeam.CollisionRule.NEVER);
+            team.setCollisionRule(AbstractTeam.CollisionRule.PUSH_OTHER_TEAMS);
             team.setDisplayName(new LiteralText("Team"));
-            team.setColor(teamColors.get(i));
+            if (config.teamSize > 1) team.setColor(teamColors.get(i));
 
             teams.add(team);
         }
 
-        TeamAllocator allocator = new TeamAllocator(teams);
+        TeamAllocator<Team, ServerPlayerEntity> allocator = new TeamAllocator<>(teams);
 
         for (ServerPlayerEntity playerEntity : gameSpace.getPlayers()) {
             allocator.add(playerEntity, null);
@@ -140,8 +140,8 @@ public class SkyWarsWaiting {
 
         Multimap<Team, ServerPlayerEntity> teamPlayers = HashMultimap.create();
         allocator.allocate((team, player) -> {
-            scoreboard.addPlayerToTeam(((ServerPlayerEntity)player).getEntityName(), (Team) team);
-            teamPlayers.put((Team)team, (ServerPlayerEntity)player);
+            scoreboard.addPlayerToTeam(player.getEntityName(), team);
+            teamPlayers.put(team, player);
         });
 
         SkyWarsActive.open(this.gameSpace, this.map, this.config, teamPlayers, participants);

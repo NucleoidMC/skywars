@@ -1,27 +1,30 @@
 package us.potatoboy.skywars.game;
 
-import com.google.common.base.Predicates;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.scoreboard.Team;
-import net.minecraft.text.MutableText;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.*;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameMode;
 import us.potatoboy.skywars.SkyWars;
+import us.potatoboy.skywars.game.map.SkyWarsMap;
 import xyz.nucleoid.plasmid.game.GameCloseReason;
 import xyz.nucleoid.plasmid.game.GameLogic;
 import xyz.nucleoid.plasmid.game.GameSpace;
@@ -30,20 +33,10 @@ import xyz.nucleoid.plasmid.game.player.JoinResult;
 import xyz.nucleoid.plasmid.game.player.PlayerSet;
 import xyz.nucleoid.plasmid.game.rule.GameRule;
 import xyz.nucleoid.plasmid.game.rule.RuleResult;
-import xyz.nucleoid.plasmid.widget.GlobalWidgets;
 import xyz.nucleoid.plasmid.util.PlayerRef;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.world.GameMode;
-import us.potatoboy.skywars.game.map.SkyWarsMap;
+import xyz.nucleoid.plasmid.widget.GlobalWidgets;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SkyWarsActive {
     public final SkyWarsConfig config;
@@ -124,9 +117,9 @@ public class SkyWarsActive {
         ServerWorld world = this.gameSpace.getWorld();
         Collections.shuffle(gameMap.spawns);
 
-        Iterator<BlockPos> spawnIterator = gameMap.spawns.listIterator();
+        Iterator<Vec3d> spawnIterator = gameMap.spawns.listIterator();
         for (Team team : teams.keySet()) {
-            BlockPos spawn = spawnIterator.next();
+            Vec3d spawn = spawnIterator.next();
             for (ServerPlayerEntity player : teams.get(team)) {
                 this.spawnLogic.resetPlayer(player, GameMode.ADVENTURE);
                 this.spawnLogic.spawnPlayer(player, spawn);
@@ -167,8 +160,7 @@ public class SkyWarsActive {
     }
 
     private ActionResult onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
-        MutableText deathMessage = getDeathMessage(player, source);
-        gameSpace.getPlayers().sendMessage(deathMessage.formatted(Formatting.GRAY));
+        gameSpace.getPlayers().sendMessage(getDeathMessage(player, source));
 
         player.inventory.dropAll();
         this.spawnSpectator(player);
@@ -194,32 +186,31 @@ public class SkyWarsActive {
         return ActionResult.PASS;
     }
 
-    private MutableText getDeathMessage(ServerPlayerEntity player, DamageSource source) {
+    private Text getDeathMessage(ServerPlayerEntity player, DamageSource source) {
         SkyWarsPlayer participant = getParticipant(player);
         ServerWorld world = gameSpace.getWorld();
         long time = world.getTime();
 
-        MutableText deathMessage = new LiteralText(" was killed by ");
+        Text deathMessage = source.getDeathMessage(player);
+        deathMessage = new LiteralText("☠ ")
+                .styled(style -> Style.EMPTY.withColor(TextColor.fromRgb(0x858585)))
+                .append(deathMessage)
+                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xbfbfbf)));
         SkyWarsPlayer attacker = null;
 
         if (source.getAttacker() != null) {
-            deathMessage.append(source.getAttacker().getDisplayName());
-
             if (source.getAttacker() instanceof ServerPlayerEntity) {
                 attacker = getParticipant((ServerPlayerEntity) source.getAttacker());
             }
         } else if (participant != null && participant.attacker(time, world) != null) {
-            deathMessage.append(participant.attacker(time, world).getDisplayName());
             attacker = getParticipant(participant.attacker(time, world));
-        } else {
-            deathMessage = new LiteralText(" died");
         }
 
         if (attacker != null) {
             attacker.kills += 1;
         }
 
-        return new LiteralText("").append(player.getDisplayName()).append(deathMessage);
+        return deathMessage;
     }
 
     private void spawnSpectator(ServerPlayerEntity player) {
@@ -340,7 +331,7 @@ public class SkyWarsActive {
         }
 
         for (MobEntity entity : entities) {
-            Vec3d pos = SkyWarsSpawnLogic.choosePos(new Random(), gameMap.waitingSpawn, 2f);
+            Vec3d pos = SkyWarsSpawnLogic.choosePos(entity.getRandom(), gameMap.getSpawn(entity.getRandom()), 2f);
             entity.refreshPositionAfterTeleport(pos);
 
             gameSpace.getWorld().spawnEntity(entity);

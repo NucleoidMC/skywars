@@ -1,6 +1,7 @@
 package us.potatoboy.skywars.game.map;
 
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.math.Vec3d;
 import xyz.nucleoid.plasmid.game.GameOpenException;
 import xyz.nucleoid.plasmid.map.template.MapTemplate;
 import xyz.nucleoid.plasmid.map.template.MapTemplateSerializer;
@@ -27,17 +28,21 @@ public class SkyWarsMapGenerator {
             MapTemplate template = MapTemplateSerializer.INSTANCE.loadFromResource(this.config.id);
             SkyWarsMap map = new SkyWarsMap(template, this.config);
 
-            map.waitingSpawn = getRegion(template, "waiting_spawn");
+            map.waitingSpawns = template.getMetadata().getRegionBounds("waiting_spawn").collect(Collectors.toList());
 
-            List<BlockPos> spawns = template.getMetadata().getRegions("spawn").map(region -> region.getBounds().getMin()).collect(Collectors.toList());
+            List<Vec3d> spawns = template.getMetadata().getRegionBounds("spawn").map(bounds -> {
+                Vec3d spawn = bounds.getCenter();
+                spawn = spawn.subtract(0, (bounds.getMax().getY() - bounds.getMin().getY() + 1) / 2.0D, 0);
+                return spawn;
+            }).collect(Collectors.toList());
             if (spawns.size() == 0) {
                 throw new GameOpenException(new LiteralText("No player spawns defined."));
             }
 
             map.spawns = spawns;
 
-            map.spawnChests = template.getMetadata().getRegions("spawn_chest").map(region -> region.getBounds().getMin()).collect(Collectors.toList());
-            map.centerChests = template.getMetadata().getRegions("center_chest").map(region -> region.getBounds().getMin()).collect(Collectors.toList());
+            map.spawnChests = template.getMetadata().getRegionBounds("spawn_chest").map(BlockBounds::getMin).collect(Collectors.toList());
+            map.centerChests = template.getMetadata().getRegionBounds("center_chest").map(BlockBounds::getMin).collect(Collectors.toList());
 
             return map;
         } catch (IOException e) {

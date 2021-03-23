@@ -33,7 +33,7 @@ public class SkyWarsSpawnLogic {
     }
 
     public void spawnPlayer(ServerPlayerEntity player) {
-        BlockBounds bounds = this.map.waitingSpawn;
+        BlockBounds bounds = map.getSpawn(player.getRandom());
         if (bounds == null) {
             SkyWars.LOGGER.error("Cannot spawn player! No spawn is defined in the map!");
             return;
@@ -41,10 +41,10 @@ public class SkyWarsSpawnLogic {
 
         Vec3d pos = choosePos(player.getRandom(), bounds, 0);
 
-        spawnPlayer(player, new BlockPos(pos));
+        spawnPlayer(player, pos);
     }
 
-    public void spawnPlayer(ServerPlayerEntity player, BlockPos pos) {
+    public void spawnPlayer(ServerPlayerEntity player, Vec3d pos) {
         ServerWorld world = this.gameSpace.getWorld();
 
         player.teleport(world, pos.getX(), pos.getY(), pos.getZ(), 0.0F, 0.0F);
