@@ -31,7 +31,7 @@
   "cooldowns": [
     {
       "id": "ender_pearl",
-      "duration": 30
+      "duration": 45
     }
   ]
 }
