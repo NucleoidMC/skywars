@@ -34,8 +34,16 @@
           }
         ]
       }
-    }.
+    }
     {
+    "id": "water_bucket",
+      "Count": 1,
+    },
+     {
+    "id": "water_bucket",
+      "Count": 1,
+    },
+     {
     "id": "water_bucket",
       "Count": 1,
     }
