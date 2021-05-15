@@ -1,0 +1,44 @@
+{
+  "kit_name": "wanderer",
+  "icon": {
+    "id": "leather_boots",
+    "Count": 1
+  },
+  "armor": [
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "leather_chestplate",
+      "Count": 1,
+      "tag": {
+    AttributeModifiers: [
+        {
+            AttributeName: "generic.movementSpeed",
+            Name: "generic.movementSpeed",
+            Amount: 50,
+            Operation: 1,
+            UUIDMost: 66628,
+            UUIDLeast: 847707
+        }
+    ],
+    Unbreakable: 1
+}
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    }
+  ],
+  "items": [
+    {
+      "id": "air",
+      "Count": 1
+    }
+  ]
+}

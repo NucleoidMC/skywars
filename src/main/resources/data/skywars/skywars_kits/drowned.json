@@ -1,7 +1,7 @@
 {
-  "kit_name": "enderman",
+  "kit_name": "drowned",
   "icon": {
-    "id": "ender_pearl",
+    "id": "trident",
     "Count": 1
   },
   "armor": [
@@ -24,14 +24,20 @@
   ],
   "items": [
     {
-      "id": "ender_pearl",
-      "Count": 2
-    }
-  ],
-  "cooldowns": [
-    {
-      "id": "ender_pearl",
-      "duration": 30
+      "id": "trident"
+      "Count": 1,
+      "tag": {
+        "Enchantments": [
+          {
+            "lvl": 3,
+            "id": "riptide"
+          }
+        ]
+      }
+},
+{
+  "id": "water_bucket
+  "Count": 2
     }
   ]
 }
