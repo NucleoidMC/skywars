@@ -11,7 +11,13 @@
       "tag": {
         "display": {
           "color": 8439583
-        }
+        },
+        "Enchantments": [
+          {
+            "lvl": 1,
+            "id": "binding_curse"
+          }
+        ]
       }
     },
     {
@@ -20,7 +26,13 @@
       "tag": {
         "display": {
           "color": 8439583
-        }
+        },
+        "Enchantments": [
+          {
+            "lvl": 1,
+            "id": "binding_curse"
+          }
+        ]
       }
     },
     {
