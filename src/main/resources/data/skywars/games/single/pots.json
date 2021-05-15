@@ -1,0 +1,11 @@
+{
+  "type": "skywars:skywars",
+  "name": "SkyWars Pots",
+  "map": {
+    "id": "skywars:pots"
+  },
+  "refills": 2,
+  "refill_mins": 2,
+  "time_limit_mins": 10,
+  "kits": true
+}
