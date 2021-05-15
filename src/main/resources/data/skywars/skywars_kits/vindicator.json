@@ -1,12 +1,12 @@
 {
-  "kit_name": "slayer",
+  "kit_name": "vindicator",
   "icon": {
-    "id": "diamond_axe",
+    "id": "iron_axe",
     "Count": 1
   },
   "armor": [
     {
-      "id": "air",
+      "id": "iron_helmet",
       "Count": 1
     },
     {
@@ -18,20 +18,14 @@
       "Count": 1
     },
     {
-      "id": "air",
+      "id": "iron_boots",
       "Count": 1
     }
   ],
   "items": [
     {
-      "id": "diamond_axe",
+      "id": "iron_axe",
       "Count": 1
-    }
-  ],
-  "cooldowns": [
-    {
-      "id": "diamond_axe",
-      "duration": 60
     }
   ]
 }

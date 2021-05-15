@@ -1,0 +1,47 @@
+{
+  "kit_name": "creeper",
+  "icon": {
+    "id": "gunpowder",
+    "Count": 1
+  },
+  "armor": [
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "chainmail_leggings",
+      "Count": 1,
+      "tag": {
+        "Enchantments": [
+          {
+            "lvl": 4,
+            "id": "blast_protection"
+          }
+        ]
+      }
+    },
+    {
+      "id": "air",
+      "Count": 1
+    }
+  ],
+  "items": [
+    {
+      "id": "tnt",
+      "Count": 12
+    },
+    {
+      "id": "redstone_block",
+      "Count": 2
+    },
+    {
+      "id": "water_bucket",
+      "Count": 1
+    }
+  ]
+}
