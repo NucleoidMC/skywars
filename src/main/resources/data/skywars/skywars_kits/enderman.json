@@ -25,13 +25,13 @@
   "items": [
     {
       "id": "ender_pearl",
-      "Count": 2
+      "Count": 3
     }
   ],
   "cooldowns": [
     {
       "id": "ender_pearl",
-      "duration": 45
+      "duration": 50
     }
   ]
 }
