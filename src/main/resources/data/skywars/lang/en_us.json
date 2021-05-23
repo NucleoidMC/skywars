@@ -12,5 +12,11 @@
   "skywars.kit.slime": "Slime",
   "skywars.kit.guardian": "Guardian",
   "skywars.kit.enderman": "Enderman",
-  "skywars.kit.fish": "Fish"
+  "skywars.kit.fish": "Fish",
+  "skywars.kit.baby-zombie": "Baby Zombie",
+  "skywars.kit.drowned": "Drowned",
+  "skywars.kit.mason": "Mason",
+  "skywars.kit.pillager": "Pillager",
+  "skywars.kit.vindicator": "Vindicator",
+  "skywars.kit.snowgolem": "Snow Golem"
 }

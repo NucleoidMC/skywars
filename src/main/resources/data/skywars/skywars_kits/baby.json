@@ -1,0 +1,48 @@
+{
+  "kit_name": "baby-zombie",
+  "icon": {
+    "id": "leather_boots",
+    "Count": 1
+  },
+  "armor": [
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "leather_chestplate",
+      "Count": 1,
+      "tag": {
+        "Unbreakable": 1,
+        "AttributeModifiers": [
+          {
+            "AttributeName": "generic.movement_speed",
+            "Name": "generic.movement_speed",
+            "Amount": 2,
+            "Operation": 1,
+            "UUID": [
+              1527397259,
+              -913290004,
+              -2084735394,
+              2066060727
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    }
+  ],
+  "items": [
+    {
+      "id": "stone_sword",
+      "Count": 1
+    }
+  ]
+}

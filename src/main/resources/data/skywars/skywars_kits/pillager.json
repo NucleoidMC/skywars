@@ -1,0 +1,31 @@
+{
+  "kit_name": "pillager",
+  "icon": {
+    "id": "crossbow",
+    "Count": 1
+  },
+  "armor": [
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    }
+  ],
+  "items": [
+    {
+      "id": "crossbow",
+      "Count": 1
+    }
+  ]
+}

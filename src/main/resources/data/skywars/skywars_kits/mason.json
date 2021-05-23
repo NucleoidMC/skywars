@@ -1,7 +1,7 @@
 {
-  "kit_name": "skeleton",
+  "kit_name": "mason",
   "icon": {
-    "id": "bow",
+    "id": "stone",
     "Count": 1
   },
   "armor": [
@@ -10,7 +10,7 @@
       "Count": 1
     },
     {
-      "id": "air",
+      "id": "chainmail_chestplate",
       "Count": 1
     },
     {
@@ -24,18 +24,8 @@
   ],
   "items": [
     {
-      "id": "bow",
-      "Count": 1
-    },
-    {
-      "id": "arrow",
-      "Count": 16
-    }
-  ],
-  "cooldowns": [
-    {
-      "id": "bow",
-      "duration": 30
+      "id": "stone",
+      "Count": 64
     }
   ]
 }
