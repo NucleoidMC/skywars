@@ -29,11 +29,19 @@
       "tag": {
         "Enchantments": [
           {
-            "lvl": 3,
+            "lvl": 2,
             "id": "riptide"
           }
         ]
       }
+    }
+    {
+    "id": "water_bucket",
+      "Count": 1,
+    },
+     {
+    "id": "water_bucket",
+      "Count": 1,
     }
   ]
 }

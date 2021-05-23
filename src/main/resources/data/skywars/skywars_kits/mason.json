@@ -26,6 +26,10 @@
     {
       "id": "stone",
       "Count": 64
+    },
+     {
+      "id": "stone_sword",
+      "Count": 1
     }
   ]
 }
