@@ -1,0 +1,12 @@
+{
+  "type": "skywars:skywars",
+  "name": "SkyWars Pot Of Gold (Duos)",
+  "map": {
+    "id": "skywars:potofgold"
+  },
+  "refills": 2,
+  "refill_mins": 2,
+  "time_limit_mins": 10,
+  "team_size": 2,
+  "kits": true
+}
