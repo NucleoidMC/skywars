@@ -90,7 +90,7 @@ public class SkyWarsWaiting {
                 .setGameRule(GameRules.DO_FIRE_TICK, true);
 
         return context.openWithWorld(worldConfig, (game, world) -> {
-            GameWaitingLobby.addTo(game, new PlayerConfig(1, map.spawns.size() * config.teamSize(), config.teamSize() + 1, new PlayerConfig.Countdown(10, 60)));
+            GameWaitingLobby.addTo(game, new PlayerConfig(1, map.spawns.size() * config.teamSize(), config.teamSize() + 1, PlayerConfig.Countdown.DEFAULT));
 
             var waiting = new SkyWarsWaiting(game.getGameSpace(), world, map, context.config());
 
