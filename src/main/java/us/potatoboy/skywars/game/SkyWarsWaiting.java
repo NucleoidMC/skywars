@@ -15,10 +15,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.*;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.GameMode;
@@ -37,7 +34,9 @@ import xyz.nucleoid.plasmid.game.GameResult;
 import xyz.nucleoid.plasmid.game.GameSpace;
 import xyz.nucleoid.plasmid.game.common.GameWaitingLobby;
 import xyz.nucleoid.plasmid.game.common.config.PlayerConfig;
+import xyz.nucleoid.plasmid.game.common.team.GameTeam;
 import xyz.nucleoid.plasmid.game.common.team.TeamAllocator;
+import xyz.nucleoid.plasmid.game.common.team.TeamManager;
 import xyz.nucleoid.plasmid.game.event.GameActivityEvents;
 import xyz.nucleoid.plasmid.game.event.GamePlayerEvents;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
@@ -57,20 +56,20 @@ public class SkyWarsWaiting {
     public final SkyWarsConfig config;
     public final ArrayList<Kit> kits = new ArrayList<>();
     private final SkyWarsSpawnLogic spawnLogic;
+    private final TeamManager teamManager;
 
     public final Object2ObjectMap<ServerPlayerEntity, SkyWarsPlayer> participants;
 
-    private SkyWarsWaiting(GameSpace gameSpace, ServerWorld world, SkyWarsMap map, SkyWarsConfig config) {
+    private SkyWarsWaiting(GameSpace gameSpace, ServerWorld world, SkyWarsMap map, SkyWarsConfig config, TeamManager teamManager) {
         this.gameSpace = gameSpace;
         this.world = world;
         this.map = map;
         this.config = config;
         this.spawnLogic = new SkyWarsSpawnLogic(gameSpace, map);
+        this.teamManager = teamManager;
         this.participants = new Object2ObjectOpenHashMap<>();
 
-        config.kits().ifLeft(kits -> {
-            this.kits.addAll(kits.stream().map(KitRegistry::get).collect(Collectors.toList()));
-        });
+        config.kits().ifLeft(kits -> this.kits.addAll(kits.stream().map(KitRegistry::get).collect(Collectors.toList())));
 
         config.kits().ifRight(allKits -> {
             if (allKits) {
@@ -92,8 +91,8 @@ public class SkyWarsWaiting {
         return context.openWithWorld(worldConfig, (game, world) -> {
             GameWaitingLobby.addTo(game, new PlayerConfig(1, map.spawns.size() * config.teamSize(), config.teamSize() + 1, PlayerConfig.Countdown.DEFAULT));
 
-            var waiting = new SkyWarsWaiting(game.getGameSpace(), world, map, context.config());
-
+            var waiting = new SkyWarsWaiting(game.getGameSpace(), world, map, context.config(), TeamManager.addTo(game));
+            
             game.listen(GamePlayerEvents.OFFER, offer -> offer.accept(world, waiting.spawnLogic.getRandomSpawnPos(offer.player().getRandom())));
             game.listen(GameActivityEvents.REQUEST_START, waiting::requestStart);
             game.listen(GamePlayerEvents.JOIN, waiting::playerJoin);
@@ -122,49 +121,50 @@ public class SkyWarsWaiting {
     private GameResult requestStart() {
         ServerScoreboard scoreboard = gameSpace.getServer().getScoreboard();
 
-        HashSet<Team> teams = new HashSet<>();
-        List<Formatting> teamColors = new ArrayList<>(Arrays.asList(
-                Formatting.BLUE,
-                Formatting.RED,
-                Formatting.YELLOW,
-                Formatting.GREEN,
-                Formatting.GOLD,
-                Formatting.AQUA,
-                Formatting.GOLD,
-                Formatting.LIGHT_PURPLE,
-                Formatting.DARK_PURPLE,
-                Formatting.DARK_AQUA,
-                Formatting.DARK_RED,
-                Formatting.DARK_GREEN,
-                Formatting.DARK_BLUE,
-                Formatting.DARK_GRAY,
-                Formatting.BLACK
+        HashSet<GameTeam> teams = new HashSet<>();
+        List<DyeColor> teamColors = new ArrayList<>(Arrays.asList(
+                DyeColor.BLUE,
+                DyeColor.RED,
+                DyeColor.YELLOW,
+                DyeColor.GREEN,
+                DyeColor.ORANGE,
+                DyeColor.LIGHT_BLUE,
+                DyeColor.PINK,
+                DyeColor.PURPLE,
+                DyeColor.CYAN,
+                DyeColor.LIME,
+                DyeColor.GREEN,
+                DyeColor.MAGENTA,
+                DyeColor.BROWN,
+                DyeColor.GRAY,
+                DyeColor.BLACK
         ));
 
         for (int i = 0; i < Math.round(gameSpace.getPlayers().size() / (float) config.teamSize()); i++) {
-            Team team = scoreboard.addTeam(RandomStringUtils.randomAlphabetic(16));
-            team.setFriendlyFireAllowed(false);
-            team.setShowFriendlyInvisibles(true);
-            team.setCollisionRule(AbstractTeam.CollisionRule.PUSH_OTHER_TEAMS);
-            team.setDisplayName(new LiteralText("Team"));
-            if (config.teamSize() > 1) team.setColor(teamColors.get(i));
+            var name = RandomStringUtils.randomAlphabetic(16);
+            GameTeam team = new GameTeam(name, new LiteralText("Team"), teamColors.get(i));
+            teamManager.addTeam(team);
+            teamManager.setFriendlyFire(team, false);
+            teamManager.setCollisionRule(team, AbstractTeam.CollisionRule.PUSH_OTHER_TEAMS);
 
             teams.add(team);
         }
 
-        TeamAllocator<Team, ServerPlayerEntity> allocator = new TeamAllocator<>(teams);
+        if (config.teamSize() < 2) teamManager.disableNameFormatting();
+
+        TeamAllocator<GameTeam, ServerPlayerEntity> allocator = new TeamAllocator<>(teams);
 
         for (ServerPlayerEntity playerEntity : gameSpace.getPlayers()) {
             allocator.add(playerEntity, null);
         }
 
-        Multimap<Team, ServerPlayerEntity> teamPlayers = HashMultimap.create();
+        Multimap<GameTeam, ServerPlayerEntity> teamPlayers = HashMultimap.create();
         allocator.allocate((team, player) -> {
-            scoreboard.addPlayerToTeam(player.getEntityName(), team);
+            teamManager.addPlayerTo(player, team);
             teamPlayers.put(team, player);
         });
 
-        SkyWarsActive.open(this.gameSpace, world, this.map, this.config, teamPlayers, participants);
+        SkyWarsActive.open(this.gameSpace, world, this.map, this.config, teamPlayers, participants, teamManager);
         return GameResult.ok();
     }
 

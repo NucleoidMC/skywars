@@ -32,6 +32,8 @@ import xyz.nucleoid.plasmid.game.GameActivity;
 import xyz.nucleoid.plasmid.game.GameCloseReason;
 import xyz.nucleoid.plasmid.game.GameSpace;
 import xyz.nucleoid.plasmid.game.common.GlobalWidgets;
+import xyz.nucleoid.plasmid.game.common.team.GameTeam;
+import xyz.nucleoid.plasmid.game.common.team.TeamManager;
 import xyz.nucleoid.plasmid.game.event.GameActivityEvents;
 import xyz.nucleoid.plasmid.game.event.GamePlayerEvents;
 import xyz.nucleoid.plasmid.game.player.PlayerSet;
@@ -52,14 +54,14 @@ public class SkyWarsActive {
     public final GameActivity gameActivity;
 
     public final Object2ObjectMap<ServerPlayerEntity, SkyWarsPlayer> participants;
-    public Multimap<Team, ServerPlayerEntity> teams;
-    private Set<Team> allTeams;
+    public Multimap<GameTeam, ServerPlayerEntity> teams;
+    private Set<GameTeam> allTeams;
     private final SkyWarsSpawnLogic spawnLogic;
     public final SkyWarsStageManager stageManager;
     protected final Sidebar globalSidebar = new Sidebar(Sidebar.Priority.MEDIUM);
     public final boolean ignoreWinState;
 
-    private SkyWarsActive(GameSpace gameSpace, ServerWorld world, SkyWarsMap map, GlobalWidgets widgets, SkyWarsConfig config, Object2ObjectMap<ServerPlayerEntity, SkyWarsPlayer> participants, GameActivity gameLogic, Multimap<Team, ServerPlayerEntity> teams) {
+    private SkyWarsActive(GameSpace gameSpace, ServerWorld world, SkyWarsMap map, GlobalWidgets widgets, SkyWarsConfig config, Object2ObjectMap<ServerPlayerEntity, SkyWarsPlayer> participants, GameActivity gameLogic, Multimap<GameTeam, ServerPlayerEntity> teams) {
         this.gameSpace = gameSpace;
         this.config = config;
         this.gameMap = map;
@@ -87,10 +89,11 @@ public class SkyWarsActive {
         }
     }
 
-    public static void open(GameSpace gameSpace, ServerWorld world, SkyWarsMap map, SkyWarsConfig config, Multimap<Team, ServerPlayerEntity> teams, Object2ObjectMap<ServerPlayerEntity, SkyWarsPlayer> participants) {
+    public static void open(GameSpace gameSpace, ServerWorld world, SkyWarsMap map, SkyWarsConfig config, Multimap<GameTeam, ServerPlayerEntity> teams, Object2ObjectMap<ServerPlayerEntity, SkyWarsPlayer> participants, TeamManager teamManager) {
         gameSpace.setActivity(activity -> {
             GlobalWidgets widgets = GlobalWidgets.addTo(activity);
             SkyWarsActive active = new SkyWarsActive(gameSpace, world, map, widgets, config, participants, activity, teams);
+            teamManager.applyTo(activity);
 
             activity.allow(GameRuleType.CRAFTING);
             activity.deny(GameRuleType.PORTALS);
@@ -135,7 +138,7 @@ public class SkyWarsActive {
         Collections.shuffle(gameMap.spawns);
 
         Iterator<Vec3d> spawnIterator = gameMap.spawns.listIterator();
-        for (Team team : teams.keySet()) {
+        for (GameTeam team : teams.keySet()) {
             Vec3d spawn = spawnIterator.next();
             for (ServerPlayerEntity player : teams.get(team)) {
                 this.spawnLogic.resetPlayer(player, GameMode.ADVENTURE);
@@ -253,6 +256,12 @@ public class SkyWarsActive {
     private void tick() {
         long time = world.getTime();
 
+        if (time % 20 == 0) {
+            for (ServerPlayerEntity player : participants.keySet()) {
+                if (player.getY() < gameMap.template.getBounds().min().getY() - 50) player.kill();
+            }
+        }
+
         SkyWarsStageManager.IdleTickResult result = this.stageManager.tick(time, gameSpace);
 
         switch (result) {
@@ -269,7 +278,7 @@ public class SkyWarsActive {
     }
 
     private void broadcastWin(WinResult result) {
-        Team winningTeam = result.getWinningTeam();
+        GameTeam winningTeam = result.getWinningTeam();
 
         Text message = getWinMessage(winningTeam);
 
@@ -278,7 +287,7 @@ public class SkyWarsActive {
         players.playSound(SoundEvents.ENTITY_VILLAGER_YES);
     }
 
-    private Text getWinMessage(Team winningTeam) {
+    private Text getWinMessage(GameTeam winningTeam) {
         if (winningTeam != null) {
             MutableText message = new LiteralText("");
             List<ServerPlayerEntity> winners = new ArrayList<>(teams.get(winningTeam));
@@ -311,7 +320,7 @@ public class SkyWarsActive {
         }
 
         if (teams.keySet().size() == 1) {
-            return WinResult.win((Team) teams.keySet().toArray()[0]);
+            return WinResult.win((GameTeam) teams.keySet().toArray()[0]);
         }
 
         return WinResult.no();
@@ -429,10 +438,10 @@ public class SkyWarsActive {
     }
 
     static class WinResult {
-        final Team winningTeam;
+        final GameTeam winningTeam;
         final boolean win;
 
-        private WinResult(Team winningTeam, boolean win) {
+        private WinResult(GameTeam winningTeam, boolean win) {
             this.winningTeam = winningTeam;
             this.win = win;
         }
@@ -441,7 +450,7 @@ public class SkyWarsActive {
             return new WinResult(null, false);
         }
 
-        static WinResult win(Team team) {
+        static WinResult win(GameTeam team) {
             return new WinResult(team, true);
         }
 
@@ -449,7 +458,7 @@ public class SkyWarsActive {
             return this.win;
         }
 
-        public Team getWinningTeam() {
+        public GameTeam getWinningTeam() {
             return this.winningTeam;
         }
     }
