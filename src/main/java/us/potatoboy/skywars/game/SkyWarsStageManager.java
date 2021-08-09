@@ -71,9 +71,10 @@ public class SkyWarsStageManager {
             if (time > refillTime) {
                 refills++;
                 LootHelper.fillChests(game.world, game.gameMap, game.config, refills);
-                this.refillTime = time + ((long) game.config.refillMins() * 20 * 60);
                 game.gameSpace.getPlayers().sendActionBar(new TranslatableText("text.skywars.refill"), 5, 20, 5);
                 game.gameSpace.getPlayers().playSound(SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 2.0F, 1.0F);
+
+                if (refills <= game.config.refills()) this.refillTime = time + ((long) game.config.refillMins() * 20 * 60);
             }
         }
 

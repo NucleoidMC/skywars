@@ -2,7 +2,7 @@
   "game.skywars.skywars": "SkyWars",
 
   "text.skywars.select_kit": "Select Your Kit",
-  "text.skywars.selected": "§aSelected",
+  "text.skywars.selected": "Selected",
   "text.skywars.click_select": "» Left Click to Select",
   "text.skywars.click_preview": "» Right Click to Preview",
   "text.skywars.go": "Go!",
@@ -35,5 +35,7 @@
   "skywars.kit.mason": "Mason",
   "skywars.kit.pillager": "Pillager",
   "skywars.kit.vindicator": "Vindicator",
-  "skywars.kit.snowgolem": "Snow Golem"
+  "skywars.kit.snowgolem": "Snow Golem",
+
+  "skywars.item.select_kit": "Kit Selector"
 }

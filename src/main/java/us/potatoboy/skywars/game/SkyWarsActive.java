@@ -26,6 +26,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.game.map.SkyWarsMap;
+import us.potatoboy.skywars.utility.FormattingUtil;
+import us.potatoboy.skywars.utility.TextUtil;
 import xyz.nucleoid.plasmid.game.GameActivity;
 import xyz.nucleoid.plasmid.game.GameCloseReason;
 import xyz.nucleoid.plasmid.game.GameSpace;
@@ -165,7 +167,6 @@ public class SkyWarsActive {
         if (participants.containsKey(player)) {
             participants.remove(player);
             teams.values().remove(player);
-            teams.containsValue(player);
         } else {
             globalSidebar.removePlayer(player);
         }
@@ -264,7 +265,6 @@ public class SkyWarsActive {
                 return;
             case GAME_CLOSED:
                 this.gameSpace.close(GameCloseReason.FINISHED);
-                return;
         }
     }
 
@@ -283,17 +283,11 @@ public class SkyWarsActive {
             MutableText message = new LiteralText("");
             List<ServerPlayerEntity> winners = new ArrayList<>(teams.get(winningTeam));
             for (int i = 0; i < winners.size(); i++) {
-                switch (i) {
-                    case 0:
-                        message = new LiteralText("").append(winners.get(i).getDisplayName()).append(message);
-                        break;
-                    case 1:
-                        message = new LiteralText("").append(winners.get(i).getDisplayName()).append(" & ").append(message);
-                        break;
-                    default:
-                        message = new LiteralText("").append(winners.get(i).getDisplayName()).append(", ").append(message);
-                        break;
-                }
+                message = switch (i) {
+                    case 0 -> new LiteralText("").append(winners.get(i).getDisplayName()).append(message);
+                    case 1 -> new LiteralText("").append(winners.get(i).getDisplayName()).append(" & ").append(message);
+                    default -> new LiteralText("").append(winners.get(i).getDisplayName()).append(", ").append(message);
+                };
             }
 
             if (winners.size() <= 1) {
@@ -345,7 +339,7 @@ public class SkyWarsActive {
                 for (int i = 0; i < 10; i++) {
                     entity = EntityType.BEE.create(world);
                     ((BeeEntity) entity).setAngerTime(1000000000);
-                    ((BeeEntity) entity).setTarget(target);
+                    entity.setTarget(target);
                     ((BeeEntity) entity).setAngryAt(target.getUuid());
                     entities.add(entity);
                 }
@@ -368,15 +362,18 @@ public class SkyWarsActive {
     }
 
     private void buildSidebar() {
-        this.globalSidebar.setTitle(new TranslatableText("sidebar.skywars.title").setStyle(Style.EMPTY.withColor(Formatting.GOLD).withBold(true)));
+        this.globalSidebar.setTitle(TextUtil.getText("sidebar", "title").setStyle(Style.EMPTY.withColor(Formatting.GOLD).withBold(true)));
 
         this.globalSidebar.set(b -> {
 
             b.add(LiteralText.EMPTY);
 
             b.add((player) ->
-                    new TranslatableText("sidebar.skywars." + (config.teamSize() > 1 ? "teams" : "players").formatted(Formatting.GREEN),
-                            new LiteralText(String.valueOf(teams.keySet().size())).formatted(Formatting.WHITE)
+                    FormattingUtil.formatScoreboard(
+                            FormattingUtil.GENERAL_PREFIX,
+                            TextUtil.getText("sidebar", (config.teamSize() > 1 ? "teams" : "players"),
+                                    new LiteralText(String.valueOf(teams.keySet().size())).formatted(Formatting.WHITE)
+                            ).formatted(Formatting.GREEN)
                     )
             );
 
@@ -387,9 +384,13 @@ public class SkyWarsActive {
                     SkyWarsPlayer data = this.participants.get(player);
 
                     if (data != null) {
-                        return new TranslatableText("sidebar.skywars.kills",
-                                new LiteralText("" + data.kills).formatted(Formatting.WHITE)
-                        ).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xf2a600)));
+                        return FormattingUtil.formatScoreboard(
+                                FormattingUtil.DEATH_PREFIX,
+                                Style.EMPTY.withColor(Formatting.GOLD),
+                                TextUtil.getText("sidebar", "kills",
+                                        new LiteralText("" + data.kills).formatted(Formatting.WHITE)
+                                )
+                        );
                     }
                 }
                 return LiteralText.EMPTY;
@@ -397,10 +398,24 @@ public class SkyWarsActive {
 
             b.add(LiteralText.EMPTY);
 
-            b.add((player) -> new TranslatableText("sidebar.skywars.refill",
-                    new LiteralText(formatTime(stageManager.refillTime - world.getTime())).formatted(Formatting.WHITE)).formatted(Formatting.GREEN));
-            b.add((player) -> new TranslatableText("sidebar.skywars.armageddon",
-                    new LiteralText(formatTime(stageManager.finishTime - world.getTime())).formatted(Formatting.WHITE)).formatted(Formatting.GREEN));
+            b.add((player) -> {
+                var time = Math.max(stageManager.refillTime - world.getTime(), 0);
+                return FormattingUtil.formatScoreboard(
+                        FormattingUtil.TIME_PREFIX,
+                        Style.EMPTY.withColor(Formatting.GREEN),
+                        TextUtil.getText("sidebar", "refill",
+                                new LiteralText(formatTime(time)).formatted(Formatting.WHITE))
+                );
+            });
+            b.add((player) -> {
+                var time = Math.max(stageManager.finishTime - world.getTime(), 0);
+                return FormattingUtil.formatScoreboard(
+                        FormattingUtil.COMET_PREFIX,
+                        Style.EMPTY.withColor(Formatting.GREEN),
+                        TextUtil.getText("sidebar", "armageddon",
+                                new LiteralText(formatTime(time)).formatted(Formatting.WHITE))
+                );
+            });
         });
     }
 
