@@ -1,10 +1,10 @@
 plugins {
-    id 'fabric-loom' version '0.5-SNAPSHOT'
+    id 'fabric-loom' version '0.8-SNAPSHOT'
     id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -14,6 +14,7 @@ repositories {
     mavenLocal()
     maven { url = "https://jitpack.io/" }
     maven { url = "https://maven.nucleoid.xyz/" }
+    maven { url = "https://maven.gegy.dev/" }
 }
 
 dependencies {
@@ -28,21 +29,16 @@ dependencies {
     // Plasmid
     modImplementation "xyz.nucleoid:plasmid:${project.plasmid_version}"
 
-    modRuntime("com.github.SuperCoder7979:databreaker:0.2.6") {
-        exclude module: "fabric-loader"
+    modRuntime ("supercoder79:databreaker:0.2.7") {
+        exclude module : "fabric-loader"
     }
 }
 
 processResources {
     inputs.property "version", project.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json"
+    filesMatching("fabric.mod.json") {
         expand "version": project.version
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
     }
 }
 
@@ -62,7 +58,13 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 }
 
 jar {
-    from "LICENSE"
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
+    }
+}
+
+java {
+    withSourcesJar()
 }
 
 // configure the maven publication

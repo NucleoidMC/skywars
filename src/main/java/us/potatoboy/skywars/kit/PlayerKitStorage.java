@@ -1,12 +1,11 @@
 package us.potatoboy.skywars.kit;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
 import xyz.nucleoid.plasmid.storage.ServerStorage;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,27 +25,27 @@ public class PlayerKitStorage implements ServerStorage {
     }
 
     @Override
-    public CompoundTag toTag() {
-        CompoundTag tag = new CompoundTag();
-        ListTag kitsTag = new ListTag();
+    public NbtCompound toTag() {
+        var nbt = new NbtCompound();
+        var kitsList = new NbtList();
         kits.forEach((uuid, identifier) -> {
             if (identifier != null) {
-                CompoundTag entryTag = new CompoundTag();
+                var entryTag = new NbtCompound();
                 entryTag.putUuid("UUID", uuid);
                 entryTag.putString("Kit", identifier.toString());
-                kitsTag.add(entryTag);
+                kitsList.add(entryTag);
             }
         });
 
-        tag.put("Kits", kitsTag);
+        nbt.put("Kits", kitsList);
 
-        return tag;
+        return nbt;
     }
 
     @Override
-    public void fromTag(CompoundTag compoundTag) {
+    public void fromTag(NbtCompound compoundTag) {
         compoundTag.getList("Kits", 10).forEach(entry -> {
-            CompoundTag entryTag = (CompoundTag) entry;
+            var entryTag = (NbtCompound) entry;
             kits.put(entryTag.getUuid("UUID"), Identifier.tryParse(entryTag.getString("Kit")));
         });
     }

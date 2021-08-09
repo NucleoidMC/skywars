@@ -1,15 +1,12 @@
 package us.potatoboy.skywars.game.map;
 
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.Vec3d;
-import xyz.nucleoid.plasmid.game.player.GameTeam;
-import xyz.nucleoid.plasmid.map.template.MapTemplate;
-import xyz.nucleoid.plasmid.map.template.TemplateChunkGenerator;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
-import xyz.nucleoid.plasmid.util.BlockBounds;
+import xyz.nucleoid.map_templates.BlockBounds;
+import xyz.nucleoid.map_templates.MapTemplate;
+import xyz.nucleoid.plasmid.game.world.generator.TemplateChunkGenerator;
 
 import java.util.ArrayList;
 import java.util.List;

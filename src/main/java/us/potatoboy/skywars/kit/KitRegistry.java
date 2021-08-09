@@ -22,7 +22,7 @@ import java.io.Reader;
 import java.util.Collection;
 
 public class KitRegistry {
-    private static final TinyRegistry<Kit> KITS = TinyRegistry.newStable();
+    private static final TinyRegistry<Kit> KITS = TinyRegistry.create();
 
     public static void register() {
         ResourceManagerHelper serverData = ResourceManagerHelper.get(ResourceType.SERVER_DATA);
@@ -34,7 +34,7 @@ public class KitRegistry {
             }
 
             @Override
-            public void apply(ResourceManager manager) {
+            public void reload(ResourceManager manager) {
                 KITS.clear();
 
                 Collection<Identifier> resources = manager.findResources("skywars_kits", path -> path.endsWith(".json"));
