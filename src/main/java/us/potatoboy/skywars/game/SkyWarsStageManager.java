@@ -127,10 +127,11 @@ public class SkyWarsStageManager {
             } else {
                 players.showTitle(new TranslatableText("text.skywars.go").formatted(Formatting.BOLD), 10);
                 players.playSound(SoundEvents.BLOCK_NOTE_BLOCK_HARP, SoundCategory.PLAYERS, 1.0F, 2.0F);
-                for (ServerPlayerEntity playerEntity : game.participants.keySet()) {
+                for (var playerRef : game.liveParticipants) {
+                    var playerEntity = game.getPlayer(playerRef);
                     playerEntity.changeGameMode(GameMode.SURVIVAL);
 
-                    SkyWarsPlayer participant = game.participants.get(playerEntity);
+                    SkyWarsPlayer participant = game.participants.get(playerRef);
                     if (participant.selectedKit != null) {
                         participant.selectedKit.equipPlayer(playerEntity);
                     }

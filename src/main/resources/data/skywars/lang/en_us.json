@@ -9,7 +9,7 @@
   "text.skywars.armageddon": "Armageddon",
   "text.skywars.refill": "Chests Refilled",
   "text.skywars.border": "Border Reached",
-  "text.skywars.win.zone": "The game ended, but nobody won!",
+  "text.skywars.win.none": "The game ended, but nobody won!",
   "text.skywars.win.team": " have won the game!",
   "text.skywars.win": " has won the game!",
   "text.skywars.return_selector": "Return to Selection",
@@ -37,5 +37,10 @@
   "skywars.kit.vindicator": "Vindicator",
   "skywars.kit.snowgolem": "Snow Golem",
 
-  "skywars.item.select_kit": "Kit Selector"
+  "skywars.item.select_kit": "Kit Selector",
+
+  "statistic.bundle.skywars": "SkyWars",
+  "statistic.skywars.arrows_shot": "Arrows Shot",
+  "statistic.skywars.arrows_hit": "Arrows Hit"
+
 }

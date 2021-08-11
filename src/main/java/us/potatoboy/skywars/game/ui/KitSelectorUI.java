@@ -59,7 +59,7 @@ public final class KitSelectorUI extends SimpleGui {
 
 
     public static void openSelector(ServerPlayerEntity player, SkyWarsWaiting logic) {
-        new KitSelectorUI(player, logic.participants.get(player), logic, logic.kits).open();
+        new KitSelectorUI(player, logic.participants.get(PlayerRef.of(player)), logic, logic.kits).open();
     }
 
     public static void openSelector(ServerPlayerEntity player, SkyWarsPlayer data, List<Identifier> kits) {

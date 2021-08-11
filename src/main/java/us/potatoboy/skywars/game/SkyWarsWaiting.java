@@ -40,6 +40,7 @@ import xyz.nucleoid.plasmid.game.common.team.TeamManager;
 import xyz.nucleoid.plasmid.game.event.GameActivityEvents;
 import xyz.nucleoid.plasmid.game.event.GamePlayerEvents;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
+import xyz.nucleoid.plasmid.util.PlayerRef;
 import xyz.nucleoid.stimuli.event.item.ItemUseEvent;
 import xyz.nucleoid.stimuli.event.player.PlayerDeathEvent;
 
@@ -58,7 +59,7 @@ public class SkyWarsWaiting {
     private final SkyWarsSpawnLogic spawnLogic;
     private final TeamManager teamManager;
 
-    public final Object2ObjectMap<ServerPlayerEntity, SkyWarsPlayer> participants;
+    public final Object2ObjectMap<PlayerRef, SkyWarsPlayer> participants;
 
     private SkyWarsWaiting(GameSpace gameSpace, ServerWorld world, SkyWarsMap map, SkyWarsConfig config, TeamManager teamManager) {
         this.gameSpace = gameSpace;
@@ -105,7 +106,7 @@ public class SkyWarsWaiting {
     }
 
     private TypedActionResult<ItemStack> onUseItem(ServerPlayerEntity playerEntity, Hand hand) {
-        SkyWarsPlayer participant = participants.get(playerEntity);
+        SkyWarsPlayer participant = participants.get(PlayerRef.of(playerEntity));
 
         if (participant != null && playerEntity.getInventory().getMainHandStack().getItem() == Items.COMPASS) {
             KitSelectorUI.openSelector(playerEntity, this);
@@ -115,7 +116,7 @@ public class SkyWarsWaiting {
     }
 
     private void playerLeave(ServerPlayerEntity playerEntity) {
-        participants.remove(playerEntity);
+        participants.remove(PlayerRef.of(playerEntity));
     }
 
     private GameResult requestStart() {
@@ -145,7 +146,7 @@ public class SkyWarsWaiting {
             GameTeam team = new GameTeam(name, new LiteralText("Team"), teamColors.get(i));
             teamManager.addTeam(team);
             teamManager.setFriendlyFire(team, false);
-            teamManager.setCollisionRule(team, AbstractTeam.CollisionRule.PUSH_OTHER_TEAMS);
+            teamManager.setCollisionRule(team, AbstractTeam.CollisionRule.PUSH_OWN_TEAM);
 
             teams.add(team);
         }
@@ -158,10 +159,11 @@ public class SkyWarsWaiting {
             allocator.add(playerEntity, null);
         }
 
-        Multimap<GameTeam, ServerPlayerEntity> teamPlayers = HashMultimap.create();
+        Multimap<GameTeam, PlayerRef> teamPlayers = HashMultimap.create();
         allocator.allocate((team, player) -> {
             teamManager.addPlayerTo(player, team);
-            teamPlayers.put(team, player);
+            teamPlayers.put(team, PlayerRef.of(player));
+            participants.get(PlayerRef.of(player)).team = team;
         });
 
         SkyWarsActive.open(this.gameSpace, world, this.map, this.config, teamPlayers, participants, teamManager);
@@ -176,7 +178,7 @@ public class SkyWarsWaiting {
             if (!config.kits().right().get()) participant.selectedKit = null;
         }
 
-        participants.put(player, participant);
+        participants.put(PlayerRef.of(player), participant);
         this.spawnPlayer(player);
     }
 
