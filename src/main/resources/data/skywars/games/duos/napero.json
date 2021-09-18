@@ -1,0 +1,12 @@
+{
+  "type": "skywars:skywars",
+  "name": "SkyWars Puzzle Cubes (Duos)",
+  "map": {
+    "id": "skywars:napero"
+  },
+  "refills": 2,
+  "refill_mins": 2,
+  "time_limit_mins": 10,
+  "team_size": 2,
+  "kits": true
+} 
