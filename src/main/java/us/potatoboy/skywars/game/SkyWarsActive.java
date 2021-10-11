@@ -360,7 +360,7 @@ public class SkyWarsActive {
         Random random = new Random();
         int eventID = random.nextInt(3);
         List<MobEntity> entities = new ArrayList<>();
-        ServerPlayerEntity target = (ServerPlayerEntity) liveParticipants.toArray()[liveParticipants.size() == 1 ? 0 : random.nextInt(liveParticipants.size())];
+        ServerPlayerEntity target = getPlayer((PlayerRef) liveParticipants.toArray()[liveParticipants.size() == 1 ? 0 : random.nextInt(liveParticipants.size())]);
 
         switch (eventID) {
             case 0:
