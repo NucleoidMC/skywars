@@ -83,7 +83,7 @@ public class SkyWarsActive {
         this.spawnLogic = new SkyWarsSpawnLogic(gameSpace, map);
         this.participants = new Object2ObjectOpenHashMap<>(participants);
         this.liveParticipants = participants.keySet();
-        this.statistics = gameSpace.getStatistics(SkyWars.ID);
+        this.statistics = gameSpace.getStatistics().bundle(SkyWars.ID);
 
         this.stageManager = new SkyWarsStageManager(this);
         this.ignoreWinState = this.liveTeams.keySet().size() <= 1;
@@ -100,7 +100,7 @@ public class SkyWarsActive {
         gameSpace.setActivity(activity -> {
             GlobalWidgets widgets = GlobalWidgets.addTo(activity);
             SkyWarsActive active = new SkyWarsActive(gameSpace, world, map, widgets, config, participants, activity, teams);
-            teamManager.applyTo(activity);
+            //teamManager.applyTo(activity);
 
             activity.allow(GameRuleType.CRAFTING);
             activity.deny(GameRuleType.PORTALS);

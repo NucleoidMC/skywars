@@ -15,7 +15,7 @@ public class TextUtil {
     }
 
     public static MutableText getTeamText(GameTeam team) {
-        return getText("general", "team", team.display()).setStyle(Style.EMPTY.withColor(team.color()));
+        return getText("general", "team", team.config().name()).setStyle(Style.EMPTY.withColor(team.config().dyeColor()));
     }
 
     public static Identifier id(String path) {

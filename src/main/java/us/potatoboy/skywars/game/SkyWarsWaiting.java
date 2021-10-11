@@ -9,10 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.scoreboard.ServerScoreboard;
-import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.*;
@@ -20,7 +18,6 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
-import org.apache.commons.lang3.RandomStringUtils;
 import us.potatoboy.skywars.game.map.SkyWarsMap;
 import us.potatoboy.skywars.game.map.SkyWarsMapGenerator;
 import us.potatoboy.skywars.game.map.loot.LootHelper;
@@ -34,9 +31,7 @@ import xyz.nucleoid.plasmid.game.GameResult;
 import xyz.nucleoid.plasmid.game.GameSpace;
 import xyz.nucleoid.plasmid.game.common.GameWaitingLobby;
 import xyz.nucleoid.plasmid.game.common.config.PlayerConfig;
-import xyz.nucleoid.plasmid.game.common.team.GameTeam;
-import xyz.nucleoid.plasmid.game.common.team.TeamAllocator;
-import xyz.nucleoid.plasmid.game.common.team.TeamManager;
+import xyz.nucleoid.plasmid.game.common.team.*;
 import xyz.nucleoid.plasmid.game.event.GameActivityEvents;
 import xyz.nucleoid.plasmid.game.event.GamePlayerEvents;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
@@ -93,7 +88,7 @@ public class SkyWarsWaiting {
             GameWaitingLobby.addTo(game, new PlayerConfig(1, map.spawns.size() * config.teamSize(), config.teamSize() + 1, PlayerConfig.Countdown.DEFAULT));
 
             var waiting = new SkyWarsWaiting(game.getGameSpace(), world, map, context.config(), TeamManager.addTo(game));
-            
+
             game.listen(GamePlayerEvents.OFFER, offer -> offer.accept(world, waiting.spawnLogic.getRandomSpawnPos(offer.player().getRandom())));
             game.listen(GameActivityEvents.REQUEST_START, waiting::requestStart);
             game.listen(GamePlayerEvents.JOIN, waiting::playerJoin);
@@ -142,11 +137,15 @@ public class SkyWarsWaiting {
         ));
 
         for (int i = 0; i < Math.round(gameSpace.getPlayers().size() / (float) config.teamSize()); i++) {
-            var name = RandomStringUtils.randomAlphabetic(16);
-            GameTeam team = new GameTeam(name, new LiteralText("Team"), teamColors.get(i));
+            GameTeam team = new GameTeam(
+                    new GameTeamKey("SkyWarsTeam" + i),
+                    GameTeamConfig.builder()
+                            .setCollision(AbstractTeam.CollisionRule.PUSH_OTHER_TEAMS)
+                            .setFriendlyFire(false)
+                            .setColors(GameTeamConfig.Colors.from(teamColors.get(i)))
+                            .build()
+            );
             teamManager.addTeam(team);
-            teamManager.setFriendlyFire(team, false);
-            teamManager.setCollisionRule(team, AbstractTeam.CollisionRule.PUSH_OWN_TEAM);
 
             teams.add(team);
         }
@@ -161,7 +160,7 @@ public class SkyWarsWaiting {
 
         Multimap<GameTeam, PlayerRef> teamPlayers = HashMultimap.create();
         allocator.allocate((team, player) -> {
-            teamManager.addPlayerTo(player, team);
+            teamManager.addPlayerTo(player, team.key());
             teamPlayers.put(team, PlayerRef.of(player));
             participants.get(PlayerRef.of(player)).team = team;
         });
@@ -173,7 +172,8 @@ public class SkyWarsWaiting {
     private void playerJoin(ServerPlayerEntity player) {
         SkyWarsPlayer participant = new SkyWarsPlayer(player);
         if (config.kits().left().isPresent()) {
-            if (!config.kits().left().get().contains(KitRegistry.getId(participant.selectedKit))) participant.selectedKit = null;
+            if (!config.kits().left().get().contains(KitRegistry.getId(participant.selectedKit)))
+                participant.selectedKit = null;
         } else if (config.kits().right().isPresent()) {
             if (!config.kits().right().get()) participant.selectedKit = null;
         }
