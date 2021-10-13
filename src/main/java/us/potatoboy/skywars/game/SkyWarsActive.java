@@ -96,11 +96,17 @@ public class SkyWarsActive {
         }
     }
 
-    public static void open(GameSpace gameSpace, ServerWorld world, SkyWarsMap map, SkyWarsConfig config, Multimap<GameTeam, PlayerRef> teams, Object2ObjectMap<PlayerRef, SkyWarsPlayer> participants, TeamManager teamManager) {
+    public static void open(GameSpace gameSpace, ServerWorld world, SkyWarsMap map, SkyWarsConfig config, Multimap<GameTeam, PlayerRef> teams, Object2ObjectMap<PlayerRef, SkyWarsPlayer> participants) {
         gameSpace.setActivity(activity -> {
             GlobalWidgets widgets = GlobalWidgets.addTo(activity);
             SkyWarsActive active = new SkyWarsActive(gameSpace, world, map, widgets, config, participants, activity, teams);
-            //teamManager.applyTo(activity);
+            var teamManger = TeamManager.addTo(activity);
+            for (GameTeam team : teams.keySet()) {
+                teamManger.addTeam(team);
+                for (PlayerRef playerRef : teams.get(team)) {
+                    teamManger.addPlayerTo(playerRef, team.key());
+                }
+            }
 
             activity.allow(GameRuleType.CRAFTING);
             activity.deny(GameRuleType.PORTALS);

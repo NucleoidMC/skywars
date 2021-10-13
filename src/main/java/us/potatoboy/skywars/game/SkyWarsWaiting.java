@@ -52,17 +52,15 @@ public class SkyWarsWaiting {
     public final SkyWarsConfig config;
     public final ArrayList<Kit> kits = new ArrayList<>();
     private final SkyWarsSpawnLogic spawnLogic;
-    private final TeamManager teamManager;
 
     public final Object2ObjectMap<PlayerRef, SkyWarsPlayer> participants;
 
-    private SkyWarsWaiting(GameSpace gameSpace, ServerWorld world, SkyWarsMap map, SkyWarsConfig config, TeamManager teamManager) {
+    private SkyWarsWaiting(GameSpace gameSpace, ServerWorld world, SkyWarsMap map, SkyWarsConfig config) {
         this.gameSpace = gameSpace;
         this.world = world;
         this.map = map;
         this.config = config;
         this.spawnLogic = new SkyWarsSpawnLogic(gameSpace, map);
-        this.teamManager = teamManager;
         this.participants = new Object2ObjectOpenHashMap<>();
 
         config.kits().ifLeft(kits -> this.kits.addAll(kits.stream().map(KitRegistry::get).collect(Collectors.toList())));
@@ -87,7 +85,7 @@ public class SkyWarsWaiting {
         return context.openWithWorld(worldConfig, (game, world) -> {
             GameWaitingLobby.addTo(game, new PlayerConfig(1, map.spawns.size() * config.teamSize(), config.teamSize() + 1, PlayerConfig.Countdown.DEFAULT));
 
-            var waiting = new SkyWarsWaiting(game.getGameSpace(), world, map, context.config(), TeamManager.addTo(game));
+            var waiting = new SkyWarsWaiting(game.getGameSpace(), world, map, context.config());
 
             game.listen(GamePlayerEvents.OFFER, offer -> offer.accept(world, waiting.spawnLogic.getRandomSpawnPos(offer.player().getRandom())));
             game.listen(GameActivityEvents.REQUEST_START, waiting::requestStart);
@@ -140,17 +138,14 @@ public class SkyWarsWaiting {
             GameTeam team = new GameTeam(
                     new GameTeamKey("SkyWarsTeam" + i),
                     GameTeamConfig.builder()
-                            .setCollision(AbstractTeam.CollisionRule.PUSH_OTHER_TEAMS)
+                            .setCollision(AbstractTeam.CollisionRule.PUSH_OWN_TEAM)
                             .setFriendlyFire(false)
-                            .setColors(GameTeamConfig.Colors.from(teamColors.get(i)))
+                            .setColors(config.teamSize() > 1 ? GameTeamConfig.Colors.from(teamColors.get(i)) : GameTeamConfig.Colors.NONE)
                             .build()
             );
-            teamManager.addTeam(team);
 
             teams.add(team);
         }
-
-        if (config.teamSize() < 2) teamManager.disableNameFormatting();
 
         TeamAllocator<GameTeam, ServerPlayerEntity> allocator = new TeamAllocator<>(teams);
 
@@ -160,12 +155,11 @@ public class SkyWarsWaiting {
 
         Multimap<GameTeam, PlayerRef> teamPlayers = HashMultimap.create();
         allocator.allocate((team, player) -> {
-            teamManager.addPlayerTo(player, team.key());
             teamPlayers.put(team, PlayerRef.of(player));
             participants.get(PlayerRef.of(player)).team = team;
         });
 
-        SkyWarsActive.open(this.gameSpace, world, this.map, this.config, teamPlayers, participants, teamManager);
+        SkyWarsActive.open(this.gameSpace, world, this.map, this.config, teamPlayers, participants);
         return GameResult.ok();
     }
 
