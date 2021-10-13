@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import us.potatoboy.skywars.custom.SWBlocks;
 import us.potatoboy.skywars.game.SkyWarsConfig;
 import us.potatoboy.skywars.game.SkyWarsWaiting;
 import us.potatoboy.skywars.kit.KitRegistry;
@@ -28,6 +29,8 @@ public class SkyWars implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        SWBlocks.register();
+
         KitRegistry.register();
     }
 
