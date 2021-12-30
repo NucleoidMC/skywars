@@ -7,6 +7,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.dimension.DimensionType;
 import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.game.map.SkyWarsMapConfig;
+import xyz.nucleoid.fantasy.Fantasy;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public record SkyWarsConfig(
     public static final Codec<SkyWarsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             SkyWarsMapConfig.CODEC.fieldOf("map").forGetter(SkyWarsConfig::mapConfig),
             Codec.INT.fieldOf("time_limit_mins").forGetter(SkyWarsConfig::timeLimitMins),
-            Identifier.CODEC.optionalFieldOf("dimension", DimensionType.OVERWORLD_ID).forGetter(SkyWarsConfig::dimension),
+            Identifier.CODEC.optionalFieldOf("dimension", Fantasy.DEFAULT_DIM_TYPE.getValue()).forGetter(SkyWarsConfig::dimension),
             Identifier.CODEC.optionalFieldOf("spawn_loot_table", new Identifier(SkyWars.ID, "spawn/default")).forGetter(SkyWarsConfig::spawnLootTable),
             Identifier.CODEC.optionalFieldOf("center_loot_table", new Identifier(SkyWars.ID, "center/default")).forGetter(SkyWarsConfig::centerLootTable),
             Codec.INT.fieldOf("refills").forGetter(SkyWarsConfig::refills),
