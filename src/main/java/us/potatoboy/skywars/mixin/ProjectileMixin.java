@@ -11,7 +11,7 @@ import xyz.nucleoid.plasmid.game.manager.GameSpaceManager;
 
 @Mixin(ProjectileEntity.class)
 public abstract class ProjectileMixin {
-    @Redirect(method = "setProperties", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isOnGround()Z"))
+    @Redirect(method = "setVelocity(Lnet/minecraft/entity/Entity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isOnGround()Z"))
     private boolean setProperties(Entity entity) {
         var gameSpace = GameSpaceManager.get().byWorld(entity.world);
 

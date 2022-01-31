@@ -1,9 +1,6 @@
 package us.potatoboy.skywars.game;
 
-import eu.pb4.sidebars.api.Sidebar;
-import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.kit.Kit;
 import us.potatoboy.skywars.kit.KitRegistry;

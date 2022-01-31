@@ -24,12 +24,9 @@ public class LaunchPadBlockEntity extends BlockEntity {
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt) {
-        nbt = super.writeNbt(nbt);
+    public void writeNbt(NbtCompound nbt) {
         nbt.putFloat("Pitch", this.pitch);
         nbt.putFloat("Power", this.power);
-
-        return nbt;
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.dimension.DimensionType;
 import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.game.map.SkyWarsMapConfig;
 import xyz.nucleoid.fantasy.Fantasy;
