@@ -1,7 +1,6 @@
 package us.potatoboy.skywars.custom;
 
-import eu.pb4.polymer.PolymerMod;
-import eu.pb4.polymer.block.BlockHelper;
+import eu.pb4.polymer.api.block.PolymerBlockUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -33,7 +32,7 @@ public class SWBlocks {
 
     private static <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(String id, BlockEntityType<T> type) {
         Registry.register(Registry.BLOCK_ENTITY_TYPE, SkyWars.identifier(id), type);
-        BlockHelper.registerVirtualBlockEntity(LAUNCH_PAD_ENTITY);
+        PolymerBlockUtils.registerBlockEntity(LAUNCH_PAD_ENTITY);
         return type;
     }
 }
