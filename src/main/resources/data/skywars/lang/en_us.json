@@ -1,5 +1,5 @@
 {
-  "game.skywars.skywars": "SkyWars",
+  "gameType.skywars.skywars": "SkyWars",
 
   "text.skywars.select_kit": "Select Your Kit",
   "text.skywars.selected": "Selected",
