@@ -18,6 +18,7 @@ import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
+import net.minecraft.screen.ScreenTexts;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
@@ -227,7 +228,7 @@ public class SkyWarsActive {
 
         if (!gameMap.template.getBounds().contains(pos)) {
             player.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(-2, 0, slot, context.getStack()));
-            player.sendMessage(new TranslatableText("text.skywars.border").formatted(Formatting.RED, Formatting.BOLD), false);
+            player.sendMessage(Text.translatable("text.skywars.border").formatted(Formatting.RED, Formatting.BOLD), false);
             return ActionResult.FAIL;
         }
 
@@ -250,7 +251,7 @@ public class SkyWarsActive {
 
     private Text getDeathMessage(ServerPlayerEntity player, DamageSource source) {
         Text deathMessage = source.getDeathMessage(player);
-        deathMessage = new LiteralText("☠ ")
+        deathMessage = Text.literal("☠ ")
                 .styled(style -> Style.EMPTY.withColor(TextColor.fromRgb(0x858585)))
                 .append(deathMessage)
                 .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xbfbfbf)));
@@ -325,23 +326,23 @@ public class SkyWarsActive {
 
     private Text getWinMessage(GameTeam winningTeam) {
         if (winningTeam != null) {
-            MutableText message = new LiteralText("");
+            MutableText message = Text.literal("");
             var winners = liveTeams.get(winningTeam).stream().map(this::getPlayer).collect(Collectors.toList());
             for (int i = 0; i < winners.size(); i++) {
                 message = switch (i) {
-                    case 0 -> new LiteralText("").append(winners.get(i).getDisplayName()).append(message);
-                    case 1 -> new LiteralText("").append(winners.get(i).getDisplayName()).append(" & ").append(message);
-                    default -> new LiteralText("").append(winners.get(i).getDisplayName()).append(", ").append(message);
+                    case 0 -> Text.literal("").append(winners.get(i).getDisplayName()).append(message);
+                    case 1 -> Text.literal("").append(winners.get(i).getDisplayName()).append(" & ").append(message);
+                    default -> Text.literal("").append(winners.get(i).getDisplayName()).append(", ").append(message);
                 };
             }
 
             if (winners.size() <= 1) {
-                return message.append(new TranslatableText("text.skywars.win")).formatted(Formatting.GOLD);
+                return message.append(Text.translatable("text.skywars.win")).formatted(Formatting.GOLD);
             } else {
-                return message.append(new TranslatableText("text.skywars.win.team")).formatted(Formatting.GOLD);
+                return message.append(Text.translatable("text.skywars.win.team")).formatted(Formatting.GOLD);
             }
         } else {
-            return new TranslatableText("text.skywars.win.none").formatted(Formatting.GOLD);
+            return Text.translatable("text.skywars.win.none").formatted(Formatting.GOLD);
         }
     }
 
@@ -406,18 +407,18 @@ public class SkyWarsActive {
 
         this.globalSidebar.set(b -> {
 
-            b.add(LiteralText.EMPTY);
+            b.add(ScreenTexts.EMPTY);
 
             b.add((player) ->
                     FormattingUtil.formatScoreboard(
                             FormattingUtil.GENERAL_PREFIX,
                             TextUtil.getText("sidebar", (config.teamSize() > 1 ? "teams" : "players"),
-                                    new LiteralText(String.valueOf(liveTeams.keySet().size())).formatted(Formatting.WHITE)
+                                    Text.literal(String.valueOf(liveTeams.keySet().size())).formatted(Formatting.WHITE)
                             ).formatted(Formatting.GREEN)
                     )
             );
 
-            b.add(LiteralText.EMPTY);
+            b.add(ScreenTexts.EMPTY);
 
             b.add((player) -> {
                 if (player != null) {
@@ -428,15 +429,15 @@ public class SkyWarsActive {
                                 FormattingUtil.DEATH_PREFIX,
                                 Style.EMPTY.withColor(Formatting.GOLD),
                                 TextUtil.getText("sidebar", "kills",
-                                        new LiteralText("" + data.kills).formatted(Formatting.WHITE)
+                                        Text.literal("" + data.kills).formatted(Formatting.WHITE)
                                 )
                         );
                     }
                 }
-                return LiteralText.EMPTY;
+                return ScreenTexts.EMPTY;
             });
 
-            b.add(LiteralText.EMPTY);
+            b.add(ScreenTexts.EMPTY);
 
             b.add((player) -> {
                 var time = Math.max(stageManager.refillTime - world.getTime(), 0);
@@ -444,7 +445,7 @@ public class SkyWarsActive {
                         FormattingUtil.TIME_PREFIX,
                         Style.EMPTY.withColor(Formatting.GREEN),
                         TextUtil.getText("sidebar", "refill",
-                                new LiteralText(formatTime(time)).formatted(Formatting.WHITE))
+                                Text.literal(formatTime(time)).formatted(Formatting.WHITE))
                 );
             });
             b.add((player) -> {
@@ -453,7 +454,7 @@ public class SkyWarsActive {
                         FormattingUtil.COMET_PREFIX,
                         Style.EMPTY.withColor(Formatting.GREEN),
                         TextUtil.getText("sidebar", "armageddon",
-                                new LiteralText(formatTime(time)).formatted(Formatting.WHITE))
+                                Text.literal(formatTime(time)).formatted(Formatting.WHITE))
                 );
             });
         });

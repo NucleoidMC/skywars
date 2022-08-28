@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
@@ -40,7 +39,7 @@ public class Kit {
     }
 
     public MutableText displayName() {
-        return new TranslatableText("skywars.kit." + name);
+        return Text.translatable("skywars.kit." + name);
     }
 
     public void equipPlayer(ServerPlayerEntity player) {

@@ -7,8 +7,7 @@ import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket.Flag;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
@@ -71,7 +70,7 @@ public class SkyWarsStageManager {
             if (time > refillTime) {
                 refills++;
                 LootHelper.fillChests(game.world, game.gameMap, game.config, refills);
-                game.gameSpace.getPlayers().sendActionBar(new TranslatableText("text.skywars.refill"), 5, 20, 5);
+                game.gameSpace.getPlayers().sendActionBar(Text.translatable("text.skywars.refill"), 5, 20, 5);
                 game.gameSpace.getPlayers().playSound(SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 2.0F, 1.0F);
 
                 if (refills <= game.config.refills()) this.refillTime = time + ((long) game.config.refillMins() * 20 * 60);
@@ -82,7 +81,7 @@ public class SkyWarsStageManager {
             //this.closeTime = time + (5 * 20);
             finishTime += 20 * 30;
             game.spawnGameEnd();
-            game.gameSpace.getPlayers().showTitle(new TranslatableText("text.skywars.armageddon").formatted(Formatting.BOLD, Formatting.RED), 5, 20, 5);
+            game.gameSpace.getPlayers().showTitle(Text.translatable("text.skywars.armageddon").formatted(Formatting.BOLD, Formatting.RED), 5, 20, 5);
             game.gameSpace.getPlayers().playSound(SoundEvents.ENTITY_WITHER_SPAWN);
         }
 
@@ -122,10 +121,10 @@ public class SkyWarsStageManager {
             PlayerSet players = space.getPlayers();
 
             if (sec > 0) {
-                players.showTitle(new LiteralText(Integer.toString(sec)).formatted(Formatting.BOLD), 20);
+                players.showTitle(Text.literal(Integer.toString(sec)).formatted(Formatting.BOLD), 20);
                 players.playSound(SoundEvents.BLOCK_NOTE_BLOCK_HARP, SoundCategory.PLAYERS, 1.0F, 1.0F);
             } else {
-                players.showTitle(new TranslatableText("text.skywars.go").formatted(Formatting.BOLD), 10);
+                players.showTitle(Text.translatable("text.skywars.go").formatted(Formatting.BOLD), 10);
                 players.playSound(SoundEvents.BLOCK_NOTE_BLOCK_HARP, SoundCategory.PLAYERS, 1.0F, 2.0F);
                 for (var playerRef : game.liveParticipants) {
                     var playerEntity = game.getPlayer(playerRef);

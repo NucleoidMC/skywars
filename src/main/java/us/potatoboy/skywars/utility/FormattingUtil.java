@@ -34,18 +34,18 @@ public class FormattingUtil {
 
 
     public static MutableText format(String prefix, Style style, Text message) {
-        return new LiteralText(prefix + " ").setStyle(PREFIX_STYLE).append(message.shallowCopy().fillStyle(style));
+        return Text.literal(prefix + " ").setStyle(PREFIX_STYLE).append(message.copy().fillStyle(style));
     }
 
     public static MutableText format(String prefix, Text message) {
-        return new LiteralText(prefix + " ").setStyle(PREFIX_STYLE).append(message.shallowCopy());
+        return Text.literal(prefix + " ").setStyle(PREFIX_STYLE).append(message.copy());
     }
 
     public static MutableText formatScoreboard(String prefix, Style style, Text message) {
-        return new LiteralText(prefix + " ").setStyle(PREFIX_SCOREBOARD_STYLE).append(message.shallowCopy().fillStyle(style));
+        return Text.literal(prefix + " ").setStyle(PREFIX_SCOREBOARD_STYLE).append(message.copy().fillStyle(style));
     }
 
     public static MutableText formatScoreboard(String prefix, Text message) {
-        return new LiteralText(prefix + " ").setStyle(PREFIX_SCOREBOARD_STYLE).append(message.shallowCopy());
+        return Text.literal(prefix + " ").setStyle(PREFIX_SCOREBOARD_STYLE).append(message.copy());
     }
 }
