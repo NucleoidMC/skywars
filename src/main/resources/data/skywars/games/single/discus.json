@@ -1,0 +1,13 @@
+{
+  "type": "skywars:skywars",
+  "name": "SkyWars Discus",
+  "map": {
+    "id": "skywars:discus"
+  },
+  "refills": 2,
+  "refill_mins": 2,
+  "time_limit_mins": 10,
+  "center_loot_table": "skywars:center/shieldless",
+  "spawn_loot_table": "skywars:spawn/shieldless",
+  "kits": true
+}
