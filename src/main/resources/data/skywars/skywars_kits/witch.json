@@ -38,7 +38,14 @@
       }
     },
     {
-      "id": "lingering_potion",
+      "id": "splash_potion",
+      "Count": 1,
+      "tag": {
+        "Potion": "strong_harming"
+      }
+    },
+     {
+      "id": "splash_potion",
       "Count": 1,
       "tag": {
         "Potion": "strong_harming"
