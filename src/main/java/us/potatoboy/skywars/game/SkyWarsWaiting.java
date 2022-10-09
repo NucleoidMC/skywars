@@ -12,7 +12,7 @@ import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Style;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
@@ -187,7 +187,7 @@ public class SkyWarsWaiting {
         this.spawnLogic.spawnPlayer(player, world);
 
         player.getInventory().setStack(0, ItemStackBuilder.of(Items.COMPASS)
-                .setName(new TranslatableText("skywars.item.select_kit")
+                .setName(Text.translatable("skywars.item.select_kit")
                         .setStyle(Style.EMPTY.withItalic(false).withColor(Formatting.GOLD))).build());
     }
 }

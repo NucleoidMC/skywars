@@ -12,9 +12,8 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import us.potatoboy.skywars.SkyWars;
@@ -38,7 +37,7 @@ public final class KitSelectorUI extends SimpleGui {
         this.playerData = data;
         this.game = game;
         this.kits = kits;
-        this.setTitle(new TranslatableText("text.skywars.select_kit"));
+        this.setTitle(Text.translatable("text.skywars.select_kit"));
     }
 
     private static ScreenHandlerType<?> getType(int size) {
@@ -83,10 +82,10 @@ public final class KitSelectorUI extends SimpleGui {
             var icon = GuiElementBuilder.from(kit.icon);
             icon.setName(kit.displayName());
             icon.hideFlags();
-            icon.addLoreLine(new TranslatableText("text.skywars.click_select").formatted(Formatting.GRAY));
-            icon.addLoreLine(new TranslatableText("text.skywars.click_preview").formatted(Formatting.GRAY));
+            icon.addLoreLine(Text.translatable("text.skywars.click_select").formatted(Formatting.GRAY));
+            icon.addLoreLine(Text.translatable("text.skywars.click_preview").formatted(Formatting.GRAY));
             if (kit == this.playerData.selectedKit) {
-                icon.addLoreLine(new TranslatableText("text.skywars.selected").formatted(Formatting.GREEN));
+                icon.addLoreLine(Text.translatable("text.skywars.selected").formatted(Formatting.GREEN));
                 icon.glow();
             }
 

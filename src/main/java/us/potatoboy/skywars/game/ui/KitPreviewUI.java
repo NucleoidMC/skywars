@@ -8,7 +8,7 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import us.potatoboy.skywars.kit.Kit;
 
 public class KitPreviewUI extends SimpleGui {
@@ -38,7 +38,7 @@ public class KitPreviewUI extends SimpleGui {
         }
 
         this.setSlot(this.size - 1, new GuiElementBuilder(Items.BARRIER)
-                .setName(new TranslatableText("text.skywars.return_selector").setStyle(Style.EMPTY.withItalic(false)))
+                .setName(Text.translatable("text.skywars.return_selector").setStyle(Style.EMPTY.withItalic(false)))
                 .setCallback((x, y, z) -> {
                     this.close();
                 })

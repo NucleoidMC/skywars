@@ -1,7 +1,7 @@
 package us.potatoboy.skywars.game.map;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import xyz.nucleoid.map_templates.BlockBounds;
 import xyz.nucleoid.map_templates.MapTemplate;
@@ -32,7 +32,7 @@ public class SkyWarsMapGenerator {
                 return spawn;
             }).collect(Collectors.toList());
             if (spawns.size() == 0) {
-                throw new GameOpenException(new LiteralText("No player spawns defined."));
+                throw new GameOpenException(Text.literal("No player spawns defined."));
             }
 
             map.spawns = spawns;
@@ -42,14 +42,14 @@ public class SkyWarsMapGenerator {
 
             return map;
         } catch (IOException e) {
-            throw new GameOpenException(new LiteralText("Failed to load map"));
+            throw new GameOpenException(Text.literal("Failed to load map"));
         }
     }
 
     private static BlockBounds getRegion(MapTemplate template, String name) {
         BlockBounds bounds = template.getMetadata().getFirstRegionBounds(name);
         if (bounds == null) {
-            throw new GameOpenException(new LiteralText(String.format("%s region not found", name)));
+            throw new GameOpenException(Text.literal(String.format("%s region not found", name)));
         }
 
         return bounds;

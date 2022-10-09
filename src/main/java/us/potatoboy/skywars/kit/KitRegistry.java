@@ -7,7 +7,6 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -19,7 +18,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Collection;
 
 public class KitRegistry {
     private static final TinyRegistry<Kit> KITS = TinyRegistry.create();
@@ -37,13 +35,10 @@ public class KitRegistry {
             public void reload(ResourceManager manager) {
                 KITS.clear();
 
-                Collection<Identifier> resources = manager.findResources("skywars_kits", path -> path.endsWith(".json"));
-
-                for (Identifier path : resources) {
+                manager.findResources("skywars_kits", path -> path.getPath().endsWith(".json")).forEach((path, resource) -> {
                     try {
-                        Resource resource = manager.getResource(path);
                         try (Reader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
-                            JsonElement json = new JsonParser().parse(reader);
+                            JsonElement json = JsonParser.parseReader(reader);
 
                             Identifier identifier = identifierFromPath(path);
 
@@ -56,7 +51,7 @@ public class KitRegistry {
                     } catch (IOException e) {
                         SkyWars.LOGGER.error("Failed to kit at {}", path, e);
                     }
-                }
+                });
             }
         });
     }
