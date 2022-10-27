@@ -1,0 +1,57 @@
+{
+  "kit_name": "poultry",
+  "icon": {
+    "id": "egg",
+    "Count": 1
+  },
+  "armor": [
+    {
+    "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "leather_leggings",
+      "Count": 1,
+      "tag": {
+        "display": {
+          "color": 16701501
+        },
+        "Enchantments": [
+          {
+            "lvl": 1,
+            "id": "binding_curse"
+          }
+        ]
+      }
+    },
+    {
+      "id": "leather_boots",
+      "Count": 1,
+      "tag": {
+        "display": {
+          "color": 16701501
+        },
+        "Enchantments": [
+          {
+            "lvl": 4,
+            "id": "feather_falling",
+          },
+	  {
+            "lvl": 1,
+	    "id: "binding_curse"
+          }
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "egg",
+      "Count": 16,
+    }
+  ]
+}
