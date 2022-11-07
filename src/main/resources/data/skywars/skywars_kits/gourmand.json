@@ -16,6 +16,12 @@
         "display": {
           "color": 16351261
         },
+        "Enchantments": [
+          {
+            "lvl": 1,
+            "id": "binding_curse"
+          }
+        ],
         "Unbreakable": 1,
         "AttributeModifiers": [
           {
