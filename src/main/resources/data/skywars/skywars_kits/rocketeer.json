@@ -41,13 +41,18 @@
     },
     {
       "id": "firework_rocket",
-      "Count": 1,
-      "Flight": 1,
-      "Explosions: [
-        {
-          "Trails": 1b,
-          "Colors": 11743532, 15790320 
-        }
+      "Count": 8,
+      "Fireworks": {
+        "Flight": 1,
+        "Explosions: [
+          { 
+            "Type": 0,
+            "Trail": 1b,
+            "Colors": [
+              "I"; 11743532, 15790320
+              ]
+            }
+          }
         ]
       }
     ]
