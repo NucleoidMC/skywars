@@ -10,10 +10,9 @@
       "Count": 1,
       "tag": {
         "display": {
-           "color": 11546150
-        },
+          "color": 11546150
           }
-        ]
+        }
       }
     },
     {
@@ -45,11 +44,10 @@
       "Count": 1,
       "Flight": 1,
       "Explosions: [
-      {
-        "Trails": 1b,
-        "Colors": [
-          "I"; 11743532,
-               15790320 
+        {
+          "Trails": 1b,
+          "Colors": 11743532, 15790320 
+        }
         ]
       }
     ]
