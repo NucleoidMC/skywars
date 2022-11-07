@@ -1,5 +1,5 @@
 {
-  "kit_name": "turtlemaster",
+  "kit_name": "turtle_master",
   "icon": {
     "id": "scute",
     "Count": 1
@@ -13,7 +13,7 @@
           "color": 8439583
           }
         }
-      ]
+      }
     },
     {
       "id": "air",
@@ -41,16 +41,28 @@
   ],
   "items": [
     {
-      "id": "tropical_fish_bucket",
+      "id": "potion",
       "Count": 1
+      "tag": {
+        "Potion": "turtle_master"
+        }
+      }
     },
     {
-      "id": "tropical_fish_bucket",
+      "id": "potion",
       "Count": 1
+      "tag": {
+        "Potion": "turtle_master"
+        }
+      }
     },
     {
-      "id": "tropical_fish_bucket",
+      "id": "potion",
       "Count": 1
+      "tag": {
+        "Potion": "turtle_master"
+        }
+      }
     }
   ]
 }
