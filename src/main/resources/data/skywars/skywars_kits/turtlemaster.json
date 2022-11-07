@@ -1,0 +1,56 @@
+{
+  "kit_name": "turtlemaster",
+  "icon": {
+    "id": "scute",
+    "Count": 1
+  },
+  "armor": [
+    {
+      "id": "leather_helmet",
+      "Count": 1,
+      "tag": {
+        "display": {
+          "color": 8439583
+          }
+        }
+      ]
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "leather_boots",
+      "Count": 1,
+      "tag": {
+        "display": {
+          "color": 8439583
+        },
+        "Enchantments": [
+          {
+            "lvl": 3,
+            "id": "depth_strider"
+          }
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "tropical_fish_bucket",
+      "Count": 1
+    },
+    {
+      "id": "tropical_fish_bucket",
+      "Count": 1
+    },
+    {
+      "id": "tropical_fish_bucket",
+      "Count": 1
+    }
+  ]
+}
