@@ -11,7 +11,6 @@
       "tag": {
         "display": {
           "color": 8439583
-          }
         }
       }
     },
@@ -61,8 +60,6 @@
       "Count": 1
       "tag": {
         "Potion": "turtle_master"
-        }
-      }
     }
   ]
 }
