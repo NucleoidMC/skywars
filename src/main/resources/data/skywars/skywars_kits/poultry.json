@@ -19,13 +19,7 @@
       "tag": {
         "display": {
           "color": 16701501
-        },
-        "Enchantments": [
-          {
-            "lvl": 1,
-            "id": "binding_curse"
-          }
-        ]
+        }
       }
     },
     {
@@ -39,10 +33,6 @@
           {
             "lvl": 4,
             "id": "feather_falling",
-          },
-	  {
-            "lvl": 1,
-	    "id: "binding_curse"
           }
         ]
       }
