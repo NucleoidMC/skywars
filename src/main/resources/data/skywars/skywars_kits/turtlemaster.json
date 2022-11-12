@@ -40,26 +40,25 @@
   ],
   "items": [
     {
-      "id": "potion",
-      "Count": 1
-      "tag": {
-        "Potion": "turtle_master"
-        }
+    "id": "potion",
+    "Count": 1,
+    "tag": {
+      "Potion": "turtle_master"
       }
     },
     {
-      "id": "potion",
-      "Count": 1
-      "tag": {
-        "Potion": "turtle_master"
-        }
+    "id": "potion",
+    "Count": 1,
+    "tag": {
+      "Potion": "turtle_master"
       }
     },
     {
-      "id": "potion",
-      "Count": 1
-      "tag": {
-        "Potion": "turtle_master"
+    "id": "potion",
+    "Count": 1,
+    "tag": {
+      "Potion": "turtle_master"
+      }
     }
   ]
 }
