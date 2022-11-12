@@ -32,7 +32,7 @@
         "Enchantments": [
           {
             "lvl": 4,
-            "id": "feather_falling",
+            "id": "feather_falling"
           }
         ]
       }
@@ -41,7 +41,7 @@
   "items": [
     {
       "id": "egg",
-      "Count": 16,
+      "Count": 16
     }
   ]
 }
