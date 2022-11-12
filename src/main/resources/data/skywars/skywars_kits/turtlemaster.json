@@ -1,0 +1,64 @@
+{
+  "kit_name": "turtle_master",
+  "icon": {
+    "id": "scute",
+    "Count": 1
+  },
+  "armor": [
+    {
+      "id": "leather_helmet",
+      "Count": 1,
+      "tag": {
+        "display": {
+          "color": 8439583
+        }
+      }
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "leather_boots",
+      "Count": 1,
+      "tag": {
+        "display": {
+          "color": 8439583
+        },
+        "Enchantments": [
+          {
+            "lvl": 3,
+            "id": "depth_strider"
+          }
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+    "id": "potion",
+    "Count": 1,
+    "tag": {
+      "Potion": "turtle_master"
+      }
+    },
+    {
+    "id": "potion",
+    "Count": 1,
+    "tag": {
+      "Potion": "turtle_master"
+      }
+    },
+    {
+    "id": "potion",
+    "Count": 1,
+    "tag": {
+      "Potion": "turtle_master"
+      }
+    }
+  ]
+}
