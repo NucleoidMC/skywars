@@ -1,18 +1,18 @@
 {
   "kit_name": "rocketeer",
-    "icon": {
-      "id": "firework_rocket",
-      "Count": 1
-    },
-    "armor": [
-      {
-        "id": "leather_helmet",
-          "Count": 1,
-          "tag": {
-            "display": {
-              "color": 11546150
-            }
+  "icon": {
+    "id": "firework_rocket",
+    "Count": 1
+  },
+  "armor": [
+    {
+      "id": "leather_helmet",
+        "Count": 1,
+        "tag": {
+          "display": {
+            "color": 11546150
           }
+        }
       },
       {
         "id": "iron_chestplate",
@@ -51,12 +51,11 @@
                 "Colors": [
                   11546150,
                   15790320
-                ]
-              }
-            ]
-         }
+              ]
+            }
+          ]
         }
       }
-    ]
-  }
+    }
+  ]
 }
