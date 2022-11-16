@@ -37,9 +37,10 @@
   "skywars.kit.vindicator": "Vindicator",
   "skywars.kit.snowgolem": "Snow Golem",
   "skywars.kit.pyromancer": "Pyromancer",
+  "skywars.kit.poultry": "Poultry",
   "skywars.kit.pufferfish": "Pufferfish",
-  "skywars.kit.rocketeer": "Rocketeer",
   "skywars.kit.gourmand": "Gourmand",
+  "skywars.kit.rocketeer": "Rocketeer",
   "skywars.kit.turtle_master": "Turtle Master",
 
   "skywars.item.select_kit": "Kit Selector",
