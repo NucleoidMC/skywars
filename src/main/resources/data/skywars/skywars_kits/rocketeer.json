@@ -1,0 +1,61 @@
+{
+  "kit_name": "rocketeer",
+  "icon": {
+    "id": "firework_rocket",
+    "Count": 1
+  },
+  "armor": [
+    {
+      "id": "leather_helmet",
+        "Count": 1,
+        "tag": {
+          "display": {
+            "color": 11546150
+          }
+        }
+      },
+      {
+        "id": "iron_chestplate",
+        "Count": 1,
+        "Enchantments": [
+          {
+            "lvl": 4,
+            "id": "blast_protection"
+          }
+        ]
+      },
+      {
+        "id": "air",
+        "Count": 1
+      },
+      {
+        "id": "air",
+        "Count": 1
+      }
+    ],
+    "items": [
+      {
+        "id": "crossbow",
+        "Count": 1
+      },
+      {
+        "id": "firework_rocket",
+        "Count": 8,
+        "tag": {
+          "Fireworks": {
+            "Flight": 1,
+            "Explosions": [
+              { 
+                "Type": 0,
+                "Trail": 1,
+                "Colors": [
+                  11546150,
+                  15790320
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
