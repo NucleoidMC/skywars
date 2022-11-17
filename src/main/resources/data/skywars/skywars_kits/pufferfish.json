@@ -1,0 +1,44 @@
+{
+  "kit_name": "pufferfish",
+  "icon": {
+    "id": "pufferfish",
+    "Count": 1
+  },
+  "armor": [
+    {
+      "id": "leather_helmet",
+      "Count": 1,
+      "tag": {
+        "display": {
+          "color": 3847130
+        }
+      }
+    },
+    {
+      "id": "golden_chestplate",
+      "Count": 1,
+      "tag": {
+        "Enchantments": [
+          {
+            "lvl": 3,
+            "id": "thorns"
+          }
+        ]
+      }
+    },
+    {
+      "id": "air",
+      "Count": 1
+    },
+    {
+      "id": "air",
+      "Count": 1
+    }
+  ],
+  "items": [
+    {
+      "id": "air",
+      "Count": 1
+    }
+  ]
+}
