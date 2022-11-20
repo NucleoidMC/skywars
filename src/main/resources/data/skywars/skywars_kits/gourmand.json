@@ -27,7 +27,7 @@
           {
             "AttributeName": "generic.movement_speed",
             "Name": "generic.movement_speed",
-            "Amount": -0.05,
+            "Amount": -0.25,
             "Operation": 2,
             "Slot": "chest",
             "UUID": [
