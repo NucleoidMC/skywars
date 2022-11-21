@@ -26,10 +26,13 @@ import net.minecraft.text.*;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
+import org.jetbrains.annotations.Nullable;
 import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.SkywarsStatistics;
 import us.potatoboy.skywars.game.map.SkyWarsMap;
@@ -49,10 +52,12 @@ import xyz.nucleoid.plasmid.game.stats.GameStatisticBundle;
 import xyz.nucleoid.plasmid.game.stats.StatisticKeys;
 import xyz.nucleoid.plasmid.util.PlayerRef;
 import xyz.nucleoid.stimuli.event.block.BlockPlaceEvent;
+import xyz.nucleoid.stimuli.event.block.FluidPlaceEvent;
 import xyz.nucleoid.stimuli.event.player.PlayerDamageEvent;
 import xyz.nucleoid.stimuli.event.player.PlayerDeathEvent;
 import xyz.nucleoid.stimuli.event.projectile.ArrowFireEvent;
 import xyz.nucleoid.stimuli.event.projectile.ProjectileHitEvent;
+import xyz.nucleoid.stimuli.event.world.FluidFlowEvent;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -137,6 +142,8 @@ public class SkyWarsActive {
             activity.listen(BlockPlaceEvent.BEFORE, active::onPlaceBlock);
             activity.listen(ArrowFireEvent.EVENT, active::onArrowFire);
             activity.listen(ProjectileHitEvent.ENTITY, active::onProjectiveHit);
+            activity.listen(FluidFlowEvent.EVENT, active::onFluidFlow);
+            activity.listen(FluidPlaceEvent.EVENT, active::onFluidPlace);
         });
     }
 
@@ -217,6 +224,23 @@ public class SkyWarsActive {
         eliminatePlayer(PlayerRef.of(player));
         return ActionResult.FAIL;
     }
+
+    private ActionResult onFluidFlow(ServerWorld serverWorld, BlockPos pos, BlockState blockState, Direction direction, BlockPos pos1, BlockState blockState1) {
+        if (!gameMap.template.getBounds().contains(pos1)) {
+            return ActionResult.FAIL;
+        }
+
+        return ActionResult.PASS;
+    }
+
+    private ActionResult onFluidPlace(ServerWorld serverWorld, BlockPos pos, @Nullable ServerPlayerEntity serverPlayerEntity, @Nullable BlockHitResult blockHitResult) {
+        if (!gameMap.template.getBounds().contains(pos)) {
+            return ActionResult.FAIL;
+        }
+
+        return ActionResult.PASS;
+    }
+
 
     private ActionResult onPlaceBlock(ServerPlayerEntity player, ServerWorld world, BlockPos pos, BlockState state, ItemUsageContext context) {
         int slot;
