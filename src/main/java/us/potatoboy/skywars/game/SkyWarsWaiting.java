@@ -37,6 +37,7 @@ import xyz.nucleoid.plasmid.game.event.GamePlayerEvents;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 import xyz.nucleoid.plasmid.util.PlayerRef;
 import xyz.nucleoid.stimuli.event.item.ItemUseEvent;
+import xyz.nucleoid.stimuli.event.player.PlayerDamageEvent;
 import xyz.nucleoid.stimuli.event.player.PlayerDeathEvent;
 
 import java.util.ArrayList;
@@ -89,9 +90,11 @@ public class SkyWarsWaiting {
 
             game.listen(GamePlayerEvents.OFFER, offer -> offer.accept(world, waiting.spawnLogic.getRandomSpawnPos(offer.player().getRandom())));
             game.listen(GameActivityEvents.REQUEST_START, waiting::requestStart);
+            game.listen(GameActivityEvents.TICK, waiting::tick);
             game.listen(GamePlayerEvents.JOIN, waiting::playerJoin);
             game.listen(GamePlayerEvents.LEAVE, waiting::playerLeave);
             game.listen(PlayerDeathEvent.EVENT, waiting::onPlayerDeath);
+            game.listen(PlayerDamageEvent.EVENT, waiting::onPlayerDamage);
             game.listen(ItemUseEvent.EVENT, waiting::onUseItem);
 
             LootHelper.fillChests(world, map, config, 1);
@@ -163,6 +166,17 @@ public class SkyWarsWaiting {
         return GameResult.ok();
     }
 
+    private void tick() {
+        long time = world.getTime();
+        if (time % 20 == 0) {
+            for (ServerPlayerEntity player : gameSpace.getPlayers()) {
+                if (player.getY() < map.template.getBounds().min().getY() - 50) {
+                    this.spawnPlayer(player);
+                }
+            }
+        }
+    }
+
     private void playerJoin(ServerPlayerEntity player) {
         SkyWarsPlayer participant = new SkyWarsPlayer(player);
         if (config.kits().left().isPresent()) {
@@ -179,6 +193,10 @@ public class SkyWarsWaiting {
     private ActionResult onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
         player.setHealth(20.0f);
         this.spawnPlayer(player);
+        return ActionResult.FAIL;
+    }
+
+    private ActionResult onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount) {
         return ActionResult.FAIL;
     }
 
