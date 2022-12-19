@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -14,8 +15,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
 import us.potatoboy.skywars.game.map.SkyWarsMap;
@@ -80,7 +80,7 @@ public class SkyWarsWaiting {
 
         var worldConfig = new RuntimeWorldConfig()
                 .setGenerator(map.asGenerator(context.server()))
-                .setDimensionType(RegistryKey.of(Registry.DIMENSION_TYPE_KEY, config.dimension()))
+                .setDimensionType(RegistryKey.of(RegistryKeys.DIMENSION_TYPE, config.dimension()))
                 .setGameRule(GameRules.DO_FIRE_TICK, true);
 
         return context.openWithWorld(worldConfig, (game, world) -> {

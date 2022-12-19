@@ -5,11 +5,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class Kit {
         player.equipStack(EquipmentSlot.FEET, ItemStackBuilder.of(this.armor.get(3)).build());
 
         for (Cooldown cooldown : cooldowns) {
-            Item item = Registry.ITEM.get(cooldown.identifier);
+            Item item = Registries.ITEM.get(cooldown.identifier);
             if (item != null) {
                 player.getItemCooldownManager().set(item, cooldown.durationSec * 20);
             }
