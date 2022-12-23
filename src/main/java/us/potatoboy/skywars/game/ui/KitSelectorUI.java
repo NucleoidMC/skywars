@@ -2,17 +2,10 @@ package us.potatoboy.skywars.game.ui;
 
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -21,7 +14,6 @@ import us.potatoboy.skywars.game.SkyWarsPlayer;
 import us.potatoboy.skywars.game.SkyWarsWaiting;
 import us.potatoboy.skywars.kit.Kit;
 import us.potatoboy.skywars.kit.KitRegistry;
-import us.potatoboy.skywars.kit.PlayerKitStorage;
 import xyz.nucleoid.plasmid.util.PlayerRef;
 
 import java.util.ArrayList;
@@ -75,7 +67,7 @@ public final class KitSelectorUI extends SimpleGui {
     }
 
     @Override
-    public void onUpdate(boolean firstUpdate) {
+    public void onOpen() {
         int pos = 0;
 
         for (Kit kit : this.kits) {
@@ -96,17 +88,17 @@ public final class KitSelectorUI extends SimpleGui {
                     changeKit(this.game, this.player, this.playerData, kit);
                 } else if (clickType.isRight) {
                     this.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.MASTER, 0.5f, 1);
-                    this.close();
                     new KitPreviewUI(this, kit).open();
+                    this.close();
                 }
-                this.onUpdate(false);
+                this.onOpen();
             });
 
             this.setSlot(pos, icon);
             pos++;
         }
 
-        super.onUpdate(firstUpdate);
+        super.onOpen();
     }
 
     public static void changeKit(SkyWarsWaiting game, ServerPlayerEntity player, SkyWarsPlayer playerData, Kit kit) {

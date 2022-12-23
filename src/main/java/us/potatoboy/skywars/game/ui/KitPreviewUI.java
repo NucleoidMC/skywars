@@ -23,7 +23,7 @@ public class KitPreviewUI extends SimpleGui {
     }
 
     @Override
-    public void onUpdate(boolean firstUpdate) {
+    public void onOpen() {
         int pos = 0;
 
         for (ItemStack itemStack : this.kit.items) {
@@ -40,17 +40,13 @@ public class KitPreviewUI extends SimpleGui {
         this.setSlot(this.size - 1, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.translatable("text.skywars.return_selector").setStyle(Style.EMPTY.withItalic(false)))
                 .setCallback((x, y, z) -> {
+                    this.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.MASTER, 0.5f, 1);
+                    selectorUI.open();
                     this.close();
+
                 })
         );
 
-        super.onUpdate(firstUpdate);
-    }
-
-    @Override
-    public void onClose() {
-        this.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.MASTER, 0.5f, 1);
-        selectorUI.open();
-        super.onClose();
+        super.onOpen();
     }
 }
