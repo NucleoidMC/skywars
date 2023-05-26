@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Seaworthy (Duos)",
+  "icon": "minecraft:birch_boat",
   "map": {
     "id": "skywars:seaworthy"
   },

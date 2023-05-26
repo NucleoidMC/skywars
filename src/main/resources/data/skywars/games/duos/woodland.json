@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Woodland (Duos)",
+  "icon": "minecraft:oak_wood",
   "map": {
     "id": "skywars:woodland"
   },

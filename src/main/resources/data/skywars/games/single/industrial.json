@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Industrial",
+  "icon": "minecraft:yellow_terracotta",
   "map": {
     "id": "skywars:industrial"
   },

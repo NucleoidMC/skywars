@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Pyramid (Duos)",
+  "icon": "minecraft:sandstone_stairs",
   "map": {
     "id": "skywars:pyramid"
   },

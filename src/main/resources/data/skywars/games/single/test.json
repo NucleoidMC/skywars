@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Test",
+  "icon": "minecraft:stone",
   "map": {
     "id": "skywars:test"
   },

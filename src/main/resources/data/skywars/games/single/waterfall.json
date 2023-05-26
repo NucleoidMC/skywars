@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Waterfall",
+  "icon": "minecraft:water_bucket",
   "map": {
     "id": "skywars:waterfall"
   },

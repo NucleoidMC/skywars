@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Crimson",
+  "icon": "minecraft:crimson_fungus",
   "map": {
     "id": "skywars:crimson"
   },

@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Platforms",
+  "icon": "minecraft:polished_andesite",
   "map": {
     "id": "skywars:platforms"
   },

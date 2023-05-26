@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Baba",
+  "icon": "minecraft:twisting_vines",
   "map": {
     "id": "skywars:baba"
   },

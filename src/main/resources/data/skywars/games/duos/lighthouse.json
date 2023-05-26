@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Lighthouse (Duos)",
+  "icon": "minecraft:red_glazed_terracotta",
   "map": {
     "id": "skywars:lighthouse"
   },

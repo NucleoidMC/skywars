@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Hive",
+  "icon": "minecraft:honeycomb",
   "map": {
     "id": "skywars:hive"
   },
