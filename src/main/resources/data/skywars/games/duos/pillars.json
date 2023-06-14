@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Pillars (Duos)",
+  "icon": "minecraft:mossy_cobblestone",
   "map": {
     "id": "skywars:pillars"
   },

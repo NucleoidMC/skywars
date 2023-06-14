@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Pots (Duos)",
+  "icon": "minecraft:flower_pot",
   "map": {
     "id": "skywars:pots"
   },

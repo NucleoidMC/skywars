@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Pot Of Gold (Duos)",
+  "icon": "minecraft:raw_gold",
   "map": {
     "id": "skywars:potofgold"
   },

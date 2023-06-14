@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Coral Reef",
+  "icon": "minecraft:tube_coral",
   "map": {
     "id": "skywars:coral_reef"
   },

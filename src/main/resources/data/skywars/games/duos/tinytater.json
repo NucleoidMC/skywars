@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Tiny Tater (Duos)",
+  "icon": "minecraft:potato",
   "map": {
     "id": "skywars:tinytater"
   },

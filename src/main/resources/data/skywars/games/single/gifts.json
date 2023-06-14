@@ -1,6 +1,29 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Gifts",
+  "icon": {
+    "id": "minecraft:player_head",
+    "Count": 1,
+    "tag": {
+      "SkullOwner": {
+        "Id": [
+          -236225363,
+          -490713442,
+          -1968365906,
+          567672213
+        ],
+        "Name": "MHF_Present2",
+        "Properties": {
+          "textures": [
+            {
+              "Signature": "HdBKUhA8lkUqj+w47KcZlQixYUD2TNjEyZP8v2rf+hZXbxQBMMEEdPrwXo/nmhIn4iX5FM+CH5vYY8Sijj6/Y242lym7QIPXMp+t2Xggje57HVoH0aTqihmpaqTT54cl8ray6BOZ0CEG0y1lXSO3euqUxpoWgksuks0BL4OSRKm/s7eQolKAkweD7H9c8Zi2GbeOVBtkq7tsWOOQBV1TQg1M+2OoH2sAvEY2oCKT5E8OZNVWN9889INaHnYRudYhdfnqaptlHWmeSz0j5uRGI4TjRKL543Tb8wr28Eb8R8GCzV8+7eXivYWUysCa0YDkhrCybvVxhqlWYlm431kjFosBF89VDVtxpQwFWI73YvwIOcAWyWHBIP+TxIZq5LMwnKunJk0MkMOtsQEexqxbb72xpxmzS88QYIftncZ3oMDhHl0xfm7GffZuJJbPU0YYIaLRHP43/RGVqAy32FSi2/tOeCfbgD3WqoFpkF/osYl+OjHY8o34i6tkK4q375on0o1BHBQuSpfuxFaMclqpe0X3XCqL/5qRrpUrxv4VDvq8hYQhdKikUcXbUW0GslO/Yd2ySNwXF/RhdxX6YLrC+4fi8BVkG4ABI13RYCc+Y8nVP70uDY3I9VTSSbhbqIYbmNKnxTarHEQ8Q53LtDtim24UI6yKIWnDQnf91r7GlVE=",
+              "Value": "ewogICJ0aW1lc3RhbXAiIDogMTY4NTEzNzk3NTAzMiwKICAicHJvZmlsZUlkIiA6ICJmMWViN2NhZGUyYzA0ZTllOGFhZDFlYWUyMWQ1ZmQ5NSIsCiAgInByb2ZpbGVOYW1lIiA6ICJNSEZfUHJlc2VudDIiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDA3YzBkMzRmOTA1NDhhYmY5NDA0MGU1MTY3YzFlMDdjMzQyN2I5MjBmNjY2ODBkNzM1NmUyM2UxMWMxYTc3ZiIKICAgIH0KICB9Cn0="
+            }
+          ]
+        }
+      }
+    }
+  },
   "map": {
     "id": "skywars:gifts"
   },

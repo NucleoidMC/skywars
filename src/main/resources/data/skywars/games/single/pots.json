@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Pots",
+  "icon": "minecraft:flower_pot",
   "map": {
     "id": "skywars:pots"
   },

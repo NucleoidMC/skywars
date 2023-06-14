@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Split (Duos)",
+  "icon": "minecraft:elytra",
   "map": {
     "id": "skywars:split"
   },

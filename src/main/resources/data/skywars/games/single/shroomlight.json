@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Shroomlight",
+  "icon": "minecraft:shroomlight",
   "map": {
     "id": "skywars:shroomlight"
   },

@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Cauldron",
+  "icon": "minecraft:cauldron",
   "map": {
     "id": "skywars:cauldron"
   },

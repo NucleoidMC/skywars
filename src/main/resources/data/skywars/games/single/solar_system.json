@@ -1,6 +1,7 @@
 {
   "type": "skywars:skywars",
   "name": "SkyWars Solar System",
+  "icon": "minecraft:heart_of_the_sea",
   "map": {
     "id": "skywars:solar_system"
   },
