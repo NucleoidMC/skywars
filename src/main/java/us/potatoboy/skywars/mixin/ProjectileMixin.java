@@ -13,7 +13,7 @@ import xyz.nucleoid.plasmid.game.manager.GameSpaceManager;
 public abstract class ProjectileMixin {
     @Redirect(method = "setVelocity(Lnet/minecraft/entity/Entity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isOnGround()Z"))
     private boolean setProperties(Entity entity) {
-        var gameSpace = GameSpaceManager.get().byWorld(entity.world);
+        var gameSpace = GameSpaceManager.get().byWorld(entity.getWorld());
 
         if (gameSpace != null && gameSpace.getBehavior().testRule(SkyWars.PROJECTILE_PLAYER_MOMENTUM) == ActionResult.SUCCESS) {
             return true;
