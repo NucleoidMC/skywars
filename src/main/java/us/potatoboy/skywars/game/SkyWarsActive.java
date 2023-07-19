@@ -173,8 +173,6 @@ public class SkyWarsActive {
                 var player = getPlayer(ref);
                 this.spawnLogic.resetPlayer(player, GameMode.ADVENTURE);
                 this.spawnLogic.spawnPlayer(player, spawn, world);
-                player.getInventory().clear();
-                player.closeHandledScreen();
             }
         }
     }

@@ -1,5 +1,6 @@
 package us.potatoboy.skywars.game;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -26,6 +27,9 @@ public class SkyWarsSpawnLogic {
         player.fallDistance = 0.0f;
         player.getHungerManager().add(20, 2.0f);
         player.setHealth(20.0f);
+        player.playerScreenHandler.setCursorStack(ItemStack.EMPTY);
+        player.playerScreenHandler.clearCraftingSlots();
+        player.getInventory().clear();
     }
 
     public void spawnPlayer(ServerPlayerEntity player, ServerWorld world) {
