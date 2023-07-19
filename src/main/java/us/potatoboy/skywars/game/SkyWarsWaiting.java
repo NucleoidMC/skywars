@@ -4,6 +4,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -16,6 +17,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
 import us.potatoboy.skywars.game.map.SkyWarsMap;
@@ -37,6 +39,7 @@ import xyz.nucleoid.plasmid.game.event.GamePlayerEvents;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 import xyz.nucleoid.plasmid.util.PlayerRef;
 import xyz.nucleoid.stimuli.event.item.ItemUseEvent;
+import xyz.nucleoid.stimuli.event.player.PlayerAttackEntityEvent;
 import xyz.nucleoid.stimuli.event.player.PlayerDamageEvent;
 import xyz.nucleoid.stimuli.event.player.PlayerDeathEvent;
 
@@ -96,6 +99,7 @@ public class SkyWarsWaiting {
             game.listen(PlayerDeathEvent.EVENT, waiting::onPlayerDeath);
             game.listen(PlayerDamageEvent.EVENT, waiting::onPlayerDamage);
             game.listen(ItemUseEvent.EVENT, waiting::onUseItem);
+            game.listen(PlayerAttackEntityEvent.EVENT, (attacker, hand, attacked, hitResult) -> ActionResult.FAIL);
 
             LootHelper.fillChests(world, map, config, 1);
         });
