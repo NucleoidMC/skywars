@@ -18,6 +18,7 @@ import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -171,6 +172,7 @@ public class SkyWarsActive {
                 this.statistics.forPlayer(ref).increment(StatisticKeys.GAMES_PLAYED, 1);
 
                 var player = getPlayer(ref);
+                if (player.currentScreenHandler != player.playerScreenHandler) player.closeHandledScreen();
                 this.spawnLogic.resetPlayer(player, GameMode.ADVENTURE);
                 this.spawnLogic.spawnPlayer(player, spawn, world);
             }
@@ -214,6 +216,8 @@ public class SkyWarsActive {
     }
 
     private ActionResult onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
+        if (!liveParticipants.contains(PlayerRef.of(player))) return ActionResult.FAIL;
+
         gameSpace.getPlayers().sendMessage(getDeathMessage(player, source));
 
         player.getInventory().dropAll();
@@ -231,8 +235,9 @@ public class SkyWarsActive {
         return ActionResult.PASS;
     }
 
-    private ActionResult onFluidPlace(ServerWorld serverWorld, BlockPos pos, @Nullable ServerPlayerEntity serverPlayerEntity, @Nullable BlockHitResult blockHitResult) {
+    private ActionResult onFluidPlace(ServerWorld serverWorld, BlockPos pos, @Nullable ServerPlayerEntity player, @Nullable BlockHitResult blockHitResult) {
         if (!gameMap.template.getBounds().contains(pos)) {
+            if (player != null) player.sendMessage(Text.translatable("text.skywars.border").formatted(Formatting.RED, Formatting.BOLD), false);
             return ActionResult.FAIL;
         }
 
@@ -298,7 +303,6 @@ public class SkyWarsActive {
     }
 
     private void spawnSpectator(ServerPlayerEntity player) {
-        player.getInventory().clear();
         this.spawnLogic.resetPlayer(player, GameMode.SPECTATOR);
         this.spawnLogic.spawnPlayer(player, world);
     }
