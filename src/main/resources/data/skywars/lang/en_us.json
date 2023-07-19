@@ -47,6 +47,8 @@
 
   "statistic.bundle.skywars": "SkyWars",
   "statistic.skywars.arrows_shot": "Arrows Shot",
-  "statistic.skywars.arrows_hit": "Arrows Hit"
+  "statistic.skywars.arrows_hit": "Arrows Hit",
 
+  "block.skywars.iron_launch_pad": "Iron Launch Pad",
+  "block.skywars.gold_launch_pad": "Gold Launch Pad",
 }
