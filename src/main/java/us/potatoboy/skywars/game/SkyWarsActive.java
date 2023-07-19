@@ -310,7 +310,7 @@ public class SkyWarsActive {
             for (ServerPlayerEntity player : gameSpace.getPlayers()) {
                 var ref = PlayerRef.of(player);
                 if (player.getY() < gameMap.template.getBounds().min().getY() - 50) {
-                    if(liveParticipants.contains(ref)) player.kill();
+                    if(liveParticipants.contains(ref)) player.damage(player.getDamageSources().outOfWorld(), Float.MAX_VALUE);
                     else {
                         spawnLogic.resetPlayer(player, GameMode.SPECTATOR);
                         spawnLogic.spawnPlayer(player, world);
