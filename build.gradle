@@ -4,7 +4,7 @@ plugins {
 }
 
 archivesBaseName = project.archives_base_name
-version = project.mod_version
+version = project.mod_version + "-" + getVersionMetadata()
 group = project.maven_group
 
 repositories {
@@ -25,6 +25,18 @@ dependencies {
 
     // Plasmid
     modImplementation "xyz.nucleoid:plasmid:${project.plasmid_version}"
+}
+
+String getVersionMetadata() {
+    var buildId = System.getenv("GITHUB_RUN_NUMBER")
+
+    // CI builds only
+    if (buildId != null) {
+        return "build.$buildId"
+    }
+
+    // No tracking information could be found about the build
+    return "snapshot"
 }
 
 processResources {
