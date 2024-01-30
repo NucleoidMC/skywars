@@ -2,11 +2,9 @@ package us.potatoboy.skywars.mixin;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ActionResult;
-import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import net.minecraft.world.explosion.ExplosionBehavior;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import us.potatoboy.skywars.SkyWars;
