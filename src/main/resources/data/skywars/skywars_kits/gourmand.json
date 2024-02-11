@@ -1,7 +1,7 @@
 {
   "kit_name": "gourmand",
   "icon": {
-    "id": "enchanted_golden_apple",
+    "id": "golden_apple",
     "Count": 1
   },
   "armor": [
@@ -52,7 +52,7 @@
   "items": [
     {
       "id": "golden_apple",
-      "Count": 3
+      "Count": 4
     }
   ]
 }
