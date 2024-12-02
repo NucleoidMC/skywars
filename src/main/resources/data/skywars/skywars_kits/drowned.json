@@ -1,38 +1,22 @@
 {
   "kit_name": "drowned",
-  "icon": {
-    "id": "trident",
-    "Count": 1
-  },
+  "icon": "trident",
   "armor": [
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    }
+    "air",
+    "air",
+    "air",
+    "air"
   ],
   "items": [
     {
-      "id": "trident",
-      "Count": 1,
-      "tag": {
-        "Enchantments": [
-          {
-            "lvl": 3,
-            "id": "riptide"
+      "id": "minecraft:trident",
+      "count": 1,
+      "components": {
+        "minecraft:enchantments": {
+          "levels": {
+            "riptide": 3
           }
-        ]
+        }
       }
     }
   ]

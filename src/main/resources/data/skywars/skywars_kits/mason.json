@@ -1,31 +1,16 @@
 {
   "kit_name": "mason",
-  "icon": {
-    "id": "stone",
-    "Count": 1
-  },
+  "icon": "stone",
   "armor": [
-    {
-      "id": "chainmail_helmet",
-      "Count": 1
-    },
-    {
-      "id": "chainmail_chestplate",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    }
+    "chainmail_helmet",
+    "chainmail_chestplate",
+    "air",
+    "air"
   ],
   "items": [
     {
-      "id": "stone",
-      "Count": 64
+      "id": "minecraft:stone",
+      "count": 64
     }
   ]
 }

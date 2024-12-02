@@ -1,63 +1,59 @@
 {
   "kit_name": "turtle_master",
-  "icon": {
-    "id": "scute",
-    "Count": 1
-  },
+  "icon": "turtle_scute",
   "armor": [
     {
-      "id": "leather_helmet",
-      "Count": 1,
-      "tag": {
-        "display": {
-          "color": 8439583
+      "id": "minecraft:leather_helmet",
+      "count": 1,
+      "components": {
+        "minecraft:dyed_color": {
+          "rgb": 8439583
         }
       }
     },
+    "air",
+    "air",
     {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "leather_boots",
-      "Count": 1,
-      "tag": {
-        "display": {
-          "color": 8439583
-        },
-        "Enchantments": [
-          {
-            "lvl": 3,
-            "id": "depth_strider"
+      "id": "minecraft:leather_boots",
+      "count": 1,
+      "components": {
+        "minecraft:enchantments": {
+          "levels": {
+            "depth_strider": 3
           }
-        ]
+        },
+        "minecraft:dyed_color": {
+          "rgb": 8439583
+        }
       }
     }
   ],
   "items": [
     {
-    "id": "splash_potion",
-    "Count": 1,
-    "tag": {
-      "Potion": "turtle_master"
+      "id": "minecraft:splash_potion",
+      "count": 1,
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "turtle_master"
+        }
       }
     },
     {
-    "id": "splash_potion",
-    "Count": 1,
-    "tag": {
-      "Potion": "turtle_master"
+      "id": "minecraft:splash_potion",
+      "count": 1,
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "turtle_master"
+        }
       }
     },
     {
-    "id": "splash_potion",
-    "Count": 1,
-    "tag": {
-      "Potion": "turtle_master"
+      "id": "minecraft:splash_potion",
+      "count": 1,
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "turtle_master"
+        }
       }
     }
   ]

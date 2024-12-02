@@ -14,19 +14,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import xyz.nucleoid.packettweaker.PacketContext;
 
 // Taken from https://github.com/NucleoidMC/nucleoid-extras/blob/1.17/src/main/java/xyz/nucleoid/extras/lobby/block/LaunchPadBlock.java
 public class LaunchPadBlock extends Block implements BlockEntityProvider, PolymerBlock {
-    private final Block virtualBlock;
+    private final BlockState virtualBlock;
 
-    public LaunchPadBlock(Settings settings, Block virtualBlock) {
+    public LaunchPadBlock(Settings settings, BlockState virtualBlock) {
         super(settings);
         this.virtualBlock = virtualBlock;
     }
 
     @Override
-    public Block getPolymerBlock(BlockState state) {
-        return this.virtualBlock;
+    public BlockState getPolymerBlockState(BlockState blockState, PacketContext packetContext) {
+        return virtualBlock;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class LaunchPadBlock extends Block implements BlockEntityProvider, Polyme
                 entity.setVelocity(getVector(launchPad.getPitch(), entity.getYaw(0)).multiply(launchPad.getPower()));
                 if (entity instanceof ServerPlayerEntity player) {
                     player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(entity));
-                    player.playSound(SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5f, 1);
+                    world.playSound(null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5f, 1);
                 }
                 super.onEntityCollision(state, world, pos, entity);
             }

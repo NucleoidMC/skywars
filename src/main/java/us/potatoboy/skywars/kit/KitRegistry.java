@@ -12,7 +12,7 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import us.potatoboy.skywars.SkyWars;
-import xyz.nucleoid.plasmid.registry.TinyRegistry;
+import xyz.nucleoid.plasmid.api.util.TinyRegistry;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class KitRegistry {
     public static void register() {
         ResourceManagerHelper serverData = ResourceManagerHelper.get(ResourceType.SERVER_DATA);
 
-        serverData.registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+        serverData.registerReloadListener(SkyWars.identifier("skywars_kits"), registries -> new SimpleSynchronousResourceReloadListener() {
             @Override
             public Identifier getFabricId() {
                 return SkyWars.identifier("skywars_kits");
@@ -34,6 +34,7 @@ public class KitRegistry {
             @Override
             public void reload(ResourceManager manager) {
                 KITS.clear();
+                var ops = registries.getOps(JsonOps.INSTANCE);
 
                 manager.findResources("skywars_kits", path -> path.getPath().endsWith(".json")).forEach((path, resource) -> {
                     try {
@@ -42,7 +43,7 @@ public class KitRegistry {
 
                             Identifier identifier = identifierFromPath(path);
 
-                            DataResult<Kit> result = Kit.CODEC.decode(JsonOps.INSTANCE, json).map(Pair::getFirst);
+                            DataResult<Kit> result = Kit.CODEC.decode(ops, json).map(Pair::getFirst);
 
                             result.result().ifPresent(game -> KITS.register(identifier, game));
 
@@ -59,7 +60,7 @@ public class KitRegistry {
     private static Identifier identifierFromPath(Identifier location) {
         String path = location.getPath();
         path = path.substring("skywarsKits//".length(), path.length() - ".json".length());
-        return new Identifier(location.getNamespace(), path);
+        return Identifier.of(location.getNamespace(), path);
     }
 
     @Nullable

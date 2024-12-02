@@ -3,6 +3,7 @@ package us.potatoboy.skywars.custom.block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import us.potatoboy.skywars.custom.SWBlocks;
 
@@ -24,14 +25,14 @@ public class LaunchPadBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt) {
+    public void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
         nbt.putFloat("Pitch", this.pitch);
         nbt.putFloat("Power", this.power);
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
+    public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
+        super.readNbt(nbt, registries);
         this.pitch = nbt.getFloat("Pitch");
         this.power = nbt.getFloat("Power");
     }

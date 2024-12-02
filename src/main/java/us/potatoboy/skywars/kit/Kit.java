@@ -3,14 +3,13 @@ package us.potatoboy.skywars.kit;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import xyz.nucleoid.plasmid.util.ItemStackBuilder;
+import xyz.nucleoid.codecs.MoreCodecs;
+import xyz.nucleoid.plasmid.api.util.ItemStackBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +17,9 @@ import java.util.List;
 public class Kit {
     public static final Codec<Kit> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("kit_name").forGetter(kit -> kit.name),
-            ItemStack.CODEC.fieldOf("icon").forGetter(kit -> kit.icon),
-            Codec.list(ItemStack.CODEC).fieldOf("armor").forGetter(kit -> kit.armor),
-            Codec.list(ItemStack.CODEC).fieldOf("items").forGetter(kit -> kit.items),
+            MoreCodecs.ITEM_STACK.fieldOf("icon").forGetter(kit -> kit.icon),
+            Codec.list(MoreCodecs.ITEM_STACK).fieldOf("armor").forGetter(kit -> kit.armor),
+            Codec.list(MoreCodecs.ITEM_STACK).fieldOf("items").forGetter(kit -> kit.items),
             Codec.list(Cooldown.CODEC).optionalFieldOf("cooldowns", new ArrayList<>()).forGetter(kit -> kit.cooldowns)
     ).apply(instance, Kit::new));
 
@@ -53,10 +52,7 @@ public class Kit {
         player.equipStack(EquipmentSlot.FEET, ItemStackBuilder.of(this.armor.get(3)).build());
 
         for (Cooldown cooldown : cooldowns) {
-            Item item = Registries.ITEM.get(cooldown.identifier);
-            if (item != null) {
-                player.getItemCooldownManager().set(item, cooldown.durationSec * 20);
-            }
+            player.getItemCooldownManager().set(cooldown.identifier, cooldown.durationSec * 20);
         }
     }
 

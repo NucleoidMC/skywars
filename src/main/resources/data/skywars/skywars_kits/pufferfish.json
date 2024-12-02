@@ -1,44 +1,31 @@
 {
   "kit_name": "pufferfish",
-  "icon": {
-    "id": "pufferfish",
-    "Count": 1
-  },
+  "icon": "pufferfish",
   "armor": [
     {
-      "id": "leather_helmet",
-      "Count": 1,
-      "tag": {
-        "display": {
-          "color": 3847130
+      "id": "minecraft:leather_helmet",
+      "count": 1,
+      "components": {
+        "minecraft:dyed_color": {
+          "rgb": 3847130
         }
       }
     },
     {
-      "id": "golden_chestplate",
-      "Count": 1,
-      "tag": {
-        "Enchantments": [
-          {
-            "lvl": 3,
-            "id": "thorns"
+      "id": "minecraft:golden_chestplate",
+      "count": 1,
+      "components": {
+        "minecraft:enchantments": {
+          "levels": {
+            "thorns": 3
           }
-        ]
+        }
       }
     },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    }
+    "air",
+    "air"
   ],
   "items": [
-    {
-      "id": "air",
-      "Count": 1
-    }
+    "air"
   ]
 }

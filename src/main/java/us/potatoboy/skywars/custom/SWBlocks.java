@@ -9,13 +9,15 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.custom.block.LaunchPadBlock;
 import us.potatoboy.skywars.custom.block.LaunchPadBlockEntity;
 
 public class SWBlocks {
-    public static final Block GOLD_LAUNCH_PAD = new LaunchPadBlock(AbstractBlock.Settings.copy(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE).strength(100).noCollision(), Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE);
-    public static final Block IRON_LAUNCH_PAD = new LaunchPadBlock(AbstractBlock.Settings.copy(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE).strength(100).noCollision(), Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE);
+    public static final Block GOLD_LAUNCH_PAD = new LaunchPadBlock(AbstractBlock.Settings.copy(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE).strength(100).noCollision().registryKey(RegistryKey.of(RegistryKeys.BLOCK, SkyWars.identifier("gold_launch_pad"))), Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE.getDefaultState());
+    public static final Block IRON_LAUNCH_PAD = new LaunchPadBlock(AbstractBlock.Settings.copy(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE).strength(100).noCollision().registryKey(RegistryKey.of(RegistryKeys.BLOCK, SkyWars.identifier("iron_launch_pad"))), Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE.getDefaultState());
 
     public static final BlockEntityType<LaunchPadBlockEntity> LAUNCH_PAD_ENTITY = FabricBlockEntityTypeBuilder.create(LaunchPadBlockEntity::new, GOLD_LAUNCH_PAD, IRON_LAUNCH_PAD).build(null);
 

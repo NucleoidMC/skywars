@@ -1,31 +1,16 @@
 {
   "kit_name": "snowgolem",
-  "icon": {
-    "id": "snowball",
-    "Count": 1
-  },
+  "icon": "snowball",
   "armor": [
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    }
+    "air",
+    "air",
+    "air",
+    "air"
   ],
   "items": [
     {
-      "id": "snowball",
-      "Count": 12
+      "id": "minecraft:snowball",
+      "count": 12
     }
   ]
 }

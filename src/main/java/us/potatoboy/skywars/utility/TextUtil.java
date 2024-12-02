@@ -7,11 +7,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import us.potatoboy.skywars.SkyWars;
-import xyz.nucleoid.plasmid.game.common.team.GameTeam;
+import xyz.nucleoid.plasmid.api.game.common.team.GameTeam;
 
 public class TextUtil {
     public static MutableText getText(String type, String path, Object... values) {
-        return Text.translatable(Util.createTranslationKey(type, new Identifier(SkyWars.ID, path)), values);
+        return Text.translatable(Util.createTranslationKey(type, Identifier.of(SkyWars.ID, path)), values);
     }
 
     public static MutableText getTeamText(GameTeam team) {
@@ -19,6 +19,6 @@ public class TextUtil {
     }
 
     public static Identifier id(String path) {
-        return new Identifier(SkyWars.ID, path);
+        return Identifier.of(SkyWars.ID, path);
     }
 }

@@ -6,7 +6,7 @@ import net.minecraft.util.math.Vec3d;
 import xyz.nucleoid.map_templates.BlockBounds;
 import xyz.nucleoid.map_templates.MapTemplate;
 import xyz.nucleoid.map_templates.MapTemplateSerializer;
-import xyz.nucleoid.plasmid.game.GameOpenException;
+import xyz.nucleoid.plasmid.api.game.GameOpenException;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,7 +31,7 @@ public class SkyWarsMapGenerator {
                 spawn = spawn.subtract(0, (bounds.max().getY() - bounds.min().getY() + 1) / 2.0D, 0);
                 return spawn;
             }).collect(Collectors.toList());
-            if (spawns.size() == 0) {
+            if (spawns.isEmpty()) {
                 throw new GameOpenException(Text.literal("No player spawns defined."));
             }
 

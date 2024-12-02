@@ -1,31 +1,22 @@
 {
   "kit_name": "vindicator",
-  "icon": {
-    "id": "iron_axe",
-    "Count": 1
-  },
+  "icon": "iron_axe",
   "armor": [
     {
-      "id": "iron_helmet",
-      "Count": 1
+      "id": "minecraft:iron_helmet",
+      "count": 1
     },
+    "air",
+    "air",
     {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "iron_boots",
-      "Count": 1
+      "id": "minecraft:iron_boots",
+      "count": 1
     }
   ],
   "items": [
     {
-      "id": "iron_axe",
-      "Count": 1
+      "id": "minecraft:iron_axe",
+      "count": 1
     }
   ]
 }

@@ -1,47 +1,36 @@
 {
   "kit_name": "pyromancer",
-  "icon": {
-    "id": "flint_and_steel",
-    "Count": 1
-  },
+  "icon": "flint_and_steel",
   "armor": [
+    "air",
+    "air",
     {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-
-      "id": "leather_leggings",
-      "Count": 1,
-      "tag": {
-        "display": {
-          "color": 11546150
-        },
-        "Enchantments": [
-          {
-            "lvl": 4,
-            "id": "fire_protection"
+      "id": "minecraft:leather_leggings",
+      "count": 1,
+      "components": {
+        "minecraft:enchantments": {
+          "levels": {
+            "fire_protection": 4
           }
-        ]
+        },
+        "minecraft:dyed_color": {
+          "rgb": 11546150
+        }
       }
     },
     {
-      "id": "iron_boots",
-      "Count": 1
+      "id": "minecraft:iron_boots",
+      "count": 1
     }
   ],
   "items": [
     {
-      "id": "flint_and_steel",
-      "Count": 1
+      "id": "minecraft:flint_and_steel",
+      "count": 1
     },
     {
-      "id": "lava_bucket",
-      "Count": 1
+      "id": "minecraft:lava_bucket",
+      "count": 1
     }
   ]
 }

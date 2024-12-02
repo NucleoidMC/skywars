@@ -1,51 +1,38 @@
 {
   "kit_name": "fish",
-  "icon": {
-    "id": "tropical_fish",
-    "Count": 1
-  },
+  "icon": "tropical_fish",
   "armor": [
+    "air",
+    "air",
+    "air",
     {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "iron_boots",
-      "Count": 1,
-      "tag": {
-        "Enchantments": [
-          {
-            "lvl": 3,
-            "id": "depth_strider"
+      "id": "minecraft:iron_boots",
+      "count": 1,
+      "components": {
+        "minecraft:enchantments": {
+          "levels": {
+            "depth_strider": 3
           }
-        ]
+        }
       }
     }
   ],
   "items": [
     {
-      "id": "water_bucket",
-      "Count": 1
+      "id": "minecraft:water_bucket",
+      "count": 1
     },
     {
-      "id": "tropical_fish_bucket",
-      "Count": 1
+      "id": "minecraft:tropical_fish_bucket",
+      "count": 1
     },
     {
-      "id": "tropical_fish_bucket",
-      "Count": 1
+      "id": "minecraft:tropical_fish_bucket",
+      "count": 1
     },
     {
-      "id": "tropical_fish_bucket",
-      "Count": 1
+      "id": "minecraft:tropical_fish_bucket",
+      "count": 1
     }
   ]
 }

@@ -5,7 +5,6 @@ import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -40,7 +39,7 @@ public class KitPreviewUI extends SimpleGui {
         this.setSlot(this.size - 1, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.translatable("text.skywars.return_selector").setStyle(Style.EMPTY.withItalic(false)))
                 .setCallback((x, y, z) -> {
-                    this.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.MASTER, 0.5f, 1);
+                    this.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, 0.5f, 1);
                     selectorUI.open();
                     this.close();
 

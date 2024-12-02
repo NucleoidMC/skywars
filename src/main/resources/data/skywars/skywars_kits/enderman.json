@@ -1,31 +1,16 @@
 {
   "kit_name": "enderman",
-  "icon": {
-    "id": "ender_pearl",
-    "Count": 1
-  },
+  "icon": "ender_pearl",
   "armor": [
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    }
+    "air",
+    "air",
+    "air",
+    "air"
   ],
   "items": [
     {
-      "id": "ender_pearl",
-      "Count": 2
+      "id": "minecraft:ender_pearl",
+      "count": 2
     }
   ],
   "cooldowns": [

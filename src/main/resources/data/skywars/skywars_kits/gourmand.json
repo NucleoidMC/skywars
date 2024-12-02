@@ -1,58 +1,40 @@
 {
   "kit_name": "gourmand",
-  "icon": {
-    "id": "golden_apple",
-    "Count": 1
-  },
+  "icon": "golden_apple",
   "armor": [
+    "air",
     {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "leather_chestplate",
-      "Count": 1,
-      "tag": {
-        "display": {
-          "color": 16351261
+      "id": "minecraft:leather_chestplate",
+      "count": 1,
+      "components": {
+        "minecraft:enchantments": {
+          "levels": {
+            "binding_curse": 1
+          }
         },
-        "Enchantments": [
-          {
-            "lvl": 1,
-            "id": "binding_curse"
-          }
-        ],
-        "Unbreakable": 1,
-        "AttributeModifiers": [
-          {
-            "AttributeName": "generic.movement_speed",
-            "Name": "generic.movement_speed",
-            "Amount": -0.25,
-            "Operation": 2,
-            "Slot": "chest",
-            "UUID": [
-              1527397259,
-              -913290004,
-              -2084735394,
-              2066060727
-            ]
-          }
-        ]
+        "minecraft:dyed_color": {
+          "rgb": 16351261
+        },
+        "minecraft:attribute_modifiers": {
+          "modifiers": [
+            {
+              "amount": -0.25,
+              "operation": "add_multiplied_total",
+              "type": "minecraft:movement_speed",
+              "slot": "chest",
+              "id": "minecraft:5b0a3b8b-c990-4cec-83bd-765e7b2595b7"
+            }
+          ]
+        }
       }
     },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    }
+    "air",
+    "air"
   ],
   "items": [
     {
-      "id": "golden_apple",
-      "Count": 4
+      "id": "minecraft:golden_apple",
+      "count": 4
     }
   ]
 }

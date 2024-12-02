@@ -4,17 +4,16 @@ import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.game.SkyWarsPlayer;
 import us.potatoboy.skywars.game.SkyWarsWaiting;
 import us.potatoboy.skywars.kit.Kit;
 import us.potatoboy.skywars.kit.KitRegistry;
-import xyz.nucleoid.plasmid.util.PlayerRef;
+import us.potatoboy.skywars.kit.PlayerKitStorage;
+import xyz.nucleoid.plasmid.api.util.PlayerRef;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +72,7 @@ public final class KitSelectorUI extends SimpleGui {
         for (Kit kit : this.kits) {
             var icon = GuiElementBuilder.from(kit.icon);
             icon.setName(kit.displayName());
-            icon.hideFlags();
+            icon.hideDefaultTooltip();
             icon.addLoreLine(Text.translatable("text.skywars.click_select").formatted(Formatting.GRAY));
             icon.addLoreLine(Text.translatable("text.skywars.click_preview").formatted(Formatting.GRAY));
             if (kit == this.playerData.selectedKit) {
@@ -83,11 +82,11 @@ public final class KitSelectorUI extends SimpleGui {
 
             icon.setCallback((index, clickType, action) -> {
                 if (clickType.isLeft) {
-                    this.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.MASTER, 0.5f, 1);
-                    SkyWars.KIT_STORAGE.putPlayerKit(player.getUuid(), KitRegistry.getId(kit));
+                    this.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, 0.5f, 1);
+                    PlayerKitStorage.get(player).selectedKit = KitRegistry.getId(kit);
                     changeKit(this.game, this.player, this.playerData, kit);
                 } else if (clickType.isRight) {
-                    this.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.MASTER, 0.5f, 1);
+                    this.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, 0.5f, 1);
                     new KitPreviewUI(this, kit).open();
                     this.close();
                 }

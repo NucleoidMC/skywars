@@ -1,47 +1,37 @@
 {
   "kit_name": "poultry",
-  "icon": {
-    "id": "egg",
-    "Count": 1
-  },
+  "icon": "egg",
   "armor": [
+    "air",
+    "air",
     {
-    "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "leather_leggings",
-      "Count": 1,
-      "tag": {
-        "display": {
-          "color": 16701501
+      "id": "minecraft:leather_leggings",
+      "count": 1,
+      "components": {
+        "minecraft:dyed_color": {
+          "rgb": 16701501
         }
       }
     },
     {
-      "id": "leather_boots",
-      "Count": 1,
-      "tag": {
-        "display": {
-          "color": 16701501
-        },
-        "Enchantments": [
-          {
-            "lvl": 4,
-            "id": "feather_falling"
+      "id": "minecraft:leather_boots",
+      "count": 1,
+      "components": {
+        "minecraft:enchantments": {
+          "levels": {
+            "feather_falling": 4
           }
-        ]
+        },
+        "minecraft:dyed_color": {
+          "rgb": 16701501
+        }
       }
     }
   ],
   "items": [
     {
-      "id": "egg",
-      "Count": 16
+      "id": "minecraft:egg",
+      "count": 16
     }
   ]
 }

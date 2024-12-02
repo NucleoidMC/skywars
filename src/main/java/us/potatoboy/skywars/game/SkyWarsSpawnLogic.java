@@ -4,13 +4,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.GameMode;
+import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.game.map.SkyWarsMap;
 import xyz.nucleoid.map_templates.BlockBounds;
-import xyz.nucleoid.plasmid.game.GameSpace;
+import xyz.nucleoid.plasmid.api.game.GameSpace;
+
+import java.util.Set;
 
 public class SkyWarsSpawnLogic {
     private final GameSpace gameSpace;
@@ -28,29 +29,29 @@ public class SkyWarsSpawnLogic {
         player.getHungerManager().add(20, 2.0f);
         player.setHealth(20.0f);
         player.playerScreenHandler.setCursorStack(ItemStack.EMPTY);
-        player.playerScreenHandler.clearCraftingSlots();
+        player.playerScreenHandler.getCraftingInput().clear();
         player.getInventory().clear();
     }
 
     public void spawnPlayer(ServerPlayerEntity player, ServerWorld world) {
-        spawnPlayer(player, getRandomSpawnPos(player.getRandom()), world);
+        spawnPlayer(player, getRandomSpawnPos(), world);
     }
 
     public void spawnPlayer(ServerPlayerEntity player, Vec3d pos, ServerWorld world) {
-        player.teleport(world, pos.getX(), pos.getY(), pos.getZ(), 0.0F, 0.0F);
+        player.teleport(player.getServerWorld(), pos.getX(), pos.getY(), pos.getZ(), Set.of(), player.getYaw(), player.getPitch(), false);
         player.setOnGround(true);
     }
 
-    public Vec3d getRandomSpawnPos(Random random) {
-        return choosePos(random, map.getSpawn(random), 0);
+    public Vec3d getRandomSpawnPos() {
+        return choosePos(map.getSpawn(), 0);
     }
 
-    public static Vec3d choosePos(Random random, BlockBounds bounds, float aboveGround) {
+    public static Vec3d choosePos(BlockBounds bounds, float aboveGround) {
         BlockPos min = bounds.min();
         BlockPos max = bounds.max();
 
-        double x = MathHelper.nextDouble(random, min.getX(), max.getX());
-        double z = MathHelper.nextDouble(random, min.getZ(), max.getZ());
+        double x = SkyWars.RANDOM.nextDouble(min.getX(), max.getX()+1);
+        double z = SkyWars.RANDOM.nextDouble(min.getZ(), max.getZ()+1);
         double y = min.getY() + aboveGround;
 
         return new Vec3d(x + 0.5, y, z + 0.5);

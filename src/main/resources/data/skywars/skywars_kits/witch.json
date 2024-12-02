@@ -1,54 +1,47 @@
 {
   "kit_name": "witch",
-  "icon": {
-    "id": "brewing_stand",
-    "Count": 1
-  },
+  "icon": "brewing_stand",
   "armor": [
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    },
-    {
-      "id": "air",
-      "Count": 1
-    }
+    "air",
+    "air",
+    "air",
+    "air"
   ],
   "items": [
     {
-      "id": "lingering_potion",
-      "Count": 1,
-      "tag": {
-        "Potion": "strong_harming"
+      "id": "minecraft:lingering_potion",
+      "count": 1,
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "strong_harming"
+        }
       }
     },
     {
-      "id": "lingering_potion",
-      "Count": 1,
-      "tag": {
-        "Potion": "strong_harming"
+      "id": "minecraft:lingering_potion",
+      "count": 1,
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "strong_harming"
+        }
       }
     },
     {
-      "id": "lingering_potion",
-      "Count": 1,
-      "tag": {
-        "Potion": "strong_harming"
+      "id": "minecraft:lingering_potion",
+      "count": 1,
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "strong_harming"
+        }
       }
     },
     {
-      "id": "potion",
-      "Count": 1,
-      "tag": {
-        "Potion": "strong_healing"
+      "id": "minecraft:potion",
+      "count": 1,
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "strong_healing"
+        }
       }
     }
   ]

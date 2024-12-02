@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
 import net.minecraft.entity.damage.DamageSource;
@@ -18,13 +19,11 @@ import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.*;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -39,19 +38,20 @@ import us.potatoboy.skywars.SkywarsStatistics;
 import us.potatoboy.skywars.game.map.SkyWarsMap;
 import us.potatoboy.skywars.utility.FormattingUtil;
 import us.potatoboy.skywars.utility.TextUtil;
-import xyz.nucleoid.plasmid.game.GameActivity;
-import xyz.nucleoid.plasmid.game.GameCloseReason;
-import xyz.nucleoid.plasmid.game.GameSpace;
-import xyz.nucleoid.plasmid.game.common.GlobalWidgets;
-import xyz.nucleoid.plasmid.game.common.team.GameTeam;
-import xyz.nucleoid.plasmid.game.common.team.TeamManager;
-import xyz.nucleoid.plasmid.game.event.GameActivityEvents;
-import xyz.nucleoid.plasmid.game.event.GamePlayerEvents;
-import xyz.nucleoid.plasmid.game.player.PlayerSet;
-import xyz.nucleoid.plasmid.game.rule.GameRuleType;
-import xyz.nucleoid.plasmid.game.stats.GameStatisticBundle;
-import xyz.nucleoid.plasmid.game.stats.StatisticKeys;
-import xyz.nucleoid.plasmid.util.PlayerRef;
+import xyz.nucleoid.plasmid.api.game.GameActivity;
+import xyz.nucleoid.plasmid.api.game.GameCloseReason;
+import xyz.nucleoid.plasmid.api.game.GameSpace;
+import xyz.nucleoid.plasmid.api.game.common.GlobalWidgets;
+import xyz.nucleoid.plasmid.api.game.common.team.GameTeam;
+import xyz.nucleoid.plasmid.api.game.common.team.TeamManager;
+import xyz.nucleoid.plasmid.api.game.event.GameActivityEvents;
+import xyz.nucleoid.plasmid.api.game.event.GamePlayerEvents;
+import xyz.nucleoid.plasmid.api.game.player.PlayerSet;
+import xyz.nucleoid.plasmid.api.game.rule.GameRuleType;
+import xyz.nucleoid.plasmid.api.game.stats.GameStatisticBundle;
+import xyz.nucleoid.plasmid.api.game.stats.StatisticKeys;
+import xyz.nucleoid.plasmid.api.util.PlayerRef;
+import xyz.nucleoid.stimuli.event.EventResult;
 import xyz.nucleoid.stimuli.event.block.BlockPlaceEvent;
 import xyz.nucleoid.stimuli.event.block.FluidPlaceEvent;
 import xyz.nucleoid.stimuli.event.player.PlayerDamageEvent;
@@ -61,7 +61,6 @@ import xyz.nucleoid.stimuli.event.projectile.ProjectileHitEvent;
 import xyz.nucleoid.stimuli.event.world.FluidFlowEvent;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SkyWarsActive {
     public final SkyWarsConfig config;
@@ -132,7 +131,7 @@ public class SkyWarsActive {
             activity.listen(GameActivityEvents.ENABLE, active::onOpen);
             activity.listen(GameActivityEvents.DISABLE, active::onClose);
 
-            activity.listen(GamePlayerEvents.OFFER, offer -> offer.accept(world, active.spawnLogic.getRandomSpawnPos(offer.player().getRandom())));
+            activity.listen(GamePlayerEvents.ACCEPT, offer -> offer.teleport(world, active.spawnLogic.getRandomSpawnPos()));
             activity.listen(GamePlayerEvents.ADD, active::addPlayer);
             activity.listen(GamePlayerEvents.REMOVE, active::removePlayer);
 
@@ -203,20 +202,19 @@ public class SkyWarsActive {
         globalSidebar.removePlayer(player);
     }
 
-    private ActionResult onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount) {
+    private EventResult onPlayerDamage(ServerPlayerEntity player, DamageSource source, float amount) {
         SkyWarsPlayer participant = getParticipant(PlayerRef.of(player));
 
         if (participant != null && source.getAttacker() != null && source.getAttacker() instanceof ServerPlayerEntity attacker) {
-
             this.statistics.forPlayer(attacker).increment(StatisticKeys.DAMAGE_DEALT, amount);
             this.statistics.forPlayer(player).increment(StatisticKeys.DAMAGE_TAKEN, amount);
         }
 
-        return ActionResult.PASS;
+        return EventResult.DENY;
     }
 
-    private ActionResult onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
-        if (!liveParticipants.contains(PlayerRef.of(player))) return ActionResult.FAIL;
+    private EventResult onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
+        if (!liveParticipants.contains(PlayerRef.of(player))) return EventResult.DENY;
 
         gameSpace.getPlayers().sendMessage(getDeathMessage(player, source));
 
@@ -224,28 +222,28 @@ public class SkyWarsActive {
         this.spawnSpectator(player);
 
         eliminatePlayer(PlayerRef.of(player));
-        return ActionResult.FAIL;
+        return EventResult.DENY;
     }
 
-    private ActionResult onFluidFlow(ServerWorld serverWorld, BlockPos pos, BlockState blockState, Direction direction, BlockPos pos1, BlockState blockState1) {
+    private EventResult onFluidFlow(ServerWorld serverWorld, BlockPos pos, BlockState blockState, Direction direction, BlockPos pos1, BlockState blockState1) {
         if (!gameMap.template.getBounds().contains(pos1)) {
-            return ActionResult.FAIL;
+            return EventResult.DENY;
         }
 
-        return ActionResult.PASS;
+        return EventResult.PASS;
     }
 
-    private ActionResult onFluidPlace(ServerWorld serverWorld, BlockPos pos, @Nullable ServerPlayerEntity player, @Nullable BlockHitResult blockHitResult) {
+    private EventResult onFluidPlace(ServerWorld serverWorld, BlockPos pos, @Nullable ServerPlayerEntity player, @Nullable BlockHitResult blockHitResult) {
         if (!gameMap.template.getBounds().contains(pos)) {
             if (player != null) player.sendMessage(Text.translatable("text.skywars.border").formatted(Formatting.RED, Formatting.BOLD), false);
-            return ActionResult.FAIL;
+            return EventResult.DENY;
         }
 
-        return ActionResult.PASS;
+        return EventResult.PASS;
     }
 
 
-    private ActionResult onPlaceBlock(ServerPlayerEntity player, ServerWorld world, BlockPos pos, BlockState state, ItemUsageContext context) {
+    private EventResult onPlaceBlock(ServerPlayerEntity player, ServerWorld world, BlockPos pos, BlockState state, ItemUsageContext context) {
         int slot;
         if (context.getHand() == Hand.MAIN_HAND) {
             slot = player.getInventory().selectedSlot;
@@ -256,24 +254,24 @@ public class SkyWarsActive {
         if (!gameMap.template.getBounds().contains(pos)) {
             player.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(-2, 0, slot, context.getStack()));
             player.sendMessage(Text.translatable("text.skywars.border").formatted(Formatting.RED, Formatting.BOLD), false);
-            return ActionResult.FAIL;
+            return EventResult.DENY;
         }
 
-        return ActionResult.PASS;
+        return EventResult.PASS;
     }
 
-    private ActionResult onProjectiveHit(ProjectileEntity projectileEntity, EntityHitResult entityHitResult) {
+    private EventResult onProjectiveHit(ProjectileEntity projectileEntity, EntityHitResult entityHitResult) {
         if (projectileEntity instanceof ArrowEntity && projectileEntity.getOwner() instanceof ServerPlayerEntity shooter) {
             this.statistics.forPlayer(shooter).increment(SkywarsStatistics.ARROWS_HIT, 1);
         }
 
-        return ActionResult.PASS;
+        return EventResult.PASS;
     }
 
-    private ActionResult onArrowFire(ServerPlayerEntity player, ItemStack itemStack, ArrowItem arrowItem, int i, PersistentProjectileEntity persistentProjectileEntity) {
+    private EventResult onArrowFire(ServerPlayerEntity player, ItemStack itemStack, ArrowItem arrowItem, int i, PersistentProjectileEntity persistentProjectileEntity) {
         this.statistics.forPlayer(player).increment(SkywarsStatistics.ARROWS_SHOT, 1);
 
-        return ActionResult.PASS;
+        return EventResult.DENY;
     }
 
     private Text getDeathMessage(ServerPlayerEntity player, DamageSource source) {
@@ -314,7 +312,7 @@ public class SkyWarsActive {
             for (ServerPlayerEntity player : gameSpace.getPlayers()) {
                 var ref = PlayerRef.of(player);
                 if (player.getY() < gameMap.template.getBounds().min().getY() - 50) {
-                    if(liveParticipants.contains(ref)) player.damage(player.getDamageSources().outOfWorld(), Float.MAX_VALUE);
+                    if(liveParticipants.contains(ref)) player.damage(world, player.getDamageSources().outOfWorld(), Float.MAX_VALUE);
                     else {
                         spawnLogic.resetPlayer(player, GameMode.SPECTATOR);
                         spawnLogic.spawnPlayer(player, world);
@@ -359,7 +357,7 @@ public class SkyWarsActive {
     private Text getWinMessage(GameTeam winningTeam) {
         if (winningTeam != null) {
             MutableText message = Text.literal("");
-            var winners = liveTeams.get(winningTeam).stream().map(this::getPlayer).collect(Collectors.toList());
+            var winners = liveTeams.get(winningTeam).stream().map(this::getPlayer).toList();
             for (int i = 0; i < winners.size(); i++) {
                 message = switch (i) {
                     case 0 -> Text.literal("").append(winners.get(i).getDisplayName()).append(message);
@@ -381,7 +379,7 @@ public class SkyWarsActive {
     public WinResult checkWinResult() {
         // for testing purposes: don't end the game if we only ever had one participant
         if (this.ignoreWinState) {
-            if (liveTeams.keySet().size() == 0) {
+            if (liveTeams.keySet().isEmpty()) {
                 return WinResult.win(null);
             } else {
                 return WinResult.no();
@@ -403,19 +401,19 @@ public class SkyWarsActive {
 
         switch (eventID) {
             case 0:
-                MobEntity entity = EntityType.WITHER.create(world);
+                MobEntity entity = EntityType.WITHER.create(world, SpawnReason.TRIGGERED);
                 entity.setTarget(target);
                 entities.add(entity);
                 break;
             case 1:
-                entity = EntityType.ENDER_DRAGON.create(world);
+                entity = EntityType.ENDER_DRAGON.create(world, SpawnReason.TRIGGERED);
                 ((EnderDragonEntity) entity).getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);
                 ((EnderDragonEntity) entity).getPhaseManager().create(PhaseType.CHARGING_PLAYER).setPathTarget(new Vec3d(target.getX(), target.getY(), target.getZ()));
                 entities.add(entity);
                 break;
             case 2:
                 for (int i = 0; i < 10; i++) {
-                    entity = EntityType.BEE.create(world);
+                    entity = EntityType.BEE.create(world, SpawnReason.TRIGGERED);
                     ((BeeEntity) entity).setAngerTime(1000000000);
                     entity.setTarget(target);
                     ((BeeEntity) entity).setAngryAt(target.getUuid());
@@ -427,7 +425,7 @@ public class SkyWarsActive {
         }
 
         for (MobEntity entity : entities) {
-            Vec3d pos = SkyWarsSpawnLogic.choosePos(entity.getRandom(), gameMap.getSpawn(entity.getRandom()), 2f);
+            Vec3d pos = SkyWarsSpawnLogic.choosePos(gameMap.getSpawn(), 2f);
             entity.refreshPositionAfterTeleport(pos);
 
             world.spawnEntity(entity);
@@ -501,7 +499,7 @@ public class SkyWarsActive {
         return String.format("%02d:%02d", minutes, seconds);
     }
 
-    static class WinResult {
+    public static class WinResult {
         final GameTeam winningTeam;
         final boolean win;
 
