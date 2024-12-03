@@ -210,7 +210,7 @@ public class SkyWarsActive {
             this.statistics.forPlayer(player).increment(StatisticKeys.DAMAGE_TAKEN, amount);
         }
 
-        return EventResult.DENY;
+        return EventResult.PASS;
     }
 
     private EventResult onPlayerDeath(ServerPlayerEntity player, DamageSource source) {
@@ -271,7 +271,7 @@ public class SkyWarsActive {
     private EventResult onArrowFire(ServerPlayerEntity player, ItemStack itemStack, ArrowItem arrowItem, int i, PersistentProjectileEntity persistentProjectileEntity) {
         this.statistics.forPlayer(player).increment(SkywarsStatistics.ARROWS_SHOT, 1);
 
-        return EventResult.DENY;
+        return EventResult.PASS;
     }
 
     private Text getDeathMessage(ServerPlayerEntity player, DamageSource source) {
