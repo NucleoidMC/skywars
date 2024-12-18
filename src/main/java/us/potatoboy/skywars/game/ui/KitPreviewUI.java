@@ -1,6 +1,8 @@
 package us.potatoboy.skywars.game.ui;
 
+import eu.pb4.sgui.api.GuiHelpers;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
+import eu.pb4.sgui.api.gui.GuiInterface;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -9,14 +11,17 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 import us.potatoboy.skywars.kit.Kit;
 
 public class KitPreviewUI extends SimpleGui {
     private final KitSelectorUI selectorUI;
     private final Kit kit;
+    private final @Nullable GuiInterface prev;
 
     public KitPreviewUI(KitSelectorUI selectorUI, Kit kit) {
         super(ScreenHandlerType.GENERIC_9X3, selectorUI.getPlayer(), false);
+        this.prev = GuiHelpers.getCurrentGui(player);
         this.selectorUI = selectorUI;
         this.kit = kit;
         this.setTitle(kit.displayName());
@@ -48,5 +53,12 @@ public class KitPreviewUI extends SimpleGui {
         );
 
         super.onOpen();
+    }
+
+    @Override
+    public void onClose() {
+        if (this.prev != null) {
+            this.prev.open();
+        }
     }
 }

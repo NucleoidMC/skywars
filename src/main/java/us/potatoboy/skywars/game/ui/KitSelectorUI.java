@@ -1,6 +1,8 @@
 package us.potatoboy.skywars.game.ui;
 
+import eu.pb4.sgui.api.GuiHelpers;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
+import eu.pb4.sgui.api.gui.GuiInterface;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -9,6 +11,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 import us.potatoboy.skywars.game.SkyWarsPlayer;
 import us.potatoboy.skywars.game.SkyWarsWaiting;
 import us.potatoboy.skywars.kit.Kit;
@@ -23,9 +26,11 @@ public final class KitSelectorUI extends SimpleGui {
     private final SkyWarsPlayer playerData;
     private final SkyWarsWaiting game;
     private final List<Kit> kits;
+    private final @Nullable GuiInterface prev;
 
     KitSelectorUI(ServerPlayerEntity player, SkyWarsPlayer data, SkyWarsWaiting game, List<Kit> kits) {
         super(getType(kits.size()), player, kits.size() > 53);
+        this.prev = GuiHelpers.getCurrentGui(player);
         this.playerData = data;
         this.game = game;
         this.kits = kits;
@@ -103,5 +108,12 @@ public final class KitSelectorUI extends SimpleGui {
 
     public static void changeKit(SkyWarsWaiting game, ServerPlayerEntity player, SkyWarsPlayer playerData, Kit kit) {
         playerData.selectedKit = kit;
+    }
+
+    @Override
+    public void onClose() {
+        if (this.prev != null) {
+            this.prev.open();
+        }
     }
 }
