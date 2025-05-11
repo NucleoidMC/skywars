@@ -6,6 +6,7 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCollisionHandler;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -31,7 +32,7 @@ public class LaunchPadBlock extends Block implements BlockEntityProvider, Polyme
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
         if (entity.isOnGround()) {
             var blockEntity = world.getBlockEntity(pos);
 
@@ -41,7 +42,7 @@ public class LaunchPadBlock extends Block implements BlockEntityProvider, Polyme
                     player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(entity));
                     world.playSound(null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5f, 1);
                 }
-                super.onEntityCollision(state, world, pos, entity);
+                super.onEntityCollision(state, world, pos, entity, handler);
             }
         }
     }

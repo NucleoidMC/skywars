@@ -33,7 +33,7 @@ public class LaunchPadBlockEntity extends BlockEntity {
     @Override
     public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
         super.readNbt(nbt, registries);
-        this.pitch = nbt.getFloat("Pitch");
-        this.power = nbt.getFloat("Power");
+        this.pitch = nbt.getFloat("Pitch", 0);
+        this.power = nbt.getFloat("Power", 0);
     }
 }

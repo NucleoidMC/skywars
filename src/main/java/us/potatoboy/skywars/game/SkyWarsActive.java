@@ -246,7 +246,7 @@ public class SkyWarsActive {
     private EventResult onPlaceBlock(ServerPlayerEntity player, ServerWorld world, BlockPos pos, BlockState state, ItemUsageContext context) {
         int slot;
         if (context.getHand() == Hand.MAIN_HAND) {
-            slot = player.getInventory().selectedSlot;
+            slot = player.getInventory().getSelectedSlot();
         } else {
             slot = 40; // offhand
         }

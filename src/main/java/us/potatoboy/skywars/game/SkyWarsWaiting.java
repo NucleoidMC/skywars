@@ -125,7 +125,7 @@ public class SkyWarsWaiting {
     private ActionResult onUseItem(ServerPlayerEntity playerEntity, Hand hand) {
         SkyWarsPlayer participant = participants.get(PlayerRef.of(playerEntity));
 
-        if (participant != null && playerEntity.getInventory().getMainHandStack().getItem() == Items.COMPASS) {
+        if (participant != null && playerEntity.getMainHandStack().getItem() == Items.COMPASS) {
             KitSelectorUI.openSelector(playerEntity, this);
         }
 
