@@ -38,7 +38,7 @@ public class SkyWarsSpawnLogic {
     }
 
     public void spawnPlayer(ServerPlayerEntity player, Vec3d pos, ServerWorld world) {
-        player.teleport(player.getServerWorld(), pos.getX(), pos.getY(), pos.getZ(), Set.of(), player.getYaw(), player.getPitch(), false);
+        player.teleport(player.getWorld(), pos.getX(), pos.getY(), pos.getZ(), Set.of(), player.getYaw(), player.getPitch(), false);
         player.setOnGround(true);
     }
 

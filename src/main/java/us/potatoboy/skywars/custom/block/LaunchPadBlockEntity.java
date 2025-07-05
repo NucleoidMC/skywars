@@ -4,6 +4,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.BlockPos;
 import us.potatoboy.skywars.custom.SWBlocks;
 
@@ -25,14 +27,15 @@ public class LaunchPadBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
+    public void writeData(WriteView nbt) {
+        super.writeData(nbt);
         nbt.putFloat("Pitch", this.pitch);
         nbt.putFloat("Power", this.power);
     }
 
     @Override
-    public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
-        super.readNbt(nbt, registries);
+    public void readData(ReadView nbt) {
+        super.readData(nbt);
         this.pitch = nbt.getFloat("Pitch", 0);
         this.power = nbt.getFloat("Power", 0);
     }

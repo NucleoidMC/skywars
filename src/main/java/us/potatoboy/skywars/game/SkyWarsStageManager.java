@@ -111,7 +111,7 @@ public class SkyWarsStageManager {
                 Set<PositionFlag> flags = ImmutableSet.of(PositionFlag.X_ROT, PositionFlag.Y_ROT);
 
                 // Teleport without changing the pitch and yaw
-                player.teleport(player.getServerWorld(), destX, destY, destZ, flags, 0, 0, false);
+                player.teleport(player.getWorld(), destX, destY, destZ, flags, 0, 0, false);
             }
         }
 
