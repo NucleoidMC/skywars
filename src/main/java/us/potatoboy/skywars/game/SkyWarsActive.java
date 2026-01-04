@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LazyEntityReference;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
@@ -414,9 +415,9 @@ public class SkyWarsActive {
             case 2:
                 for (int i = 0; i < 10; i++) {
                     entity = EntityType.BEE.create(world, SpawnReason.TRIGGERED);
-                    ((BeeEntity) entity).setAngerTime(1000000000);
+                    ((BeeEntity) entity).setAngerEndTime(world.getTime() + 1000000000);
                     entity.setTarget(target);
-                    ((BeeEntity) entity).setAngryAt(target.getUuid());
+                    ((BeeEntity) entity).setAngryAt(LazyEntityReference.ofUUID(target.getUuid()));
                     entities.add(entity);
                 }
                 break;

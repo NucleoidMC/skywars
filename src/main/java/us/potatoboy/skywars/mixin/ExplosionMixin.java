@@ -16,7 +16,7 @@ public abstract class ExplosionMixin {
 
     @ModifyConstant(method = "calculateDamage", constant = @Constant(doubleValue = 7.0))
     private double reduceDamage(double original, Explosion explosion, Entity entity) {
-        var gameSpace = GameSpaceManager.get().byWorld(entity.getWorld());
+        var gameSpace = GameSpaceManager.get().byWorld(entity.getEntityWorld());
 
         if (gameSpace != null && gameSpace.getBehavior().testRule(SkyWars.REDUCED_EXPLOSION_DAMAGE) == EventResult.ALLOW) {
             return 4.0D;

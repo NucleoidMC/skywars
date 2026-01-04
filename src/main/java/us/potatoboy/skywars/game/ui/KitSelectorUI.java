@@ -88,11 +88,11 @@ public final class KitSelectorUI extends SimpleGui {
 
             icon.setCallback((index, clickType, action) -> {
                 if (clickType.isLeft) {
-                    this.player.playSoundToPlayer(SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.MASTER, 0.5f, 1);
+                    this.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, 0.5f, 1);
                     PlayerKitStorage.get(player).selectedKit = KitRegistry.getId(kit);
                     changeKit(this.game, this.player, this.playerData, kit);
                 } else if (clickType.isRight) {
-                    this.player.playSoundToPlayer(SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.MASTER, 0.5f, 1);
+                    this.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, 0.5f, 1);
                     new KitPreviewUI(this, kit).open();
                     this.close();
                 }

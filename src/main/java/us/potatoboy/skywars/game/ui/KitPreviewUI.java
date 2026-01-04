@@ -45,7 +45,7 @@ public class KitPreviewUI extends SimpleGui {
         this.setSlot(this.size - 1, new GuiElementBuilder(Items.BARRIER)
                 .setName(Text.translatable("text.skywars.return_selector").setStyle(Style.EMPTY.withItalic(false)))
                 .setCallback((x, y, z) -> {
-                    this.player.playSoundToPlayer(SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.MASTER, 0.5f, 1);
+                    this.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN,0.5f, 1);
                     selectorUI.open();
                     this.close();
 

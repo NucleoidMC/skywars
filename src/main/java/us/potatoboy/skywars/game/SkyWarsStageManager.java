@@ -100,7 +100,7 @@ public class SkyWarsStageManager {
                 FrozenPlayer state = this.frozen.computeIfAbsent(player, p -> new FrozenPlayer());
 
                 if (state.lastPos == null) {
-                    state.lastPos = player.getPos();
+                    state.lastPos = player.getEntityPos();
                 }
 
                 double destX = state.lastPos.x;
@@ -111,7 +111,7 @@ public class SkyWarsStageManager {
                 Set<PositionFlag> flags = ImmutableSet.of(PositionFlag.X_ROT, PositionFlag.Y_ROT);
 
                 // Teleport without changing the pitch and yaw
-                player.teleport(player.getWorld(), destX, destY, destZ, flags, 0, 0, false);
+                player.teleport(player.getEntityWorld(), destX, destY, destZ, flags, 0, 0, false);
             }
         }
 

@@ -11,6 +11,7 @@ import us.potatoboy.skywars.game.SkyWarsWaiting;
 import us.potatoboy.skywars.kit.KitRegistry;
 import us.potatoboy.skywars.kit.PlayerKitStorage;
 import xyz.nucleoid.plasmid.api.game.GameType;
+import xyz.nucleoid.plasmid.api.game.GameTypes;
 import xyz.nucleoid.plasmid.api.game.rule.GameRuleType;
 
 import java.util.Random;
@@ -23,7 +24,7 @@ public class SkyWars implements ModInitializer {
     public static GameRuleType PROJECTILE_PLAYER_MOMENTUM = GameRuleType.create();
     public static GameRuleType REDUCED_EXPLOSION_DAMAGE = GameRuleType.create();
 
-    public static final GameType<SkyWarsConfig> TYPE = GameType.register(
+    public static final GameType<SkyWarsConfig> TYPE = GameTypes.register(
             Identifier.of(ID, "skywars"),
             SkyWarsConfig.CODEC,
             SkyWarsWaiting::open

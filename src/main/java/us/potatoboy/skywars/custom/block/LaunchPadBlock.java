@@ -32,7 +32,7 @@ public class LaunchPadBlock extends Block implements BlockEntityProvider, Polyme
     }
 
     @Override
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
+    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler, boolean bl) {
         if (entity.isOnGround()) {
             var blockEntity = world.getBlockEntity(pos);
 
@@ -42,7 +42,7 @@ public class LaunchPadBlock extends Block implements BlockEntityProvider, Polyme
                     player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(entity));
                     world.playSound(null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5f, 1);
                 }
-                super.onEntityCollision(state, world, pos, entity, handler);
+                super.onEntityCollision(state, world, pos, entity, handler, bl);
             }
         }
     }

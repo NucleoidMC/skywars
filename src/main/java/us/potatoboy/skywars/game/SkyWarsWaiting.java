@@ -16,7 +16,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.GameMode;
-import net.minecraft.world.GameRules;
+import net.minecraft.world.rule.GameRules;
 import us.potatoboy.skywars.game.map.SkyWarsMap;
 import us.potatoboy.skywars.game.map.SkyWarsMapGenerator;
 import us.potatoboy.skywars.game.map.loot.LootHelper;
@@ -80,7 +80,7 @@ public class SkyWarsWaiting {
         var worldConfig = new RuntimeWorldConfig()
                 .setGenerator(map.asGenerator(context.server()))
                 .setDimensionType(RegistryKey.of(RegistryKeys.DIMENSION_TYPE, config.dimension()))
-                .setGameRule(GameRules.DO_FIRE_TICK, true);
+                .setGameRule(GameRules.FIRE_SPREAD_RADIUS_AROUND_PLAYER, 0);
 
         return context.openWithWorld(worldConfig, (game, world) -> {
             GameWaitingLobby.addTo(game,
