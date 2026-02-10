@@ -1,14 +1,17 @@
 package us.potatoboy.skywars.utility;
 
-import net.minecraft.text.*;
-import net.minecraft.util.Formatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.ChatFormatting;
 
 public class FormattingUtil {
     public static final Style PREFIX_STYLE = Style.EMPTY.withColor(TextColor.fromRgb(0x858585));
     public static final Style PREFIX_SCOREBOARD_STYLE = Style.EMPTY.withColor(TextColor.fromRgb(0xd9d9d9));
 
-    public static final Style GENERAL_STYLE = Style.EMPTY.withColor(Formatting.WHITE);
-    public static final Style WIN_STYLE = Style.EMPTY.withColor(Formatting.GOLD);
+    public static final Style GENERAL_STYLE = Style.EMPTY.withColor(ChatFormatting.WHITE);
+    public static final Style WIN_STYLE = Style.EMPTY.withColor(ChatFormatting.GOLD);
     public static final Style DEATH_STYLE = Style.EMPTY.withColor(TextColor.fromRgb(0xbfbfbf));
 
     public static final String GENERAL_PREFIX = "»";
@@ -33,19 +36,19 @@ public class FormattingUtil {
     public static final String X = "✘";
 
 
-    public static MutableText format(String prefix, Style style, Text message) {
-        return Text.literal(prefix + " ").setStyle(PREFIX_STYLE).append(message.copy().fillStyle(style));
+    public static MutableComponent format(String prefix, Style style, Component message) {
+        return Component.literal(prefix + " ").setStyle(PREFIX_STYLE).append(message.copy().withStyle(style));
     }
 
-    public static MutableText format(String prefix, Text message) {
-        return Text.literal(prefix + " ").setStyle(PREFIX_STYLE).append(message.copy());
+    public static MutableComponent format(String prefix, Component message) {
+        return Component.literal(prefix + " ").setStyle(PREFIX_STYLE).append(message.copy());
     }
 
-    public static MutableText formatScoreboard(String prefix, Style style, Text message) {
-        return Text.literal(prefix + " ").setStyle(PREFIX_SCOREBOARD_STYLE).append(message.copy().fillStyle(style));
+    public static MutableComponent formatScoreboard(String prefix, Style style, Component message) {
+        return Component.literal(prefix + " ").setStyle(PREFIX_SCOREBOARD_STYLE).append(message.copy().withStyle(style));
     }
 
-    public static MutableText formatScoreboard(String prefix, Text message) {
-        return Text.literal(prefix + " ").setStyle(PREFIX_SCOREBOARD_STYLE).append(message.copy());
+    public static MutableComponent formatScoreboard(String prefix, Component message) {
+        return Component.literal(prefix + " ").setStyle(PREFIX_SCOREBOARD_STYLE).append(message.copy());
     }
 }

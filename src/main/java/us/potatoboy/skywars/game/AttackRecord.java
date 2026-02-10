@@ -1,6 +1,6 @@
 package us.potatoboy.skywars.game;
 
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import xyz.nucleoid.plasmid.api.util.PlayerRef;
 
 public class AttackRecord {
@@ -14,8 +14,8 @@ public class AttackRecord {
         this.expireTime = time + EXPIRE_TIME;
     }
 
-    public static AttackRecord fromAttacker(ServerPlayerEntity player) {
-        return new AttackRecord(PlayerRef.of(player), player.getEntityWorld().getTime());
+    public static AttackRecord fromAttacker(ServerPlayer player) {
+        return new AttackRecord(PlayerRef.of(player), player.level().getGameTime());
     }
 
     public boolean isValid(long time) {

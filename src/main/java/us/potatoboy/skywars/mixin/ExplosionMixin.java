@@ -1,8 +1,8 @@
 package us.potatoboy.skywars.mixin;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.world.explosion.Explosion;
-import net.minecraft.world.explosion.ExplosionBehavior;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.ExplosionDamageCalculator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
@@ -10,13 +10,13 @@ import us.potatoboy.skywars.SkyWars;
 import xyz.nucleoid.plasmid.api.game.GameSpaceManager;
 import xyz.nucleoid.stimuli.event.EventResult;
 
-@Mixin(ExplosionBehavior.class)
+@Mixin(ExplosionDamageCalculator.class)
 public abstract class ExplosionMixin {
 
 
-    @ModifyConstant(method = "calculateDamage", constant = @Constant(doubleValue = 7.0))
+    @ModifyConstant(method = "getEntityDamageAmount", constant = @Constant(doubleValue = 7.0))
     private double reduceDamage(double original, Explosion explosion, Entity entity) {
-        var gameSpace = GameSpaceManager.get().byWorld(entity.getEntityWorld());
+        var gameSpace = GameSpaceManager.get().byWorld(entity.level());
 
         if (gameSpace != null && gameSpace.getBehavior().testRule(SkyWars.REDUCED_EXPLOSION_DAMAGE) == EventResult.ALLOW) {
             return 4.0D;

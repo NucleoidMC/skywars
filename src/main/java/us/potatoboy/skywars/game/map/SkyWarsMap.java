@@ -1,9 +1,9 @@
 package us.potatoboy.skywars.game.map;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import us.potatoboy.skywars.SkyWars;
 import xyz.nucleoid.map_templates.BlockBounds;
 import xyz.nucleoid.map_templates.MapTemplate;
@@ -16,7 +16,7 @@ public class SkyWarsMap {
     public final MapTemplate template;
     private final SkyWarsMapConfig config;
     public List<BlockBounds> waitingSpawns;
-    public List<Vec3d> spawns = new ArrayList<>();
+    public List<Vec3> spawns = new ArrayList<>();
     public List<BlockPos> spawnChests = new ArrayList<>();
     public List<BlockPos> centerChests = new ArrayList<>();
 

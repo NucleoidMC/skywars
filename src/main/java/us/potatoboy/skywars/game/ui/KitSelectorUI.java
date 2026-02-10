@@ -4,13 +4,13 @@ import eu.pb4.sgui.api.GuiHelpers;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import eu.pb4.sgui.api.gui.GuiInterface;
 import eu.pb4.sgui.api.gui.SimpleGui;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 import us.potatoboy.skywars.game.SkyWarsPlayer;
 import us.potatoboy.skywars.game.SkyWarsWaiting;
@@ -28,37 +28,37 @@ public final class KitSelectorUI extends SimpleGui {
     private final List<Kit> kits;
     private final @Nullable GuiInterface prev;
 
-    KitSelectorUI(ServerPlayerEntity player, SkyWarsPlayer data, SkyWarsWaiting game, List<Kit> kits) {
+    KitSelectorUI(ServerPlayer player, SkyWarsPlayer data, SkyWarsWaiting game, List<Kit> kits) {
         super(getType(kits.size()), player, kits.size() > 53);
         this.prev = GuiHelpers.getCurrentGui(player);
         this.playerData = data;
         this.game = game;
         this.kits = kits;
-        this.setTitle(Text.translatable("text.skywars.select_kit"));
+        this.setTitle(Component.translatable("text.skywars.select_kit"));
     }
 
-    private static ScreenHandlerType<?> getType(int size) {
+    private static MenuType<?> getType(int size) {
         if (size <= 8) {
-            return ScreenHandlerType.GENERIC_9X1;
+            return MenuType.GENERIC_9x1;
         } else if (size <= 17) {
-            return ScreenHandlerType.GENERIC_9X2;
+            return MenuType.GENERIC_9x2;
         } else if (size <= 26) {
-            return ScreenHandlerType.GENERIC_9X3;
+            return MenuType.GENERIC_9x3;
         } else if (size <= 35) {
-            return ScreenHandlerType.GENERIC_9X4;
+            return MenuType.GENERIC_9x4;
         } else if (size <= 44) {
-            return ScreenHandlerType.GENERIC_9X5;
+            return MenuType.GENERIC_9x5;
         } else {
-            return ScreenHandlerType.GENERIC_9X6;
+            return MenuType.GENERIC_9x6;
         }
     }
 
 
-    public static void openSelector(ServerPlayerEntity player, SkyWarsWaiting logic) {
+    public static void openSelector(ServerPlayer player, SkyWarsWaiting logic) {
         new KitSelectorUI(player, logic.participants.get(PlayerRef.of(player)), logic, logic.kits).open();
     }
 
-    public static void openSelector(ServerPlayerEntity player, SkyWarsPlayer data, List<Identifier> kits) {
+    public static void openSelector(ServerPlayer player, SkyWarsPlayer data, List<Identifier> kits) {
         var kitsList = new ArrayList<Kit>();
 
         for (Identifier id : kits) {
@@ -79,20 +79,20 @@ public final class KitSelectorUI extends SimpleGui {
             var icon = GuiElementBuilder.from(kit.icon);
             icon.setName(kit.displayName());
             icon.hideDefaultTooltip();
-            icon.addLoreLine(Text.translatable("text.skywars.click_select").formatted(Formatting.GRAY));
-            icon.addLoreLine(Text.translatable("text.skywars.click_preview").formatted(Formatting.GRAY));
+            icon.addLoreLine(Component.translatable("text.skywars.click_select").withStyle(ChatFormatting.GRAY));
+            icon.addLoreLine(Component.translatable("text.skywars.click_preview").withStyle(ChatFormatting.GRAY));
             if (kit == this.playerData.selectedKit) {
-                icon.addLoreLine(Text.translatable("text.skywars.selected").formatted(Formatting.GREEN));
+                icon.addLoreLine(Component.translatable("text.skywars.selected").withStyle(ChatFormatting.GREEN));
                 icon.glow();
             }
 
             icon.setCallback((index, clickType, action) -> {
                 if (clickType.isLeft) {
-                    this.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, 0.5f, 1);
+                    this.player.playSound(SoundEvents.BOOK_PAGE_TURN, 0.5f, 1);
                     PlayerKitStorage.get(player).selectedKit = KitRegistry.getId(kit);
                     changeKit(this.game, this.player, this.playerData, kit);
                 } else if (clickType.isRight) {
-                    this.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, 0.5f, 1);
+                    this.player.playSound(SoundEvents.BOOK_PAGE_TURN, 0.5f, 1);
                     new KitPreviewUI(this, kit).open();
                     this.close();
                 }
@@ -106,7 +106,7 @@ public final class KitSelectorUI extends SimpleGui {
         super.onOpen();
     }
 
-    public static void changeKit(SkyWarsWaiting game, ServerPlayerEntity player, SkyWarsPlayer playerData, Kit kit) {
+    public static void changeKit(SkyWarsWaiting game, ServerPlayer player, SkyWarsPlayer playerData, Kit kit) {
         playerData.selectedKit = kit;
     }
 

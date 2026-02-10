@@ -1,12 +1,12 @@
 package us.potatoboy.skywars.custom.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.core.BlockPos;
 import us.potatoboy.skywars.custom.SWBlocks;
 
 // Taken from
@@ -27,16 +27,16 @@ public class LaunchPadBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void writeData(WriteView nbt) {
-        super.writeData(nbt);
+    public void saveAdditional(ValueOutput nbt) {
+        super.saveAdditional(nbt);
         nbt.putFloat("Pitch", this.pitch);
         nbt.putFloat("Power", this.power);
     }
 
     @Override
-    public void readData(ReadView nbt) {
-        super.readData(nbt);
-        this.pitch = nbt.getFloat("Pitch", 0);
-        this.power = nbt.getFloat("Power", 0);
+    public void loadAdditional(ValueInput nbt) {
+        super.loadAdditional(nbt);
+        this.pitch = nbt.getFloatOr("Pitch", 0);
+        this.power = nbt.getFloatOr("Power", 0);
     }
 }

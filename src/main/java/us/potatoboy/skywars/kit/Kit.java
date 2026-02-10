@@ -2,12 +2,12 @@ package us.potatoboy.skywars.kit;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import xyz.nucleoid.codecs.MoreCodecs;
 import xyz.nucleoid.plasmid.api.util.ItemStackBuilder;
 
@@ -37,22 +37,22 @@ public class Kit {
         this.cooldowns = cooldowns;
     }
 
-    public MutableText displayName() {
-        return Text.translatable("skywars.kit." + name);
+    public MutableComponent displayName() {
+        return Component.translatable("skywars.kit." + name);
     }
 
-    public void equipPlayer(ServerPlayerEntity player) {
+    public void equipPlayer(ServerPlayer player) {
         for (ItemStack itemStack : this.items) {
-            player.getInventory().insertStack(ItemStackBuilder.of(itemStack).build());
+            player.getInventory().add(ItemStackBuilder.of(itemStack).build());
         }
 
-        player.equipStack(EquipmentSlot.HEAD, ItemStackBuilder.of(this.armor.get(0)).build());
-        player.equipStack(EquipmentSlot.CHEST, ItemStackBuilder.of(this.armor.get(1)).build());
-        player.equipStack(EquipmentSlot.LEGS, ItemStackBuilder.of(this.armor.get(2)).build());
-        player.equipStack(EquipmentSlot.FEET, ItemStackBuilder.of(this.armor.get(3)).build());
+        player.setItemSlot(EquipmentSlot.HEAD, ItemStackBuilder.of(this.armor.get(0)).build());
+        player.setItemSlot(EquipmentSlot.CHEST, ItemStackBuilder.of(this.armor.get(1)).build());
+        player.setItemSlot(EquipmentSlot.LEGS, ItemStackBuilder.of(this.armor.get(2)).build());
+        player.setItemSlot(EquipmentSlot.FEET, ItemStackBuilder.of(this.armor.get(3)).build());
 
         for (Cooldown cooldown : cooldowns) {
-            player.getItemCooldownManager().set(cooldown.identifier, cooldown.durationSec * 20);
+            player.getCooldowns().addCooldown(cooldown.identifier, cooldown.durationSec * 20);
         }
     }
 

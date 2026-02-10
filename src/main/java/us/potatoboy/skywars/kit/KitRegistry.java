@@ -7,9 +7,9 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 import us.potatoboy.skywars.SkyWars;
 import xyz.nucleoid.plasmid.api.util.TinyRegistry;
@@ -23,7 +23,7 @@ public class KitRegistry {
     private static final TinyRegistry<Kit> KITS = TinyRegistry.create();
 
     public static void register() {
-        ResourceManagerHelper serverData = ResourceManagerHelper.get(ResourceType.SERVER_DATA);
+        ResourceManagerHelper serverData = ResourceManagerHelper.get(PackType.SERVER_DATA);
 
         serverData.registerReloadListener(SkyWars.identifier("skywars_kits"), registries -> new SimpleSynchronousResourceReloadListener() {
             @Override
@@ -32,13 +32,13 @@ public class KitRegistry {
             }
 
             @Override
-            public void reload(ResourceManager manager) {
+            public void onResourceManagerReload(ResourceManager manager) {
                 KITS.clear();
-                var ops = registries.getOps(JsonOps.INSTANCE);
+                var ops = registries.createSerializationContext(JsonOps.INSTANCE);
 
-                manager.findResources("skywars_kits", path -> path.getPath().endsWith(".json")).forEach((path, resource) -> {
+                manager.listResources("skywars_kits", path -> path.getPath().endsWith(".json")).forEach((path, resource) -> {
                     try {
-                        try (Reader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
+                        try (Reader reader = new BufferedReader(new InputStreamReader(resource.open()))) {
                             JsonElement json = JsonParser.parseReader(reader);
 
                             Identifier identifier = identifierFromPath(path);
@@ -60,7 +60,7 @@ public class KitRegistry {
     private static Identifier identifierFromPath(Identifier location) {
         String path = location.getPath();
         path = path.substring("skywarsKits//".length(), path.length() - ".json".length());
-        return Identifier.of(location.getNamespace(), path);
+        return Identifier.fromNamespaceAndPath(location.getNamespace(), path);
     }
 
     @Nullable

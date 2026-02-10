@@ -3,14 +3,14 @@ package us.potatoboy.skywars.game;
 import com.google.common.collect.ImmutableSet;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameMode;
+import net.minecraft.world.entity.Relative;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.GameType;
 import us.potatoboy.skywars.game.map.loot.LootHelper;
 import xyz.nucleoid.plasmid.api.game.GameSpace;
 import xyz.nucleoid.plasmid.api.game.player.PlayerSet;
@@ -27,7 +27,7 @@ public class SkyWarsStageManager {
     public long finishTime = -1;
     private long startTime = -1;
     public long refillTime = -1;
-    private final Object2ObjectMap<ServerPlayerEntity, FrozenPlayer> frozen;
+    private final Object2ObjectMap<ServerPlayer, FrozenPlayer> frozen;
 
     public SkyWarsStageManager(SkyWarsActive game) {
         this.game = game;
@@ -70,8 +70,8 @@ public class SkyWarsStageManager {
             if (time > refillTime) {
                 refills++;
                 LootHelper.fillChests(game.world, game.gameMap, game.config, refills);
-                game.gameSpace.getPlayers().sendActionBar(Text.translatable("text.skywars.refill"), 5, 20, 5);
-                game.gameSpace.getPlayers().playSound(SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 2.0F, 1.0F);
+                game.gameSpace.getPlayers().sendActionBar(Component.translatable("text.skywars.refill"), 5, 20, 5);
+                game.gameSpace.getPlayers().playSound(SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 2.0F, 1.0F);
 
                 if (refills <= game.config.refills()) this.refillTime = time + ((long) game.config.refillMins() * 20 * 60);
             }
@@ -81,8 +81,8 @@ public class SkyWarsStageManager {
             //this.closeTime = time + (5 * 20);
             finishTime += 20 * 30;
             game.spawnGameEnd();
-            game.gameSpace.getPlayers().showTitle(Text.translatable("text.skywars.armageddon").formatted(Formatting.BOLD, Formatting.RED), 5, 20, 5);
-            game.gameSpace.getPlayers().playSound(SoundEvents.ENTITY_WITHER_SPAWN);
+            game.gameSpace.getPlayers().showTitle(Component.translatable("text.skywars.armageddon").withStyle(ChatFormatting.BOLD, ChatFormatting.RED), 5, 20, 5);
+            game.gameSpace.getPlayers().playSound(SoundEvents.WITHER_SPAWN);
         }
 
         return IdleTickResult.CONTINUE_TICK;
@@ -92,7 +92,7 @@ public class SkyWarsStageManager {
         float sec_f = (this.startTime - time) / 20.0f;
 
         if (sec_f > 1) {
-            for (ServerPlayerEntity player : space.getPlayers()) {
+            for (ServerPlayer player : space.getPlayers()) {
                 if (player.isSpectator()) {
                     continue;
                 }
@@ -100,7 +100,7 @@ public class SkyWarsStageManager {
                 FrozenPlayer state = this.frozen.computeIfAbsent(player, p -> new FrozenPlayer());
 
                 if (state.lastPos == null) {
-                    state.lastPos = player.getEntityPos();
+                    state.lastPos = player.position();
                 }
 
                 double destX = state.lastPos.x;
@@ -108,10 +108,10 @@ public class SkyWarsStageManager {
                 double destZ = state.lastPos.z;
 
                 // Set X and Y as relative so it will send 0 change when we pass yaw (yaw - yaw = 0) and pitch
-                Set<PositionFlag> flags = ImmutableSet.of(PositionFlag.X_ROT, PositionFlag.Y_ROT);
+                Set<Relative> flags = ImmutableSet.of(Relative.X_ROT, Relative.Y_ROT);
 
                 // Teleport without changing the pitch and yaw
-                player.teleport(player.getEntityWorld(), destX, destY, destZ, flags, 0, 0, false);
+                player.teleportTo(player.level(), destX, destY, destZ, flags, 0, 0, false);
             }
         }
 
@@ -121,14 +121,14 @@ public class SkyWarsStageManager {
             PlayerSet players = space.getPlayers();
 
             if (sec > 0) {
-                players.showTitle(Text.literal(Integer.toString(sec)).formatted(Formatting.BOLD), 20);
-                players.playSound(SoundEvents.BLOCK_NOTE_BLOCK_HARP.value(), SoundCategory.PLAYERS, 1.0F, 1.0F);
+                players.showTitle(Component.literal(Integer.toString(sec)).withStyle(ChatFormatting.BOLD), 20);
+                players.playSound(SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
             } else {
-                players.showTitle(Text.translatable("text.skywars.go").formatted(Formatting.BOLD), 10);
-                players.playSound(SoundEvents.BLOCK_NOTE_BLOCK_HARP.value(), SoundCategory.PLAYERS, 1.0F, 2.0F);
+                players.showTitle(Component.translatable("text.skywars.go").withStyle(ChatFormatting.BOLD), 10);
+                players.playSound(SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.PLAYERS, 1.0F, 2.0F);
                 for (var playerRef : game.liveParticipants) {
                     var playerEntity = game.getPlayer(playerRef);
-                    playerEntity.changeGameMode(GameMode.SURVIVAL);
+                    playerEntity.setGameMode(GameType.SURVIVAL);
 
                     SkyWarsPlayer participant = game.participants.get(playerRef);
                     if (participant.selectedKit != null) {
@@ -141,7 +141,7 @@ public class SkyWarsStageManager {
     }
 
     public static class FrozenPlayer {
-        public Vec3d lastPos;
+        public Vec3 lastPos;
     }
 
     public enum IdleTickResult {

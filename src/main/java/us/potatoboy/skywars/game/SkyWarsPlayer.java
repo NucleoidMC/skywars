@@ -1,6 +1,6 @@
 package us.potatoboy.skywars.game;
 
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import us.potatoboy.skywars.kit.Kit;
 import us.potatoboy.skywars.kit.KitRegistry;
 import us.potatoboy.skywars.kit.PlayerKitStorage;
@@ -11,7 +11,7 @@ public class SkyWarsPlayer {
     public Kit selectedKit;
     public GameTeam team = null;
 
-    public SkyWarsPlayer(ServerPlayerEntity player) {
+    public SkyWarsPlayer(ServerPlayer player) {
         this.selectedKit = KitRegistry.get(PlayerKitStorage.get(player).selectedKit);
     }
 }
