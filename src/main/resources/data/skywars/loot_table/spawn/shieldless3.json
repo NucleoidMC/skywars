@@ -36,6 +36,18 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 12,
+          "quality": 1,
+          "name": "minecraft:netherite_spear",
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": 4
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
           "weight": 10,
           "quality": 1,
           "name": "minecraft:diamond_pickaxe",

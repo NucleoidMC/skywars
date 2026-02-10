@@ -36,6 +36,18 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 15,
+          "quality": 1,
+          "name": "minecraft:stone_spear"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
+          "quality": 1,
+          "name": "minecraft:iron_spear"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 10,
           "quality": 1,
           "name": "minecraft:iron_pickaxe"

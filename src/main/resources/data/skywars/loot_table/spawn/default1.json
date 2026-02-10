@@ -56,6 +56,17 @@
           "weight": 1,
           "quality": 1,
           "name": "minecraft:iron_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "name": "minecraft:stone_spear"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "quality": 1,
+          "name": "minecraft:iron_spear"
         }
       ]
     },

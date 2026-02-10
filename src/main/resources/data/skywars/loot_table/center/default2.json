@@ -169,6 +169,28 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 12,
+          "name": "minecraft:iron_spear",
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": 7
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 6,
+          "name": "minecraft:diamond_spear",
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": 7
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
           "weight": 7,
           "name": "minecraft:ender_pearl"
         },
