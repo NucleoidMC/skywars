@@ -1,6 +1,7 @@
 package us.potatoboy.skywars.custom.block;
 
 import eu.pb4.polymer.core.api.block.PolymerBlock;
+import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
@@ -16,7 +17,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-import xyz.nucleoid.packettweaker.PacketContext;
 
 // Taken from https://github.com/NucleoidMC/nucleoid-extras/blob/1.17/src/main/java/xyz/nucleoid/extras/lobby/block/LaunchPadBlock.java
 public class LaunchPadBlock extends Block implements EntityBlock, PolymerBlock {

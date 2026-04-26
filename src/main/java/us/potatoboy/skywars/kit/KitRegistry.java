@@ -21,7 +21,7 @@ import java.io.Reader;
 
 public class KitRegistry {
     private static final TinyRegistry<Kit> KITS = TinyRegistry.create();
-
+    // TODO fix this :)
     public static void register() {
         ResourceManagerHelper serverData = ResourceManagerHelper.get(PackType.SERVER_DATA);
 

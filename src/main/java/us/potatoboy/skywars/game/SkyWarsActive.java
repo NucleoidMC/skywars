@@ -41,7 +41,7 @@ import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.SkywarsStatistics;
 import us.potatoboy.skywars.game.map.SkyWarsMap;
 import us.potatoboy.skywars.utility.FormattingUtil;
-import us.potatoboy.skywars.utility.TextUtil;
+import us.potatoboy.skywars.utility.ComponentUtil;
 import xyz.nucleoid.plasmid.api.game.GameActivity;
 import xyz.nucleoid.plasmid.api.game.GameCloseReason;
 import xyz.nucleoid.plasmid.api.game.GameSpace;
@@ -71,7 +71,7 @@ public class SkyWarsActive {
 
     public final GameSpace gameSpace;
     public final SkyWarsMap gameMap;
-    public final ServerLevel world;
+    public final ServerLevel level;
     public final GameActivity gameActivity;
 
     public final Object2ObjectMap<PlayerRef, SkyWarsPlayer> participants;
@@ -83,11 +83,11 @@ public class SkyWarsActive {
     protected final Sidebar globalSidebar = new Sidebar(Sidebar.Priority.MEDIUM);
     public final boolean ignoreWinState;
 
-    private SkyWarsActive(GameSpace gameSpace, ServerLevel world, SkyWarsMap map, GlobalWidgets widgets, SkyWarsConfig config, Object2ObjectMap<PlayerRef, SkyWarsPlayer> participants, GameActivity gameLogic, Multimap<GameTeam, PlayerRef> teams) {
+    private SkyWarsActive(GameSpace gameSpace, ServerLevel level, SkyWarsMap map, GlobalWidgets widgets, SkyWarsConfig config, Object2ObjectMap<PlayerRef, SkyWarsPlayer> participants, GameActivity gameLogic, Multimap<GameTeam, PlayerRef> teams) {
         this.gameSpace = gameSpace;
         this.config = config;
         this.gameMap = map;
-        this.world = world;
+        this.level = level;
         this.gameActivity = gameLogic;
         this.liveTeams = teams;
         this.spawnLogic = new SkyWarsSpawnLogic(gameSpace, map);
@@ -106,10 +106,10 @@ public class SkyWarsActive {
         }
     }
 
-    public static void open(GameSpace gameSpace, ServerLevel world, SkyWarsMap map, SkyWarsConfig config, Multimap<GameTeam, PlayerRef> teams, Object2ObjectMap<PlayerRef, SkyWarsPlayer> participants) {
+    public static void open(GameSpace gameSpace, ServerLevel level, SkyWarsMap map, SkyWarsConfig config, Multimap<GameTeam, PlayerRef> teams, Object2ObjectMap<PlayerRef, SkyWarsPlayer> participants) {
         gameSpace.setActivity(activity -> {
             GlobalWidgets widgets = GlobalWidgets.addTo(activity);
-            SkyWarsActive active = new SkyWarsActive(gameSpace, world, map, widgets, config, participants, activity, teams);
+            SkyWarsActive active = new SkyWarsActive(gameSpace, level, map, widgets, config, participants, activity, teams);
             var teamManger = TeamManager.addTo(activity);
             for (GameTeam team : teams.keySet()) {
                 teamManger.addTeam(team);
@@ -135,7 +135,7 @@ public class SkyWarsActive {
             activity.listen(GameActivityEvents.ENABLE, active::onOpen);
             activity.listen(GameActivityEvents.DISABLE, active::onClose);
 
-            activity.listen(GamePlayerEvents.ACCEPT, offer -> offer.teleport(world, active.spawnLogic.getRandomSpawnPos()));
+            activity.listen(GamePlayerEvents.ACCEPT, offer -> offer.teleport(level, active.spawnLogic.getRandomSpawnPos()));
             activity.listen(GamePlayerEvents.ADD, active::addPlayer);
             activity.listen(GamePlayerEvents.REMOVE, active::removePlayer);
 
@@ -154,7 +154,7 @@ public class SkyWarsActive {
     private void onOpen() {
         spawnParticipants();
 
-        this.stageManager.onOpen(world.getGameTime(), this.config);
+        this.stageManager.onOpen(level.getGameTime(), this.config);
     }
 
     public SkyWarsPlayer getParticipant(PlayerRef player) {
@@ -162,7 +162,7 @@ public class SkyWarsActive {
     }
 
     public ServerPlayer getPlayer(PlayerRef ref) {
-        return ref.getEntity(world);
+        return ref.getEntity(level);
     }
 
     private void spawnParticipants() {
@@ -177,7 +177,7 @@ public class SkyWarsActive {
                 var player = getPlayer(ref);
                 if (player.containerMenu != player.inventoryMenu) player.closeContainer();
                 this.spawnLogic.resetPlayer(player, GameType.ADVENTURE);
-                this.spawnLogic.spawnPlayer(player, spawn, world);
+                this.spawnLogic.spawnPlayer(player, spawn, level);
             }
         }
     }
@@ -229,7 +229,7 @@ public class SkyWarsActive {
         return EventResult.DENY;
     }
 
-    private EventResult onFluidFlow(ServerLevel serverWorld, BlockPos pos, BlockState blockState, Direction direction, BlockPos pos1, BlockState blockState1) {
+    private EventResult onFluidFlow(ServerLevel serverLevel, BlockPos pos, BlockState blockState, Direction direction, BlockPos pos1, BlockState blockState1) {
         if (!gameMap.template.getBounds().contains(pos1)) {
             return EventResult.DENY;
         }
@@ -237,9 +237,9 @@ public class SkyWarsActive {
         return EventResult.PASS;
     }
 
-    private EventResult onFluidPlace(ServerLevel serverWorld, BlockPos pos, @Nullable ServerPlayer player, @Nullable BlockHitResult blockHitResult) {
+    private EventResult onFluidPlace(ServerLevel serverLevel, BlockPos pos, @Nullable ServerPlayer player, @Nullable BlockHitResult blockHitResult) {
         if (!gameMap.template.getBounds().contains(pos)) {
-            if (player != null) player.displayClientMessage(Component.translatable("text.skywars.border").withStyle(ChatFormatting.RED, ChatFormatting.BOLD), false);
+            if (player != null) player.sendSystemMessage(Component.translatable("text.skywars.border").withStyle(ChatFormatting.RED, ChatFormatting.BOLD), false);
             return EventResult.DENY;
         }
 
@@ -247,7 +247,7 @@ public class SkyWarsActive {
     }
 
 
-    private EventResult onPlaceBlock(ServerPlayer player, ServerLevel world, BlockPos pos, BlockState state, UseOnContext context) {
+    private EventResult onPlaceBlock(ServerPlayer player, ServerLevel level, BlockPos pos, BlockState state, UseOnContext context) {
         int slot;
         if (context.getHand() == InteractionHand.MAIN_HAND) {
             slot = player.getInventory().getSelectedSlot();
@@ -257,7 +257,7 @@ public class SkyWarsActive {
 
         if (!gameMap.template.getBounds().contains(pos)) {
             player.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, context.getItemInHand()));
-            player.displayClientMessage(Component.translatable("text.skywars.border").withStyle(ChatFormatting.RED, ChatFormatting.BOLD), false);
+            player.sendSystemMessage(Component.translatable("text.skywars.border").withStyle(ChatFormatting.RED, ChatFormatting.BOLD), false);
             return EventResult.DENY;
         }
 
@@ -306,20 +306,20 @@ public class SkyWarsActive {
 
     private void spawnSpectator(ServerPlayer player) {
         this.spawnLogic.resetPlayer(player, GameType.SPECTATOR);
-        this.spawnLogic.spawnPlayer(player, world);
+        this.spawnLogic.spawnPlayer(player, level);
     }
 
     private void tick() {
-        long time = world.getGameTime();
+        long time = level.getGameTime();
 
         if (time % 20 == 0) {
             for (ServerPlayer player : gameSpace.getPlayers()) {
                 var ref = PlayerRef.of(player);
                 if (player.getY() < gameMap.template.getBounds().min().getY() - 50) {
-                    if(liveParticipants.contains(ref)) player.hurtServer(world, player.damageSources().fellOutOfWorld(), Float.MAX_VALUE);
+                    if(liveParticipants.contains(ref)) player.hurtServer(level, player.damageSources().fellOutOfWorld(), Float.MAX_VALUE);
                     else {
                         spawnLogic.resetPlayer(player, GameType.SPECTATOR);
-                        spawnLogic.spawnPlayer(player, world);
+                        spawnLogic.spawnPlayer(player, level);
                     }
                 }
             }
@@ -405,20 +405,20 @@ public class SkyWarsActive {
 
         switch (eventID) {
             case 0:
-                Mob entity = EntityType.WITHER.create(world, EntitySpawnReason.TRIGGERED);
+                Mob entity = EntityType.WITHER.create(level, EntitySpawnReason.TRIGGERED);
                 entity.setTarget(target);
                 entities.add(entity);
                 break;
             case 1:
-                entity = EntityType.ENDER_DRAGON.create(world, EntitySpawnReason.TRIGGERED);
+                entity = EntityType.ENDER_DRAGON.create(level, EntitySpawnReason.TRIGGERED);
                 ((EnderDragon) entity).getPhaseManager().setPhase(EnderDragonPhase.CHARGING_PLAYER);
                 ((EnderDragon) entity).getPhaseManager().getPhase(EnderDragonPhase.CHARGING_PLAYER).setTarget(new Vec3(target.getX(), target.getY(), target.getZ()));
                 entities.add(entity);
                 break;
             case 2:
                 for (int i = 0; i < 10; i++) {
-                    entity = EntityType.BEE.create(world, EntitySpawnReason.TRIGGERED);
-                    ((Bee) entity).setPersistentAngerEndTime(world.getGameTime() + 1000000000);
+                    entity = EntityType.BEE.create(level, EntitySpawnReason.TRIGGERED);
+                    ((Bee) entity).setPersistentAngerEndTime(level.getGameTime() + 1000000000);
                     entity.setTarget(target);
                     ((Bee) entity).setPersistentAngerTarget(EntityReference.of(target.getUUID()));
                     entities.add(entity);
@@ -432,12 +432,12 @@ public class SkyWarsActive {
             Vec3 pos = SkyWarsSpawnLogic.choosePos(gameMap.getSpawn(), 2f);
             entity.snapTo(pos);
 
-            world.addFreshEntity(entity);
+            level.addFreshEntity(entity);
         }
     }
 
     private void buildSidebar() {
-        this.globalSidebar.setTitle(TextUtil.getText("sidebar", "title").setStyle(Style.EMPTY.withColor(ChatFormatting.GOLD).withBold(true)));
+        this.globalSidebar.setTitle(ComponentUtil.getComponent("sidebar", "title").setStyle(Style.EMPTY.withColor(ChatFormatting.GOLD).withBold(true)));
 
         this.globalSidebar.set(b -> {
 
@@ -446,7 +446,7 @@ public class SkyWarsActive {
             b.add((player) ->
                     FormattingUtil.formatScoreboard(
                             FormattingUtil.GENERAL_PREFIX,
-                            TextUtil.getText("sidebar", (config.teamSize() > 1 ? "teams" : "players"),
+                            ComponentUtil.getComponent("sidebar", (config.teamSize() > 1 ? "teams" : "players"),
                                     Component.literal(String.valueOf(liveTeams.keySet().size())).withStyle(ChatFormatting.WHITE)
                             ).withStyle(ChatFormatting.GREEN)
                     )
@@ -462,7 +462,7 @@ public class SkyWarsActive {
                         return FormattingUtil.formatScoreboard(
                                 FormattingUtil.DEATH_PREFIX,
                                 Style.EMPTY.withColor(ChatFormatting.GOLD),
-                                TextUtil.getText("sidebar", "kills",
+                                ComponentUtil.getComponent("sidebar", "kills",
                                         Component.literal("" + data.kills).withStyle(ChatFormatting.WHITE)
                                 )
                         );
@@ -474,20 +474,20 @@ public class SkyWarsActive {
             b.add(CommonComponents.EMPTY);
 
             b.add((player) -> {
-                var time = Math.max(stageManager.refillTime - world.getGameTime(), 0);
+                var time = Math.max(stageManager.refillTime - level.getGameTime(), 0);
                 return FormattingUtil.formatScoreboard(
                         FormattingUtil.TIME_PREFIX,
                         Style.EMPTY.withColor(ChatFormatting.GREEN),
-                        TextUtil.getText("sidebar", "refill",
+                        ComponentUtil.getComponent("sidebar", "refill",
                                 Component.literal(formatTime(time)).withStyle(ChatFormatting.WHITE))
                 );
             });
             b.add((player) -> {
-                var time = Math.max(stageManager.finishTime - world.getGameTime(), 0);
+                var time = Math.max(stageManager.finishTime - level.getGameTime(), 0);
                 return FormattingUtil.formatScoreboard(
                         FormattingUtil.COMET_PREFIX,
                         Style.EMPTY.withColor(ChatFormatting.GREEN),
-                        TextUtil.getText("sidebar", "armageddon",
+                        ComponentUtil.getComponent("sidebar", "armageddon",
                                 Component.literal(formatTime(time)).withStyle(ChatFormatting.WHITE))
                 );
             });

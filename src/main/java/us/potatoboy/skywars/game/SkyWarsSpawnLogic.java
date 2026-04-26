@@ -33,11 +33,11 @@ public class SkyWarsSpawnLogic {
         player.getInventory().clearContent();
     }
 
-    public void spawnPlayer(ServerPlayer player, ServerLevel world) {
-        spawnPlayer(player, getRandomSpawnPos(), world);
+    public void spawnPlayer(ServerPlayer player, ServerLevel level) {
+        spawnPlayer(player, getRandomSpawnPos(), level);
     }
 
-    public void spawnPlayer(ServerPlayer player, Vec3 pos, ServerLevel world) {
+    public void spawnPlayer(ServerPlayer player, Vec3 pos, ServerLevel level) {
         player.teleportTo(player.level(), pos.x(), pos.y(), pos.z(), Set.of(), player.getYRot(), player.getXRot(), false);
         player.setOnGround(true);
     }

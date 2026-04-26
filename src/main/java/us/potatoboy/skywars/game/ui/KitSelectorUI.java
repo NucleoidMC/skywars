@@ -1,12 +1,11 @@
 package us.potatoboy.skywars.game.ui;
 
-import eu.pb4.sgui.api.GuiHelpers;
+import eu.pb4.sgui.api.SguiUtils;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
-import eu.pb4.sgui.api.gui.GuiInterface;
+import eu.pb4.sgui.api.gui.GuiLike;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
@@ -26,11 +25,11 @@ public final class KitSelectorUI extends SimpleGui {
     private final SkyWarsPlayer playerData;
     private final SkyWarsWaiting game;
     private final List<Kit> kits;
-    private final @Nullable GuiInterface prev;
+    private final @Nullable GuiLike prev;
 
     KitSelectorUI(ServerPlayer player, SkyWarsPlayer data, SkyWarsWaiting game, List<Kit> kits) {
         super(getType(kits.size()), player, kits.size() > 53);
-        this.prev = GuiHelpers.getCurrentGui(player);
+        this.prev = SguiUtils.getCurrentGui(player);
         this.playerData = data;
         this.game = game;
         this.kits = kits;
@@ -86,7 +85,7 @@ public final class KitSelectorUI extends SimpleGui {
                 icon.glow();
             }
 
-            icon.setCallback((index, clickType, action) -> {
+            icon.setCallback((index, clickType, action, gui) -> {
                 if (clickType.isLeft) {
                     this.player.playSound(SoundEvents.BOOK_PAGE_TURN, 0.5f, 1);
                     PlayerKitStorage.get(player).selectedKit = KitRegistry.getId(kit);
@@ -111,7 +110,7 @@ public final class KitSelectorUI extends SimpleGui {
     }
 
     @Override
-    public void onClose() {
+    public void onManualClose() {
         if (this.prev != null) {
             this.prev.open();
         }

@@ -27,7 +27,7 @@ import us.potatoboy.skywars.game.map.loot.LootHelper;
 import us.potatoboy.skywars.game.ui.KitSelectorUI;
 import us.potatoboy.skywars.kit.Kit;
 import us.potatoboy.skywars.kit.KitRegistry;
-import xyz.nucleoid.fantasy.RuntimeWorldConfig;
+import xyz.nucleoid.fantasy.RuntimeLevelConfig;
 import xyz.nucleoid.plasmid.api.game.GameOpenContext;
 import xyz.nucleoid.plasmid.api.game.GameOpenProcedure;
 import xyz.nucleoid.plasmid.api.game.GameResult;
@@ -51,7 +51,7 @@ import java.util.*;
 
 public class SkyWarsWaiting {
     private final GameSpace gameSpace;
-    private final ServerLevel world;
+    private final ServerLevel level;
     private final SkyWarsMap map;
     public final SkyWarsConfig config;
     public final ArrayList<Kit> kits = new ArrayList<>();
@@ -59,9 +59,9 @@ public class SkyWarsWaiting {
 
     public final Object2ObjectMap<PlayerRef, SkyWarsPlayer> participants;
 
-    private SkyWarsWaiting(GameSpace gameSpace, ServerLevel world, SkyWarsMap map, SkyWarsConfig config) {
+    private SkyWarsWaiting(GameSpace gameSpace, ServerLevel level, SkyWarsMap map, SkyWarsConfig config) {
         this.gameSpace = gameSpace;
-        this.world = world;
+        this.level = level;
         this.map = map;
         this.config = config;
         this.spawnLogic = new SkyWarsSpawnLogic(gameSpace, map);
@@ -81,12 +81,12 @@ public class SkyWarsWaiting {
         var generator = new SkyWarsMapGenerator(config.mapConfig());
         var map = generator.build(context.server());
 
-        var worldConfig = new RuntimeWorldConfig()
+        var levelConfig = new RuntimeLevelConfig()
                 .setGenerator(map.asGenerator(context.server()))
                 .setDimensionType(ResourceKey.create(Registries.DIMENSION_TYPE, config.dimension()))
                 .setGameRule(GameRules.FIRE_SPREAD_RADIUS_AROUND_PLAYER, 0);
 
-        return context.openWithWorld(worldConfig, (game, world) -> {
+        return context.openWithLevel(levelConfig, (game, level) -> {
             GameWaitingLobby.addTo(game,
                     new WaitingLobbyConfig(
                             new PlayerLimiterConfig(
@@ -98,9 +98,9 @@ public class SkyWarsWaiting {
                     )
             );
 
-            var waiting = new SkyWarsWaiting(game.getGameSpace(), world, map, context.config());
+            var waiting = new SkyWarsWaiting(game.getGameSpace(), level, map, context.config());
             game.listen(GameWaitingLobbyEvents.BUILD_UI_LAYOUT, waiting::onBuildUiLayout);
-            game.listen(GamePlayerEvents.ACCEPT, offer -> offer.teleport(world, waiting.spawnLogic.getRandomSpawnPos()));
+            game.listen(GamePlayerEvents.ACCEPT, offer -> offer.teleport(level, waiting.spawnLogic.getRandomSpawnPos()));
             game.listen(GameActivityEvents.REQUEST_START, waiting::requestStart);
             game.listen(GameActivityEvents.TICK, waiting::tick);
             game.listen(GamePlayerEvents.JOIN, waiting::playerJoin);
@@ -110,7 +110,7 @@ public class SkyWarsWaiting {
             game.listen(ItemUseEvent.EVENT, waiting::onUseItem);
             game.listen(PlayerAttackEntityEvent.EVENT, (attacker, hand, attacked, hitResult) -> EventResult.DENY);
 
-            LootHelper.fillChests(world, map, config, 1);
+            LootHelper.fillChests(level, map, config, 1);
         });
     }
 
@@ -185,12 +185,12 @@ public class SkyWarsWaiting {
             participants.get(PlayerRef.of(player)).team = team;
         });
 
-        SkyWarsActive.open(this.gameSpace, world, this.map, this.config, teamPlayers, participants);
+        SkyWarsActive.open(this.gameSpace, level, this.map, this.config, teamPlayers, participants);
         return GameResult.ok();
     }
 
     private void tick() {
-        long time = world.getGameTime();
+        long time = level.getGameTime();
         if (time % 20 == 0) {
             for (ServerPlayer player : gameSpace.getPlayers()) {
                 if (player.getY() < map.template.getBounds().min().getY() - 50) {
@@ -225,6 +225,6 @@ public class SkyWarsWaiting {
 
     private void spawnPlayer(ServerPlayer player) {
         this.spawnLogic.resetPlayer(player, GameType.ADVENTURE);
-        this.spawnLogic.spawnPlayer(player, world);
+        this.spawnLogic.spawnPlayer(player, level);
     }
 }

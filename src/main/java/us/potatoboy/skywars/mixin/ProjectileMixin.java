@@ -13,7 +13,7 @@ import xyz.nucleoid.stimuli.event.EventResult;
 public abstract class ProjectileMixin {
     @Redirect(method = "shootFromRotation(Lnet/minecraft/world/entity/Entity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;onGround()Z"))
     private boolean setProperties(Entity entity) {
-        var gameSpace = GameSpaceManager.get().byWorld(entity.level());
+        var gameSpace = GameSpaceManager.get().byLevel(entity.level());
 
         if (gameSpace != null && gameSpace.getBehavior().testRule(SkyWars.PROJECTILE_PLAYER_MOMENTUM) == EventResult.ALLOW) {
             return true;
