@@ -2,15 +2,13 @@
   "kit_name": "poultry",
   "icon": "egg",
   "armor": [
-    "air",
-    "air",
+    "barrier",
+    "barrier",
     {
       "id": "minecraft:leather_leggings",
       "count": 1,
       "components": {
-        "minecraft:dyed_color": {
-          "rgb": 16701501
-        }
+        "minecraft:dyed_color": 16701501
       }
     },
     {
@@ -18,13 +16,9 @@
       "count": 1,
       "components": {
         "minecraft:enchantments": {
-          "levels": {
-            "feather_falling": 4
-          }
+          "feather_falling": 4
         },
-        "minecraft:dyed_color": {
-          "rgb": 16701501
-        }
+        "minecraft:dyed_color": 16701501
       }
     }
   ],

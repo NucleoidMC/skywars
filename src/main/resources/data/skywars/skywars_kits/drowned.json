@@ -2,10 +2,10 @@
   "kit_name": "drowned",
   "icon": "trident",
   "armor": [
-    "air",
-    "air",
-    "air",
-    "air"
+    "barrier",
+    "barrier",
+    "barrier",
+    "barrier"
   ],
   "items": [
     {
@@ -13,9 +13,7 @@
       "count": 1,
       "components": {
         "minecraft:enchantments": {
-          "levels": {
-            "riptide": 3
-          }
+          "riptide": 3
         }
       }
     }

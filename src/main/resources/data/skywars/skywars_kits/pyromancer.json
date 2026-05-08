@@ -2,20 +2,16 @@
   "kit_name": "pyromancer",
   "icon": "flint_and_steel",
   "armor": [
-    "air",
-    "air",
+    "barrier",
+    "barrier",
     {
       "id": "minecraft:leather_leggings",
       "count": 1,
       "components": {
         "minecraft:enchantments": {
-          "levels": {
-            "fire_protection": 4
-          }
+          "fire_protection": 4
         },
-        "minecraft:dyed_color": {
-          "rgb": 11546150
-        }
+        "minecraft:dyed_color": 11546150
       }
     },
     {

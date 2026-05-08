@@ -2,10 +2,10 @@
   "kit_name": "snowgolem",
   "icon": "snowball",
   "armor": [
-    "air",
-    "air",
-    "air",
-    "air"
+    "barrier",
+    "barrier",
+    "barrier",
+    "barrier"
   ],
   "items": [
     {

@@ -2,10 +2,10 @@
   "kit_name": "witch",
   "icon": "brewing_stand",
   "armor": [
-    "air",
-    "air",
-    "air",
-    "air"
+    "barrier",
+    "barrier",
+    "barrier",
+    "barrier"
   ],
   "items": [
     {

@@ -2,17 +2,15 @@
   "kit_name": "fish",
   "icon": "tropical_fish",
   "armor": [
-    "air",
-    "air",
-    "air",
+    "barrier",
+    "barrier",
+    "barrier",
     {
       "id": "minecraft:iron_boots",
       "count": 1,
       "components": {
         "minecraft:enchantments": {
-          "levels": {
-            "depth_strider": 3
-          }
+          "depth_strider": 3
         }
       }
     }

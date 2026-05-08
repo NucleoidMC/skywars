@@ -6,25 +6,19 @@
       "id": "minecraft:leather_helmet",
       "count": 1,
       "components": {
-        "minecraft:dyed_color": {
-          "rgb": 8439583
-        }
+        "minecraft:dyed_color": 8439583
       }
     },
-    "air",
-    "air",
+    "barrier",
+    "barrier",
     {
       "id": "minecraft:leather_boots",
       "count": 1,
       "components": {
         "minecraft:enchantments": {
-          "levels": {
-            "depth_strider": 3
-          }
+          "depth_strider": 3
         },
-        "minecraft:dyed_color": {
-          "rgb": 8439583
-        }
+        "minecraft:dyed_color": 8439583
       }
     }
   ],

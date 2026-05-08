@@ -29,14 +29,13 @@ public class KitPreviewUI extends SimpleGui {
     @Override
     public void onOpen() {
         int pos = 0;
-
-        for (ItemStack itemStack : this.kit.items) {
+        for (ItemStack itemStack : this.kit.getItems()) {
             this.setSlot(pos++, itemStack.copy());
         }
 
         pos = 0;
 
-        for (ItemStack itemStack : this.kit.armor) {
+        for (ItemStack itemStack : this.kit.getArmor()) {
             this.setSlot(9 + pos, itemStack.copy());
             pos++;
         }

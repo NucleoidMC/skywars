@@ -6,9 +6,7 @@
       "id": "minecraft:leather_helmet",
       "count": 1,
       "components": {
-        "minecraft:dyed_color": {
-          "rgb": 3847130
-        }
+        "minecraft:dyed_color": 3847130
       }
     },
     {
@@ -16,16 +14,14 @@
       "count": 1,
       "components": {
         "minecraft:enchantments": {
-          "levels": {
-            "thorns": 3
-          }
+          "thorns": 3
         }
       }
     },
-    "air",
-    "air"
+    "barrier",
+    "barrier"
   ],
   "items": [
-    "air"
+    "barrier"
   ]
 }

@@ -2,20 +2,18 @@
   "kit_name": "creeper",
   "icon": "gunpowder",
   "armor": [
-    "air",
-    "air",
+    "barrier",
+    "barrier",
     {
       "id": "minecraft:chainmail_leggings",
       "count": 1,
       "components": {
         "minecraft:enchantments": {
-          "levels": {
-            "minecraft:blast_protection": 4
-          }
+          "minecraft:blast_protection": 4
         }
       }
     },
-    "air"
+    "barrier"
   ],
   "items": [
     {

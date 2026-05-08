@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStackTemplate;
 import org.jetbrains.annotations.Nullable;
 import us.potatoboy.skywars.SkyWars;
 import xyz.nucleoid.plasmid.api.util.TinyRegistry;
@@ -42,9 +43,7 @@ public class KitRegistry {
                             JsonElement json = JsonParser.parseReader(reader);
 
                             Identifier identifier = identifierFromPath(path);
-
                             DataResult<Kit> result = Kit.CODEC.decode(ops, json).map(Pair::getFirst);
-
                             result.result().ifPresent(game -> KITS.register(identifier, game));
 
                             result.error().ifPresent(error -> SkyWars.LOGGER.error("Failed to decode kit at {}: {}", path, error.toString()));

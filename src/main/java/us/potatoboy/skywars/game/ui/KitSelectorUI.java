@@ -75,7 +75,7 @@ public final class KitSelectorUI extends SimpleGui {
         int pos = 0;
 
         for (Kit kit : this.kits) {
-            var icon = GuiElementBuilder.from(kit.icon);
+            var icon = GuiElementBuilder.from(kit.getItem());
             icon.setName(kit.displayName());
             icon.hideDefaultTooltip();
             icon.addLoreLine(Component.translatable("text.skywars.click_select").withStyle(ChatFormatting.GRAY));
