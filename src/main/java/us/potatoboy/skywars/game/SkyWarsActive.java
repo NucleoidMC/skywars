@@ -8,14 +8,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EntityReference;
-import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.phases.EnderDragonPhase;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
@@ -405,19 +402,19 @@ public class SkyWarsActive {
 
         switch (eventID) {
             case 0:
-                Mob entity = EntityType.WITHER.create(level, EntitySpawnReason.TRIGGERED);
+                Mob entity = EntityTypes.WITHER.create(level, EntitySpawnReason.TRIGGERED);
                 entity.setTarget(target);
                 entities.add(entity);
                 break;
             case 1:
-                entity = EntityType.ENDER_DRAGON.create(level, EntitySpawnReason.TRIGGERED);
+                entity = EntityTypes.ENDER_DRAGON.create(level, EntitySpawnReason.TRIGGERED);
                 ((EnderDragon) entity).getPhaseManager().setPhase(EnderDragonPhase.CHARGING_PLAYER);
                 ((EnderDragon) entity).getPhaseManager().getPhase(EnderDragonPhase.CHARGING_PLAYER).setTarget(new Vec3(target.getX(), target.getY(), target.getZ()));
                 entities.add(entity);
                 break;
             case 2:
                 for (int i = 0; i < 10; i++) {
-                    entity = EntityType.BEE.create(level, EntitySpawnReason.TRIGGERED);
+                    entity = EntityTypes.BEE.create(level, EntitySpawnReason.TRIGGERED);
                     ((Bee) entity).setPersistentAngerEndTime(level.getGameTime() + 1000000000);
                     entity.setTarget(target);
                     ((Bee) entity).setPersistentAngerTarget(EntityReference.of(target.getUUID()));
