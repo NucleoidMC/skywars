@@ -2,10 +2,10 @@
   "kit_name": "enderman",
   "icon": "ender_pearl",
   "armor": [
-    "air",
-    "air",
-    "air",
-    "air"
+    "barrier",
+    "barrier",
+    "barrier",
+    "barrier"
   ],
   "items": [
     {

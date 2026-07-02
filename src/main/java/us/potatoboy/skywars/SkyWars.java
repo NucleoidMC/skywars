@@ -2,7 +2,7 @@ package us.potatoboy.skywars;
 
 import eu.pb4.playerdata.api.PlayerDataApi;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import us.potatoboy.skywars.custom.SWBlocks;
@@ -11,6 +11,7 @@ import us.potatoboy.skywars.game.SkyWarsWaiting;
 import us.potatoboy.skywars.kit.KitRegistry;
 import us.potatoboy.skywars.kit.PlayerKitStorage;
 import xyz.nucleoid.plasmid.api.game.GameType;
+import xyz.nucleoid.plasmid.api.game.GameTypes;
 import xyz.nucleoid.plasmid.api.game.rule.GameRuleType;
 
 import java.util.Random;
@@ -23,8 +24,8 @@ public class SkyWars implements ModInitializer {
     public static GameRuleType PROJECTILE_PLAYER_MOMENTUM = GameRuleType.create();
     public static GameRuleType REDUCED_EXPLOSION_DAMAGE = GameRuleType.create();
 
-    public static final GameType<SkyWarsConfig> TYPE = GameType.register(
-            Identifier.of(ID, "skywars"),
+    public static final GameType<SkyWarsConfig> TYPE = GameTypes.register(
+            Identifier.fromNamespaceAndPath(ID, "skywars"),
             SkyWarsConfig.CODEC,
             SkyWarsWaiting::open
     );
@@ -38,6 +39,6 @@ public class SkyWars implements ModInitializer {
     }
 
     public static Identifier identifier(String value) {
-        return Identifier.of(ID, value);
+        return Identifier.fromNamespaceAndPath(ID, value);
     }
 }

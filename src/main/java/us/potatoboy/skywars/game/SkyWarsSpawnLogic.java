@@ -1,11 +1,11 @@
 package us.potatoboy.skywars.game;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameMode;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.GameType;
 import us.potatoboy.skywars.SkyWars;
 import us.potatoboy.skywars.game.map.SkyWarsMap;
 import xyz.nucleoid.map_templates.BlockBounds;
@@ -22,31 +22,31 @@ public class SkyWarsSpawnLogic {
         this.map = map;
     }
 
-    public void resetPlayer(ServerPlayerEntity player, GameMode gameMode) {
-        player.changeGameMode(gameMode);
-        player.setVelocity(Vec3d.ZERO);
+    public void resetPlayer(ServerPlayer player, GameType gameMode) {
+        player.setGameMode(gameMode);
+        player.setDeltaMovement(Vec3.ZERO);
         player.fallDistance = 0.0f;
-        player.getHungerManager().add(20, 2.0f);
+        player.getFoodData().eat(20, 2.0f);
         player.setHealth(20.0f);
-        player.playerScreenHandler.setCursorStack(ItemStack.EMPTY);
-        player.playerScreenHandler.getCraftingInput().clear();
-        player.getInventory().clear();
+        player.inventoryMenu.setCarried(ItemStack.EMPTY);
+        player.inventoryMenu.getCraftSlots().clearContent();
+        player.getInventory().clearContent();
     }
 
-    public void spawnPlayer(ServerPlayerEntity player, ServerWorld world) {
-        spawnPlayer(player, getRandomSpawnPos(), world);
+    public void spawnPlayer(ServerPlayer player, ServerLevel level) {
+        spawnPlayer(player, getRandomSpawnPos(), level);
     }
 
-    public void spawnPlayer(ServerPlayerEntity player, Vec3d pos, ServerWorld world) {
-        player.teleport(player.getWorld(), pos.getX(), pos.getY(), pos.getZ(), Set.of(), player.getYaw(), player.getPitch(), false);
+    public void spawnPlayer(ServerPlayer player, Vec3 pos, ServerLevel level) {
+        player.teleportTo(player.level(), pos.x(), pos.y(), pos.z(), Set.of(), player.getYRot(), player.getXRot(), false);
         player.setOnGround(true);
     }
 
-    public Vec3d getRandomSpawnPos() {
+    public Vec3 getRandomSpawnPos() {
         return choosePos(map.getSpawn(), 0);
     }
 
-    public static Vec3d choosePos(BlockBounds bounds, float aboveGround) {
+    public static Vec3 choosePos(BlockBounds bounds, float aboveGround) {
         BlockPos min = bounds.min();
         BlockPos max = bounds.max();
 
@@ -54,6 +54,6 @@ public class SkyWarsSpawnLogic {
         double z = SkyWars.RANDOM.nextDouble(min.getZ(), max.getZ()+1);
         double y = min.getY() + aboveGround;
 
-        return new Vec3d(x + 0.5, y, z + 0.5);
+        return new Vec3(x + 0.5, y, z + 0.5);
     }
 }

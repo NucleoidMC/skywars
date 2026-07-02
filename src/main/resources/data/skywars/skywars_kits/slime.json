@@ -7,13 +7,9 @@
       "count": 1,
       "components": {
         "minecraft:enchantments": {
-          "levels": {
-            "binding_curse": 1
-          }
+          "binding_curse": 1
         },
-        "minecraft:dyed_color": {
-          "rgb": 8439583
-        }
+        "minecraft:dyed_color": 8439583
       }
     },
     {
@@ -21,17 +17,13 @@
       "count": 1,
       "components": {
         "minecraft:enchantments": {
-          "levels": {
-            "binding_curse": 1
-          }
+          "binding_curse": 1
         },
-        "minecraft:dyed_color": {
-          "rgb": 8439583
-        }
+        "minecraft:dyed_color": 8439583
       }
     },
-    "air",
-    "air"
+    "barrier",
+    "barrier"
   ],
   "items": [
     {
@@ -39,9 +31,7 @@
       "count": 1,
       "components": {
         "minecraft:enchantments": {
-          "levels": {
-            "knockback": 1
-          }
+          "knockback": 1
         }
       }
     }

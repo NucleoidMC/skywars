@@ -1,27 +1,28 @@
 package us.potatoboy.skywars.custom.block;
 
 import eu.pb4.polymer.core.api.block.PolymerBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCollisionHandler;
-import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-import xyz.nucleoid.packettweaker.PacketContext;
 
 // Taken from https://github.com/NucleoidMC/nucleoid-extras/blob/1.17/src/main/java/xyz/nucleoid/extras/lobby/block/LaunchPadBlock.java
-public class LaunchPadBlock extends Block implements BlockEntityProvider, PolymerBlock {
+public class LaunchPadBlock extends Block implements EntityBlock, PolymerBlock {
     private final BlockState virtualBlock;
 
-    public LaunchPadBlock(Settings settings, BlockState virtualBlock) {
+    public LaunchPadBlock(Properties settings, BlockState virtualBlock) {
         super(settings);
         this.virtualBlock = virtualBlock;
     }
@@ -32,27 +33,27 @@ public class LaunchPadBlock extends Block implements BlockEntityProvider, Polyme
     }
 
     @Override
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
-        if (entity.isOnGround()) {
+    protected void entityInside(BlockState state, Level world, BlockPos pos, Entity entity, InsideBlockEffectApplier handler, boolean bl) {
+        if (entity.onGround()) {
             var blockEntity = world.getBlockEntity(pos);
 
             if (blockEntity instanceof LaunchPadBlockEntity launchPad) {
-                entity.setVelocity(getVector(launchPad.getPitch(), entity.getYaw(0)).multiply(launchPad.getPower()));
-                if (entity instanceof ServerPlayerEntity player) {
-                    player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(entity));
-                    world.playSound(null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5f, 1);
+                entity.setDeltaMovement(getVector(launchPad.getPitch(), entity.getViewYRot(0)).scale(launchPad.getPower()));
+                if (entity instanceof ServerPlayer player) {
+                    player.connection.send(new ClientboundSetEntityMotionPacket(entity));
+                    world.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 0.5f, 1);
                 }
-                super.onEntityCollision(state, world, pos, entity, handler);
+                super.entityInside(state, world, pos, entity, handler, bl);
             }
         }
     }
 
-    private static Vec3d getVector(float pitch, float yaw) {
+    private static Vec3 getVector(float pitch, float yaw) {
         double pitchRad = Math.toRadians(pitch);
         double yawRad = Math.toRadians(yaw);
 
         double horizontal = -Math.cos(pitchRad);
-        return new Vec3d(
+        return new Vec3(
                 Math.sin(yawRad) * horizontal,
                 Math.sin(pitchRad),
                 -Math.cos(yawRad) * horizontal
@@ -61,7 +62,7 @@ public class LaunchPadBlock extends Block implements BlockEntityProvider, Polyme
 
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new LaunchPadBlockEntity(pos, state);
     }
 }

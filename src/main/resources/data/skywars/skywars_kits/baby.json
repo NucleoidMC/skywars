@@ -2,26 +2,24 @@
   "kit_name": "baby-zombie",
   "icon": "leather_boots",
   "armor": [
-    "air",
+    "barrier",
     {
       "id": "minecraft:leather_chestplate",
       "count": 1,
       "components": {
-        "minecraft:attribute_modifiers": {
-          "modifiers": [
-            {
-              "amount": 1,
-              "operation": "add_multiplied_total",
-              "type": "minecraft:movement_speed",
-              "slot": "chest",
-              "id": "minecraft:5b0a3b8b-c990-4cec-83bd-765e7b2595b7"
-            }
-          ]
-        }
+        "minecraft:attribute_modifiers": [
+          {
+            "amount": 1,
+            "operation": "add_multiplied_total",
+            "type": "minecraft:movement_speed",
+            "slot": "chest",
+            "id": "minecraft:5b0a3b8b-c990-4cec-83bd-765e7b2595b7"
+          }
+        ]
       }
     },
-    "air",
-    "air"
+    "barrier",
+    "barrier"
   ],
   "items": [
     "stone_sword"

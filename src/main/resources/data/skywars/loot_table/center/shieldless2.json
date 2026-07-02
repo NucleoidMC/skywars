@@ -137,7 +137,7 @@
         {
           "type": "minecraft:item",
           "weight": 12,
-          "name": "minecraft:iron_sword",
+          "name": "minecraft:iron_spear",
           "functions": [
             {
               "function": "minecraft:enchant_with_levels",
@@ -148,7 +148,7 @@
         {
           "type": "minecraft:item",
           "weight": 6,
-          "name": "minecraft:diamond_sword",
+          "name": "minecraft:diamond_spear",
           "functions": [
             {
               "function": "minecraft:enchant_with_levels",

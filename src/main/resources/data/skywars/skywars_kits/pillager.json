@@ -2,10 +2,10 @@
   "kit_name": "pillager",
   "icon": "crossbow",
   "armor": [
-    "air",
-    "air",
-    "air",
-    "air"
+    "barrier",
+    "barrier",
+    "barrier",
+    "barrier"
   ],
   "items": [
     {

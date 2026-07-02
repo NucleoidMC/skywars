@@ -7,9 +7,10 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStackTemplate;
 import org.jetbrains.annotations.Nullable;
 import us.potatoboy.skywars.SkyWars;
 import xyz.nucleoid.plasmid.api.util.TinyRegistry;
@@ -21,9 +22,9 @@ import java.io.Reader;
 
 public class KitRegistry {
     private static final TinyRegistry<Kit> KITS = TinyRegistry.create();
-
+    // TODO fix this :)
     public static void register() {
-        ResourceManagerHelper serverData = ResourceManagerHelper.get(ResourceType.SERVER_DATA);
+        ResourceManagerHelper serverData = ResourceManagerHelper.get(PackType.SERVER_DATA);
 
         serverData.registerReloadListener(SkyWars.identifier("skywars_kits"), registries -> new SimpleSynchronousResourceReloadListener() {
             @Override
@@ -32,19 +33,17 @@ public class KitRegistry {
             }
 
             @Override
-            public void reload(ResourceManager manager) {
+            public void onResourceManagerReload(ResourceManager manager) {
                 KITS.clear();
-                var ops = registries.getOps(JsonOps.INSTANCE);
+                var ops = registries.createSerializationContext(JsonOps.INSTANCE);
 
-                manager.findResources("skywars_kits", path -> path.getPath().endsWith(".json")).forEach((path, resource) -> {
+                manager.listResources("skywars_kits", path -> path.getPath().endsWith(".json")).forEach((path, resource) -> {
                     try {
-                        try (Reader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
+                        try (Reader reader = new BufferedReader(new InputStreamReader(resource.open()))) {
                             JsonElement json = JsonParser.parseReader(reader);
 
                             Identifier identifier = identifierFromPath(path);
-
                             DataResult<Kit> result = Kit.CODEC.decode(ops, json).map(Pair::getFirst);
-
                             result.result().ifPresent(game -> KITS.register(identifier, game));
 
                             result.error().ifPresent(error -> SkyWars.LOGGER.error("Failed to decode kit at {}: {}", path, error.toString()));
@@ -60,7 +59,7 @@ public class KitRegistry {
     private static Identifier identifierFromPath(Identifier location) {
         String path = location.getPath();
         path = path.substring("skywarsKits//".length(), path.length() - ".json".length());
-        return Identifier.of(location.getNamespace(), path);
+        return Identifier.fromNamespaceAndPath(location.getNamespace(), path);
     }
 
     @Nullable

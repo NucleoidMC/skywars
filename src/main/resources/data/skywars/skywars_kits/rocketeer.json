@@ -6,9 +6,7 @@
       "id": "minecraft:leather_helmet",
       "count": 1,
       "components": {
-        "minecraft:dyed_color": {
-          "rgb": 11546150
-        }
+        "minecraft:dyed_color": 11546150
       }
     },
     {
@@ -21,8 +19,8 @@
       "id": "minecraft:iron_chestplate",
       "count": 1
     },
-    "air",
-    "air"
+    "barrier",
+    "barrier"
   ],
   "items": [
     {
