@@ -12,9 +12,9 @@
           "type": "minecraft:item",
           "weight": 6,
           "name": "minecraft:netherite_boots",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 14
             }
           ]
@@ -23,9 +23,9 @@
           "type": "minecraft:item",
           "weight": 6,
           "name": "minecraft:diamond_leggings",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 7
             }
           ]
@@ -34,9 +34,9 @@
           "type": "minecraft:item",
           "weight": 3,
           "name": "minecraft:diamond_leggings",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 14
             }
           ]
@@ -45,9 +45,9 @@
           "type": "minecraft:item",
           "weight": 6,
           "name": "minecraft:diamond_chestplate",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 7
             }
           ]
@@ -56,9 +56,9 @@
           "type": "minecraft:item",
           "weight": 3,
           "name": "minecraft:diamond_chestplate",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 14
             }
           ]
@@ -67,9 +67,9 @@
           "type": "minecraft:item",
           "weight": 8,
           "name": "minecraft:netherite_helmet",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 14
             }
           ]
@@ -83,9 +83,9 @@
           "type": "minecraft:item",
           "weight": 5,
           "name": "minecraft:trident",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_randomly",
+              "type": "minecraft:enchant_randomly",
               "enchantments": [
                 "minecraft:loyalty"
               ]
@@ -96,10 +96,11 @@
           "type": "minecraft:item",
           "weight": 4,
           "name": "minecraft:tnt",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 6,
                 "max": 12
               }
@@ -110,10 +111,11 @@
           "type": "minecraft:item",
           "weight": 10,
           "name": "minecraft:golden_apple",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 2,
                 "max": 3
               }
@@ -129,10 +131,11 @@
           "type": "minecraft:item",
           "weight": 8,
           "name": "minecraft:iron_ingot",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 2,
                 "max": 6
               }
@@ -143,9 +146,9 @@
           "type": "minecraft:item",
           "weight": 12,
           "name": "minecraft:diamond_sword",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 4
             }
           ]
@@ -154,9 +157,9 @@
           "type": "minecraft:item",
           "weight": 6,
           "name": "minecraft:diamond_sword",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 7
             }
           ]
@@ -165,9 +168,9 @@
           "type": "minecraft:item",
           "weight": 12,
           "name": "minecraft:diamond_spear",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 4
             }
           ]
@@ -176,9 +179,9 @@
           "type": "minecraft:item",
           "weight": 6,
           "name": "minecraft:diamond_spear",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 7
             }
           ]
@@ -193,10 +196,11 @@
           "weight": 5,
           "quality": 1,
           "name": "minecraft:oak_planks",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 16,
                 "max": 64
               }

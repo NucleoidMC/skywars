@@ -13,10 +13,11 @@
           "weight": 15,
           "quality": 1,
           "name": "minecraft:cooked_beef",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 4,
                 "max": 8
               }
@@ -28,9 +29,9 @@
           "weight": 12,
           "quality": 1,
           "name": "minecraft:netherite_sword",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 4
             }
           ]
@@ -40,9 +41,9 @@
           "weight": 12,
           "quality": 1,
           "name": "minecraft:netherite_spear",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 4
             }
           ]
@@ -52,9 +53,9 @@
           "weight": 10,
           "quality": 1,
           "name": "minecraft:diamond_pickaxe",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 4
             }
           ]
@@ -64,9 +65,9 @@
           "weight": 10,
           "quality": 1,
           "name": "minecraft:diamond_boots",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 4
             }
           ]
@@ -76,9 +77,9 @@
           "weight": 10,
           "quality": 1,
           "name": "minecraft:diamond_boots",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 7
             }
           ]
@@ -88,9 +89,9 @@
           "weight": 10,
           "quality": 1,
           "name": "minecraft:diamond_leggings",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 4
             }
           ]
@@ -100,9 +101,9 @@
           "weight": 10,
           "quality": 1,
           "name": "minecraft:iron_chestplate",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 7
             }
           ]
@@ -112,9 +113,9 @@
           "weight": 10,
           "quality": 1,
           "name": "minecraft:diamond_helmet",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 4
             }
           ]
@@ -124,9 +125,9 @@
           "weight": 10,
           "quality": 1,
           "name": "minecraft:diamond_helmet",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 7
             }
           ]
@@ -136,9 +137,9 @@
           "weight": 4,
           "quality": 1,
           "name": "minecraft:crossbow",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 7
             }
           ]
@@ -153,9 +154,9 @@
           "weight": 10,
           "quality": 1,
           "name": "minecraft:iron_axe",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 4
             }
           ]
@@ -171,10 +172,11 @@
           "weight": 4,
           "quality": 1,
           "name": "minecraft:egg",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 6,
                 "max": 8
               }
@@ -186,10 +188,11 @@
           "weight": 10,
           "quality": 1,
           "name": "minecraft:arrow",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 12,
                 "max": 16
               }
@@ -201,9 +204,9 @@
           "weight": 5,
           "quality": 1,
           "name": "minecraft:bow",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "type": "minecraft:enchant_with_levels",
               "levels": 4
             }
           ]
@@ -213,10 +216,11 @@
           "weight": 4,
           "quality": 1,
           "name": "minecraft:oak_planks",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 16,
                 "max": 64
               }
@@ -228,10 +232,11 @@
           "weight": 4,
           "quality": 1,
           "name": "minecraft:stone",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 16,
                 "max": 64
               }

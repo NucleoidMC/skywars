@@ -13,10 +13,11 @@
           "type": "minecraft:item",
           "weight": 3,
           "name": "minecraft:oak_planks",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 16,
                 "max": 64
               }
@@ -28,10 +29,11 @@
           "weight": 1,
           "quality": 1,
           "name": "minecraft:stone",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 16,
                 "max": 64
               }
@@ -130,10 +132,11 @@
           "type": "minecraft:item",
           "weight": 15,
           "name": "minecraft:cooked_beef",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 4,
                 "max": 8
               }
@@ -176,10 +179,11 @@
           "type": "minecraft:item",
           "weight": 4,
           "name": "minecraft:egg",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 4,
                 "max": 8
               }
@@ -190,10 +194,11 @@
           "type": "minecraft:item",
           "weight": 8,
           "name": "minecraft:arrow",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 6,
                 "max": 16
               }

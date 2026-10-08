@@ -59,10 +59,11 @@
           "weight": 6,
           "quality": 1,
           "name": "minecraft:arrow",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 6,
                 "max": 16
               }
@@ -78,10 +79,11 @@
           "type": "minecraft:item",
           "weight": 4,
           "name": "minecraft:tnt",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 4,
                 "max": 8
               }
@@ -107,10 +109,11 @@
           "type": "minecraft:item",
           "weight": 8,
           "name": "minecraft:iron_ingot",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1,
                 "max": 6
               }
@@ -152,10 +155,11 @@
           "weight": 18,
           "quality": 1,
           "name": "minecraft:oak_planks",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 16,
                 "max": 64
               }

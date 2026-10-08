@@ -13,10 +13,11 @@
           "weight": 15,
           "quality": 1,
           "name": "minecraft:cooked_beef",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 4,
                 "max": 8
               }
@@ -115,10 +116,11 @@
           "weight": 4,
           "quality": 1,
           "name": "minecraft:egg",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 4,
                 "max": 8
               }
@@ -130,10 +132,11 @@
           "weight": 10,
           "quality": 1,
           "name": "minecraft:arrow",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 6,
                 "max": 16
               }
@@ -151,10 +154,11 @@
           "weight": 18,
           "quality": 1,
           "name": "minecraft:oak_planks",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 16,
                 "max": 64
               }
@@ -166,10 +170,11 @@
           "weight": 16,
           "quality": 1,
           "name": "minecraft:stone",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 16,
                 "max": 64
               }
