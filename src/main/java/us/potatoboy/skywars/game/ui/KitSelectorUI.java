@@ -110,7 +110,7 @@ public final class KitSelectorUI extends SimpleGui {
     }
 
     @Override
-    public void onManualClose() {
+    public void afterRemoval() {
         if (this.prev != null) {
             this.prev.open();
         }
